@@ -2,8 +2,7 @@
   "app": {
     "name": "TasteAbroad",
     "tagline": "Find the university city abroad where your taste feels at home.",
-    "about": "How it works",
-    "language": "Language"
+    "about": "How it works"
   },
   "form": {
     "label": "What do you love?",
@@ -17,10 +16,13 @@
     "maxMonthly": "Max monthly budget (USD)",
     "language": "Language of study",
     "regions": "Regions",
-    "any": "Any",
     "submit": "Find my cities",
     "running": "Finding your cities...",
-    "needLikes": "Add at least one thing you love."
+    "needLikes": "Add at least one thing you love.",
+    "studyEnglish": "I want to study in English",
+    "studyEnglishHint": "Only show cities with English-taught programmes.",
+    "alsoSpeak": "I also speak other languages...",
+    "alsoSpeakHint": "Cities that teach in any of these languages also count. Many public universities are free or cheap in the local language."
   },
   "regions": {
     "Europe": "Europe",
@@ -58,7 +60,10 @@
     "worldwide": "Qloo also sees strong taste fits in",
     "share": "Copy share link",
     "copied": "Link copied!",
-    "trace": "Agent trace ({count} tool calls)"
+    "trace": "Agent trace ({count} tool calls)",
+    "studyHere": "You can study here in {langs}",
+    "scoreBy": "Score from Qloo",
+    "scoreNote": "Every match score comes straight from Qloo's taste data, not from the AI. The AI only chooses what to look up and writes the explanations."
   },
   "compare": {
     "select": "Compare",

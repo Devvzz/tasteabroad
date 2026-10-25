@@ -5,8 +5,8 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Region } from "@/lib/cities";
 import type { AgentEvent, ErrorCode, MatchFilters, MatchResult, StepKey } from "@/lib/agent/types";
-import { getMessages, LANG_LABELS, LANGS, translate, type Lang } from "@/lib/i18n";
-import { fromSearchParams, toSearchParams } from "@/lib/share";
+import { t } from "@/lib/i18n";
+import { fromSearchParams, toSearchParams, type SearchState } from "@/lib/share";
 import { AgentSteps, type StepStatus } from "./AgentSteps";
 import { AlsoLiked } from "./AlsoLiked";
 import { CityCard } from "./CityCard";
@@ -14,7 +14,10 @@ import { ComparePanel } from "./ComparePanel";
 
 const SUGGESTIONS = ["Dua Lipa", "anime", "street food", "hiking", "techno", "Studio Ghibli", "Bad Bunny", "K-pop"];
 const REGIONS: Region[] = ["Europe", "North America", "Asia", "Oceania", "Latin America", "Middle East", "Africa"];
-const STUDY_LANGUAGES = ["English", "German", "French", "Spanish", "Japanese", "Korean", "Portuguese"];
+// Names match the `languages` values in data/cities.json. English gets its own switch;
+// the others sit behind "I also speak..." because most students only need English.
+const ENGLISH = "English";
+const OTHER_STUDY_LANGUAGES = ["Spanish", "German", "French", "Italian", "Portuguese", "Dutch", "Japanese", "Korean", "Mandarin", "Arabic", "Albanian"];
 const MAX_LIKES = 8;
 
 export function TasteApp() {
@@ -23,7 +26,6 @@ export function TasteApp() {
   const searchParams = useSearchParams();
   const initial = useMemo(() => fromSearchParams(new URLSearchParams(searchParams.toString())), [searchParams]);
 
-  const [lang, setLang] = useState<Lang>(initial.lang);
   const [likes, setLikes] = useState<string[]>(initial.likes);
   const [draft, setDraft] = useState("");
   const [filters, setFilters] = useState<MatchFilters>(initial.filters);
@@ -37,16 +39,10 @@ export function TasteApp() {
   const [showCompare, setShowCompare] = useState(false);
   const autoRan = useRef(false);
   const outputRef = useRef<HTMLDivElement>(null);
-
-  const messages = getMessages(lang);
-  const t = useCallback(
-    (key: string, vars?: Record<string, string | number>) => translate(messages, key, vars),
-    [messages],
+  // Open the other languages straight away when a shared link already uses one of them.
+  const [showOtherLanguages, setShowOtherLanguages] = useState(
+    () => initial.filters.languages?.some((l) => l !== ENGLISH) ?? false,
   );
-
-  useEffect(() => {
-    document.documentElement.lang = lang;
-  }, [lang]);
 
   const addLike = (value: string) => {
     const like = value.trim();
@@ -68,7 +64,7 @@ export function TasteApp() {
   };
 
   const run = useCallback(
-    async (state: { likes: string[]; filters: MatchFilters; lang: Lang }) => {
+    async (state: SearchState) => {
       if (!state.likes.length) {
         setError("needLikes");
         return;
@@ -130,14 +126,7 @@ export function TasteApp() {
       setLikes(all);
       setDraft("");
     }
-    void run({ likes: all, filters, lang });
-  };
-
-  const changeLang = (next: Lang) => {
-    setLang(next);
-    // Explanations are written in the chosen language, so refresh visible results.
-    if (result && !running) void run({ likes, filters, lang: next });
-    else router.replace(`${pathname}?${toSearchParams({ likes, filters, lang: next }).toString()}`, { scroll: false });
+    void run({ likes: all, filters });
   };
 
   const copyLink = async () => {
@@ -149,6 +138,14 @@ export function TasteApp() {
   const toggleRegion = (region: Region) => {
     const current = filters.regions ?? [];
     setFilters({ ...filters, regions: current.includes(region) ? current.filter((r) => r !== region) : [...current, region] });
+  };
+
+  const toggleLanguage = (language: string) => {
+    const current = filters.languages ?? [];
+    setFilters({
+      ...filters,
+      languages: current.includes(language) ? current.filter((l) => l !== language) : [...current, language],
+    });
   };
 
   const toggleCompare = (cityId: string) =>
@@ -168,20 +165,9 @@ export function TasteApp() {
         <Link href="/" className="text-lg font-bold tracking-tight">
           Taste<span className="text-accent">Abroad</span>
         </Link>
-        <label className="flex items-center gap-2 text-sm">
-          <span className="sr-only">{t("app.language")}</span>
-          <select
-            value={lang}
-            onChange={(e) => changeLang(e.target.value as Lang)}
-            className="rounded-lg border border-line bg-card px-2 py-1"
-          >
-            {LANGS.map((l) => (
-              <option key={l} value={l}>
-                {LANG_LABELS[l]}
-              </option>
-            ))}
-          </select>
-        </label>
+        <Link href="/about" className="text-sm text-muted underline-offset-2 hover:underline">
+          {t("app.about")}
+        </Link>
       </nav>
 
       <header className="mb-6">
@@ -248,9 +234,56 @@ export function TasteApp() {
           ))}
         </div>
 
+        <fieldset className="space-y-2 text-sm">
+          <legend className="sr-only">{t("form.language")}</legend>
+          <label
+            className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 ${
+              filters.languages?.includes(ENGLISH) ? "border-accent bg-accent-soft" : "border-line"
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={filters.languages?.includes(ENGLISH) ?? false}
+              onChange={() => toggleLanguage(ENGLISH)}
+              className="size-5 accent-[var(--accent)]"
+            />
+            <span>
+              <span className="block font-semibold">{t("form.studyEnglish")}</span>
+              <span className="text-muted">{t("form.studyEnglishHint")}</span>
+            </span>
+          </label>
+
+          {!showOtherLanguages ? (
+            <button type="button" onClick={() => setShowOtherLanguages(true)} className="text-accent underline-offset-2 hover:underline">
+              {t("form.alsoSpeak")}
+            </button>
+          ) : (
+            <div>
+              <p className="mb-2 text-muted">{t("form.alsoSpeakHint")}</p>
+              <div className="flex flex-wrap gap-2">
+                {OTHER_STUDY_LANGUAGES.map((l) => {
+                  const on = filters.languages?.includes(l) ?? false;
+                  return (
+                    <button
+                      key={l}
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() => toggleLanguage(l)}
+                      className={`rounded-full border px-3 py-1 ${on ? "border-accent bg-accent-soft text-accent" : "border-line"}`}
+                    >
+                      {on ? "✓ " : ""}
+                      {l}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </fieldset>
+
         <details className="rounded-xl border border-line p-3 text-sm">
           <summary className="cursor-pointer font-medium">{t("form.filters")}</summary>
-          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
             <label className="flex flex-col gap-1">
               <span className="text-muted">{t("form.maxTuition")}</span>
               <input
@@ -272,21 +305,6 @@ export function TasteApp() {
                 onChange={(e) => setFilters({ ...filters, maxMonthlyUsd: e.target.value ? Number(e.target.value) : undefined })}
                 className="rounded-lg border border-line bg-background px-2 py-1.5"
               />
-            </label>
-            <label className="flex flex-col gap-1">
-              <span className="text-muted">{t("form.language")}</span>
-              <select
-                value={filters.language ?? ""}
-                onChange={(e) => setFilters({ ...filters, language: e.target.value || undefined })}
-                className="rounded-lg border border-line bg-background px-2 py-1.5"
-              >
-                <option value="">{t("form.any")}</option>
-                {STUDY_LANGUAGES.map((l) => (
-                  <option key={l} value={l}>
-                    {l}
-                  </option>
-                ))}
-              </select>
             </label>
           </div>
           <fieldset className="mt-3">
@@ -372,7 +390,7 @@ export function TasteApp() {
 
       <footer className="mt-12 flex flex-wrap justify-between gap-2 border-t border-line pt-4 text-xs text-muted">
         <span>{t("footer.poweredBy")}</span>
-        <Link href={lang === "en" ? "/about" : `/about?lang=${lang}`} className="underline-offset-2 hover:underline">
+        <Link href="/about" className="underline-offset-2 hover:underline">
           {t("app.about")}
         </Link>
       </footer>
@@ -400,6 +418,11 @@ function Results({ result, t, onCopy, copied, compareIds, onCompareToggle }: Res
           </button>
         </div>
 
+        <p className="rounded-xl border border-accent/40 bg-accent-soft p-3 text-sm">
+          <span aria-hidden>★ </span>
+          {t("results.scoreNote")}
+        </p>
+
         <p className="text-sm text-muted">
           {t("results.qlooMatched")}:{" "}
           {result.resolved.map((r) => (r.name.toLowerCase() === r.input.toLowerCase() ? r.name : `${r.input} → ${r.name}`)).join(" · ")}
@@ -419,6 +442,7 @@ function Results({ result, t, onCopy, copied, compareIds, onCompareToggle }: Res
             match={match}
             rank={i + 1}
             t={t}
+            studyLanguages={result.filters.languages ?? []}
             comparing={compareIds.includes(match.city.id)}
             compareDisabled={compareIds.length >= 2 && !compareIds.includes(match.city.id)}
             onCompareToggle={() => onCompareToggle(match.city.id)}

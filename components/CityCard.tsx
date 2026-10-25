@@ -7,14 +7,18 @@ interface Props {
   match: CityMatch;
   rank: number;
   t: (key: string, vars?: Record<string, string | number>) => string;
+  /** Languages the student said they can study in (may be empty). */
+  studyLanguages: string[];
   comparing: boolean;
   compareDisabled: boolean;
   onCompareToggle: () => void;
 }
 
-export function CityCard({ match, rank, t, comparing, compareDisabled, onCompareToggle }: Props) {
+export function CityCard({ match, rank, t, studyLanguages, comparing, compareDisabled, onCompareToggle }: Props) {
   const { city, score } = match;
   const cost = city.costOfLiving;
+  const wanted = new Set(studyLanguages.map((l) => l.toLowerCase()));
+  const studyMatches = city.languages.filter((l) => wanted.has(l.toLowerCase()));
 
   return (
     <article
@@ -31,9 +35,12 @@ export function CityCard({ match, rank, t, comparing, compareDisabled, onCompare
           </h3>
           <p className="text-sm opacity-90">{city.country}</p>
         </div>
-        <p className="rounded-full bg-white/90 px-3 py-1 text-sm font-semibold text-neutral-900">
-          {t("results.match", { score })}
-        </p>
+        <div className="text-right">
+          <p className="rounded-full bg-white/90 px-3 py-1 text-sm font-semibold text-neutral-900">
+            {t("results.match", { score })}
+          </p>
+          <p className="mt-1 text-[11px] font-medium opacity-90">{t("results.scoreBy")}</p>
+        </div>
       </header>
 
       <div className="space-y-4 p-4 text-sm">
@@ -89,9 +96,28 @@ export function CityCard({ match, rank, t, comparing, compareDisabled, onCompare
           </ul>
         </section>
 
-        <p className="text-xs text-muted">
-          {t("results.languages")}: {city.languages.join(", ")} · {t("results.estimate")}
-        </p>
+        <section>
+          <h4 className="mb-1 font-semibold">{t("results.languages")}</h4>
+          {studyMatches.length > 0 && (
+            <p className="mb-2 font-medium text-accent">
+              ✓ {t("results.studyHere", { langs: studyMatches.join(", ") })}
+            </p>
+          )}
+          <ul className="flex flex-wrap gap-1.5">
+            {city.languages.map((l) => (
+              <li
+                key={l}
+                className={`rounded-full border px-2 py-0.5 text-xs ${
+                  wanted.has(l.toLowerCase()) ? "border-accent bg-accent-soft font-semibold text-accent" : "border-line text-muted"
+                }`}
+              >
+                {l}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <p className="text-xs text-muted">{t("results.estimate")}</p>
 
         <label
           className={`flex w-fit items-center gap-2 rounded-lg border px-3 py-2 font-medium ${

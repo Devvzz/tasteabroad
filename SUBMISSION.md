@@ -5,6 +5,11 @@
 - Live demo: https://tasteabroad.vercel.app (no login)
 - Code: https://github.com/Devvzz/tasteabroad (MIT licence)
 
+> **The key point: every match score comes straight from Qloo.** The percentage on each city is
+> Qloo's own taste-affinity value for that city, shown unchanged (0.93 becomes 93%), and the
+> ranking is Qloo's order. The AI never sets or changes a score. It decides which Qloo lookups to
+> make and writes the explanations around Qloo's results.
+
 ## Inspiration
 
 Every year millions of students pick a city to study abroad by looking at rankings and tuition.
@@ -14,24 +19,31 @@ signing up. I wanted a tool that asks exactly that question, for any student fro
 
 ## What it does
 
+TasteAbroad answers three questions at once:
+
+1. **Will I fit in culturally?** Matched by Qloo from your taste.
+2. **Can I study there in a language I speak?** English-taught programmes first, other languages optional.
+3. **Can I afford it?** Typical international tuition and the monthly cost of living.
+
 You type what you love: artists, films, shows, food, hobbies, brands or places. For example
 "Studio Ghibli, street food, cycling". TasteAbroad then:
 
-1. **Matches you to cities** around the world by taste. 67 student cities on every continent are
-   scored by Qloo's taste graph, and you get your top 5 with a match score.
+1. **Matches you to cities** around the world by taste. A curated list of 105 student cities on
+   every continent is scored by Qloo's taste graph, and you get your top 5 with Qloo's match score.
 2. **Explains each match** in a few sentences that refer to what you typed ("Kyoto feels like
    stepping into a Studio Ghibli film...").
 3. **Shows the practical side**: well-known universities with links, typical international
-   tuition and the monthly cost of living as honest ranges.
+   tuition, the monthly cost of living as honest ranges, and the languages you can study in.
 4. **"People like you also liked..."**: artists, films, TV shows and places that people with the
    same taste enjoy.
 5. **Compare two cities** side by side, including places inside each city that people with your
    taste love, straight from Qloo.
-6. Works in **English, Albanian and German** (the AI writes in the chosen language), on any phone,
-   and every result is a **shareable link**.
+6. Works on any phone, and every result is a **shareable link**.
 
-Optional filters (tuition, budget, language of study, region) narrow the results. There are no
-filters by default, so the match is purely about taste.
+One switch limits results to English-taught programmes; "I also speak..." adds other languages,
+which matters because many public universities are free or cheap in the local language (German in
+Berlin, Spanish in Mexico City). Optional filters for tuition, budget and region narrow things
+further. Nothing is filtered by default, so the match is purely about taste.
 
 ## How Qloo powers it
 
@@ -41,13 +53,14 @@ function calling with four tools:
 | Tool | Qloo call | Why it fits |
 | --- | --- | --- |
 | `qloo_search` | `GET /search` and `GET /v2/tags` | Turns free text into Qloo signals. A specific name becomes an **entity** (Dua Lipa, Studio Ghibli); a genre or hobby becomes a **tag** (techno, street food, hiking). The agent picks the right one per input. |
-| `qloo_destination_affinity` | `GET /v2/insights`, `filter.type=urn:entity:destination`, `filter.results.entities=<our 67 cities>` | Scores every city in our dataset by taste affinity in a single request, plus Qloo's top destinations worldwide. |
+| `qloo_destination_affinity` | `GET /v2/insights`, `filter.type=urn:entity:destination`, `filter.results.entities=<our 105 cities>` | Scores every city in our list by taste affinity, plus Qloo's top destinations worldwide. **These scores are what the user sees.** |
 | `qloo_similar` | `GET /v2/insights` with `filter.type` = artist, movie, tv_show, place | Powers "People like you also liked...". |
-| `get_city_info` | Our curated `data/cities.json` | Adds universities, tuition and cost of living to the cities Qloo picked. |
+| `get_city_info` | Our curated `data/cities.json` | Adds universities, tuition, cost of living and teaching languages to the cities Qloo picked. |
 
 The compare view makes one more Qloo call per city: `filter.type=urn:entity:place` with
 `filter.location` set to the city, so you see places in that city that people with your taste
-rate highest (hotels are filtered out).
+rate highest (only restaurants, bars, cafés, sights, museums, parks and similar; hotels and trade
+fair venues are filtered out).
 
 ### Example request (key removed)
 
@@ -58,19 +71,24 @@ GET https://hackathon.api.qloo.com/v2/insights
   ?filter.type=urn:entity:destination
   &signal.interests.entities=<Studio Ghibli entity id>
   &signal.interests.tags=urn:tag:cuisine:qloo:street_food
-  &filter.results.entities=<67 destination ids from data/cities.json>
+  &filter.results.entities=<105 destination ids from data/cities.json>
 X-Api-Key: <hidden>
 ```
 
-Result (affinity shown as a percentage): Kyoto 97%, Tokyo, Hong Kong, Seoul, Singapore. The agent
-then reads the city facts and writes the explanations.
+Qloo returns an affinity per city (for example Kyoto 0.97). That number, as a percentage, is the
+match score on the card, and Qloo's order is the ranking. The agent then reads the city facts and
+writes the explanations.
 
-### Why the agent can't make things up
+### Why the AI can't make things up
 
-Qloo decides which cities fit and how strongly: every score is a Qloo affinity. The LLM decides
-which lookups to make and puts the results into words, but the tools only accept IDs that a Qloo
-search actually returned, and the final city list is built from Qloo's response, not from the
-model's text.
+| | Decides |
+| --- | --- |
+| **Qloo** | Which cities fit, how strongly, and in what order. Every score is Qloo's value, unchanged. |
+| **AI agent** | Which lookups to make, and the wording. The tools only accept IDs that a Qloo search actually returned, and the city list is built from Qloo's response, not from the model's text. |
+| **Dataset** | Universities, tuition, costs and teaching languages, marked as estimates with official links. |
+
+Each result page says this in the app too ("Every match score comes straight from Qloo's taste
+data, not from the AI"), and each card labels its score "Score from Qloo".
 
 ## How I built it
 
@@ -80,26 +98,28 @@ model's text.
 - **The agent's steps are streamed live** to the page ("Searching your tastes on Qloo...",
   "Matching cities worldwide...") and a full tool-call trace is shown under the results.
 - **A typed Qloo client** with timeouts, bounded retries, caching and clear errors.
-- **A curated dataset** of 67 cities, each resolved to its Qloo destination ID by a script and
-  checked so that every city can actually be scored.
+- **A curated dataset** of 105 cities. A script maps each one to its Qloo destination ID, and a
+  check confirms that Qloo can score every single city.
 
 ## Challenges
 
 - **Destination results cluster.** The plain worldwide ranking often returns 50 cities from one
-  country. Scoring our own city list with `filter.results.entities` solved it: one call, every
-  city scored.
-- **Some cities have no score.** Qloo returns no insights for Seoul's destination entry and has no
-  entry for Lima. I score a nearby district instead (Suwon, Miraflores) and label it clearly.
-- **Free LLM quotas.** The free Gemini tier is busy at peak times. The app tries other models,
-  keeps a time budget, and if the AI is unavailable a fixed pipeline calls the same Qloo tools so
-  users always get results.
+  country. Scoring our own city list with `filter.results.entities` solved it: every city scored.
+- **Not every city exists in Qloo.** Qloo has no destination for Wellington or Kigali, so they
+  were replaced with cities it can score (Christchurch, Kampala). Seoul and Lima are scored
+  through a district in the same metro area (Suwon, Miraflores), and the card says so.
+- **Free LLM quotas and latency.** Production logs showed some Gemini calls timing out. I measured
+  the models and moved the agent to the one that answers in about a second. The app also keeps a
+  time budget, and if the AI is unavailable a fixed pipeline calls the same Qloo tools, so users
+  always get results with the same Qloo scores.
 - **Hobbies vs. names.** "anime" or "street food" match random entities by name. The agent (and the
   fallback) prefer Qloo tags for genre and hobby inputs.
 
 ## Accomplishments I'm proud of
 
-- A working end-to-end agent that is genuinely useful in about 15 seconds.
-- Results that make sense: Bad Bunny and tapas lead to Barcelona, Studio Ghibli to Kyoto.
+- A working end-to-end agent that answers in about 10 to 20 seconds.
+- Results that make sense: Bad Bunny and tapas lead to Barcelona, Studio Ghibli to Kyoto,
+  Rammstein to Berlin.
 - It degrades gracefully in every failure case I could think of.
 
 ## What I learned
@@ -111,7 +131,7 @@ data, and how much reliability work a "simple" demo needs on free APIs.
 
 - Live tuition and cost data from official sources.
 - More cities, and smaller university towns.
-- Saving and comparing several searches.
+- More app languages, starting with Albanian and German.
 
 ## Limitations
 

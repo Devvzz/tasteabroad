@@ -7,23 +7,33 @@ Find the university city abroad where you'd actually feel at home.
 ![TasteAbroad results for Studio Ghibli, street food and cycling](docs/screenshot.jpg)
 
 Millions of students choose where to study abroad by rankings and price, then feel lost because
-the city doesn't fit them. TasteAbroad adds the missing question: **will I feel at home there?**
+the city doesn't fit them. TasteAbroad answers three questions together:
+
+1. **Will I fit in culturally?** Your taste in music, film, food and hobbies, matched by Qloo.
+2. **Can I study there in a language I speak?** English-taught programmes first, other languages optional.
+3. **Can I afford it?** Typical international tuition and the monthly cost of living.
 
 You type what you love, like artists, films, shows, food and hobbies. An AI agent uses
-[Qloo](https://www.qloo.com/)'s taste graph to rank 67 university cities around the world by
-cultural fit, then shows well-known universities, typical international tuition, the monthly cost
-of living and a short explanation of why each city fits you.
+[Qloo](https://www.qloo.com/)'s taste graph to rank a curated list of 105 university cities
+around the world by cultural fit, then shows well-known universities, typical international
+tuition, the monthly cost of living and a short explanation of why each city fits you.
+
+> **Every match score comes straight from Qloo.** The percentage on a city card is Qloo's own
+> taste-affinity value for that city, shown unchanged (0.93 becomes 93%). The AI never sets,
+> adjusts or ranks a score. It only decides which Qloo lookups to make and writes the
+> explanations around Qloo's results.
 
 ## Features
 
-- **Taste-based city matching** for 67 student cities on every continent, scored by Qloo.
+- **Taste-based city matching** for 105 student cities on every continent, scored by Qloo.
 - **Visible AI agent**: every step and tool call is streamed live to the page, with a full agent trace.
-- **City cards** with match score, "why you'd fit", universities with links, tuition and monthly costs.
+- **City cards** with the Qloo match score, "why you'd fit", universities with links, tuition and monthly costs.
+- **Study language**: one switch for English-taught programmes, plus "I also speak..." for other languages
+  (useful for free or cheap public degrees in the local language).
 - **Compare two cities** side by side, including places in each city that people with your taste love (from Qloo).
 - **"People like you also liked..."**: music, films, TV and places from Qloo.
-- **Optional filters** for tuition, monthly budget, language of study and region.
-- **Shareable links**: likes, filters and language live in the URL.
-- **English, Albanian and German**, including the AI-written explanations.
+- **Optional filters** for tuition, monthly budget and region.
+- **Shareable links**: likes and filters live in the URL.
 - **Mobile-first**, light and dark mode.
 
 ## How Qloo is used
@@ -40,20 +50,24 @@ Qloo is not a side feature: without it there is no result. The agent has four to
 The compare view adds one more Qloo call per city: places inside that city (`filter.type=urn:entity:place`
 with `filter.location`) that people with the same taste rate highest.
 
-**Who decides what:** Qloo decides which cities fit and how strongly; every match score is a Qloo
-affinity. The LLM decides which lookups to make and writes the explanations, but it can only use
-IDs and cities that Qloo actually returned.
+**Who decides what:**
+
+| | Decides |
+| --- | --- |
+| **Qloo** | Which cities fit and how strongly. Every match score is Qloo's affinity value, unchanged. The ranking is Qloo's order. |
+| **AI agent (Gemini)** | Which Qloo lookups to make, and the wording of the explanations. The tools only accept IDs that a Qloo search returned, and the city list is built from Qloo's response, not from the model's text. |
+| **Our dataset** | Universities, tuition, living costs and teaching languages (rough ranges, marked as estimates). |
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-  U[Browser<br/>Next.js UI] -- "POST /api/match<br/>(likes, filters, language)" --> R[API route<br/>streams NDJSON events]
+  U[Browser<br/>Next.js UI] -- "POST /api/match<br/>(likes, filters)" --> R[API route<br/>streams NDJSON events]
   R --> A[Agent loop<br/>lib/agent]
   A <-- "tool calls" --> L[Gemini<br/>OpenAI-compatible API]
   A --> T[Tools]
   T --> Q[(Qloo<br/>Insights API)]
-  T --> D[(data/cities.json<br/>67 cities)]
+  T --> D[(data/cities.json<br/>105 cities)]
   A -. "LLM busy or failing" .-> F[Fixed pipeline<br/>same tools, fixed order]
   F --> T
   U -- "POST /api/city-picks" --> P[Compare route] --> Q
@@ -101,7 +115,7 @@ Open http://localhost:3000.
 | `QLOO_API_KEY` | Qloo API key (server-side only) |
 | `GEMINI_API_KEY` | Google Gemini API key (server-side only) |
 | `QLOO_BASE_URL` | Optional, defaults to `https://hackathon.api.qloo.com` |
-| `LLM_MODEL` | Optional, defaults to `gemini-3.1-flash-lite` |
+| `LLM_MODEL` | Optional, defaults to `gemini-3.5-flash-lite` |
 | `LLM_FALLBACK_MODELS` | Optional, comma-separated models tried when the main one is busy |
 | `LLM_WRITER_MODEL` | Optional, model that writes the city explanations |
 | `LLM_BASE_URL` / `LLM_API_KEY` | Optional, point the agent at any OpenAI-compatible provider |
@@ -127,10 +141,17 @@ Never commit `.env.local`; `.gitignore` already excludes it.
 
 ## Data
 
-`data/cities.json` holds 67 cities with country, region, coordinates, 2 to 3 universities with
-official links, typical international tuition, a monthly student budget in EUR and USD, teaching
-languages and student-life tags. Each city has a `source`, a `checked` date and is marked
-`estimate, check official site`. Values are rough ranges, never quotes.
+`data/cities.json` holds a hand-picked list of 105 well-known student cities across all world
+regions (Europe 38, Asia 19, North America 16, Latin America 10, Africa 9, Oceania 7, Middle
+East 6). The list is curated, not taken from a ranking; Qloo then scores every city on it for each
+search. Every city was checked to have a Qloo destination that can be scored, and cities Qloo
+has no entry for were left out. Seoul and Lima are scored through a district in the same metro
+area (Suwon, Miraflores), which the card says openly.
+
+Each city has country, region, coordinates, 1 to 3 universities with official links, typical
+international tuition, a monthly student budget in EUR and USD, teaching languages and
+student-life tags, plus a `source`, a `checked` date and the mark `estimate, check official site`.
+Values are rough ranges, never quotes.
 
 ## Limitations
 

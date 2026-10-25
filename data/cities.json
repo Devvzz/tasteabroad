@@ -3777,6 +3777,2059 @@
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-26",
       "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "lyon",
+      "name": "Lyon",
+      "country": "France",
+      "countryCode": "FR",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 45.764,
+        "lon": 4.8357
+      },
+      "qlooId": "8A3A63FB-B038-4422-A36A-5E89B13993AD",
+      "universities": [
+        {
+          "name": "Claude Bernard University Lyon 1",
+          "url": "https://www.univ-lyon1.fr"
+        },
+        {
+          "name": "Lumière University Lyon 2",
+          "url": "https://www.univ-lyon2.fr"
+        },
+        {
+          "name": "INSA Lyon",
+          "url": "https://www.insa-lyon.fr"
+        }
+      ],
+      "tuition": {
+        "label": "€175 (EU) to ~€4k (non-EU) per year (public)",
+        "usdPerYear": {
+          "min": 200,
+          "max": 4400
+        },
+        "note": "Many public universities waive the higher non-EU fee."
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 800,
+          "max": 1200
+        },
+        "usdPerMonth": {
+          "min": 900,
+          "max": 1300
+        }
+      },
+      "languages": [
+        "French",
+        "English"
+      ],
+      "studentLife": [
+        "food capital",
+        "Festival of Lights",
+        "rivers",
+        "student city",
+        "cycling"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "hamburg",
+      "name": "Hamburg",
+      "country": "Germany",
+      "countryCode": "DE",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 53.5511,
+        "lon": 9.9937
+      },
+      "qlooId": "DFA1ECB1-172B-4AB7-9D66-80C083FA2039",
+      "universities": [
+        {
+          "name": "University of Hamburg",
+          "url": "https://www.uni-hamburg.de"
+        },
+        {
+          "name": "Hamburg University of Technology",
+          "url": "https://www.tuhh.de"
+        },
+        {
+          "name": "HAW Hamburg",
+          "url": "https://www.haw-hamburg.de"
+        }
+      ],
+      "tuition": {
+        "label": "€0 tuition + ~€350 semester fee (public)",
+        "usdPerYear": {
+          "min": 0,
+          "max": 800
+        },
+        "note": "The semester fee includes a public transport ticket."
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 1000,
+          "max": 1450
+        },
+        "usdPerMonth": {
+          "min": 1100,
+          "max": 1600
+        }
+      },
+      "languages": [
+        "German",
+        "English"
+      ],
+      "studentLife": [
+        "harbour",
+        "music clubs",
+        "nightlife",
+        "media",
+        "lakes"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "heidelberg",
+      "name": "Heidelberg",
+      "country": "Germany",
+      "countryCode": "DE",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 49.3988,
+        "lon": 8.6724
+      },
+      "qlooId": "E133B304-5CD9-4BC0-B0E9-B8DA883EF833",
+      "universities": [
+        {
+          "name": "Heidelberg University",
+          "url": "https://www.uni-heidelberg.de"
+        },
+        {
+          "name": "SRH University Heidelberg",
+          "url": "https://www.srh-university.de"
+        }
+      ],
+      "tuition": {
+        "label": "€0 (EU) to ~€3k (non-EU) per year + semester fee",
+        "usdPerYear": {
+          "min": 0,
+          "max": 3800
+        },
+        "note": "Baden-Württemberg charges non-EU students €1,500 per semester at public universities."
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 900,
+          "max": 1300
+        },
+        "usdPerMonth": {
+          "min": 1000,
+          "max": 1450
+        }
+      },
+      "languages": [
+        "German",
+        "English"
+      ],
+      "studentLife": [
+        "old town",
+        "castle",
+        "student city",
+        "river walks",
+        "research"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "utrecht",
+      "name": "Utrecht",
+      "country": "Netherlands",
+      "countryCode": "NL",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 52.0907,
+        "lon": 5.1214
+      },
+      "qlooId": "C993791E-4C6B-49AC-9D25-14944431A318",
+      "universities": [
+        {
+          "name": "Utrecht University",
+          "url": "https://www.uu.nl"
+        },
+        {
+          "name": "HU University of Applied Sciences Utrecht",
+          "url": "https://www.hu.nl"
+        }
+      ],
+      "tuition": {
+        "label": "€2.5k (EU) to €12k–20k (non-EU) per year",
+        "usdPerYear": {
+          "min": 2800,
+          "max": 22000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 1100,
+          "max": 1600
+        },
+        "usdPerMonth": {
+          "min": 1200,
+          "max": 1750
+        }
+      },
+      "languages": [
+        "Dutch",
+        "English"
+      ],
+      "studentLife": [
+        "cycling",
+        "canals",
+        "student city",
+        "cafés",
+        "festivals"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "groningen",
+      "name": "Groningen",
+      "country": "Netherlands",
+      "countryCode": "NL",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 53.2194,
+        "lon": 6.5665
+      },
+      "qlooId": "01364A9F-91F7-4E70-9679-E3B5163B7551",
+      "universities": [
+        {
+          "name": "University of Groningen",
+          "url": "https://www.rug.nl"
+        },
+        {
+          "name": "Hanze University of Applied Sciences",
+          "url": "https://www.hanze.nl"
+        }
+      ],
+      "tuition": {
+        "label": "€2.5k (EU) to €10k–18k (non-EU) per year",
+        "usdPerYear": {
+          "min": 2800,
+          "max": 20000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 950,
+          "max": 1350
+        },
+        "usdPerMonth": {
+          "min": 1050,
+          "max": 1500
+        }
+      },
+      "languages": [
+        "Dutch",
+        "English"
+      ],
+      "studentLife": [
+        "student city",
+        "cycling",
+        "nightlife",
+        "cafés",
+        "young crowd"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "valencia",
+      "name": "Valencia",
+      "country": "Spain",
+      "countryCode": "ES",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 39.4699,
+        "lon": -0.3763
+      },
+      "qlooId": "807DF328-49F5-4B19-8125-5297E4D1F526",
+      "universities": [
+        {
+          "name": "University of Valencia",
+          "url": "https://www.uv.es"
+        },
+        {
+          "name": "Polytechnic University of Valencia",
+          "url": "https://www.upv.es"
+        }
+      ],
+      "tuition": {
+        "label": "€1k–3k per year (public)",
+        "usdPerYear": {
+          "min": 1100,
+          "max": 3300
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 750,
+          "max": 1100
+        },
+        "usdPerMonth": {
+          "min": 850,
+          "max": 1200
+        }
+      },
+      "languages": [
+        "Spanish",
+        "Catalan",
+        "English"
+      ],
+      "studentLife": [
+        "beach",
+        "paella",
+        "Las Fallas festival",
+        "cycling",
+        "sunshine"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "porto",
+      "name": "Porto",
+      "country": "Portugal",
+      "countryCode": "PT",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 41.1579,
+        "lon": -8.6291
+      },
+      "qlooId": "E1ACE365-5184-4298-A919-F4609A95490B",
+      "universities": [
+        {
+          "name": "University of Porto",
+          "url": "https://www.up.pt"
+        },
+        {
+          "name": "Catholic University of Portugal (Porto)",
+          "url": "https://www.porto.ucp.pt"
+        }
+      ],
+      "tuition": {
+        "label": "€700 (EU) to €3k–7k (international) per year",
+        "usdPerYear": {
+          "min": 800,
+          "max": 7700
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 700,
+          "max": 1050
+        },
+        "usdPerMonth": {
+          "min": 750,
+          "max": 1150
+        }
+      },
+      "languages": [
+        "Portuguese",
+        "English"
+      ],
+      "studentLife": [
+        "river views",
+        "port wine",
+        "surfing",
+        "architecture",
+        "affordable"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "glasgow",
+      "name": "Glasgow",
+      "country": "United Kingdom",
+      "countryCode": "GB",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 55.8642,
+        "lon": -4.2518
+      },
+      "qlooId": "CC8DB961-F1A2-4AF2-8190-8DBB3617763C",
+      "universities": [
+        {
+          "name": "University of Glasgow",
+          "url": "https://www.gla.ac.uk"
+        },
+        {
+          "name": "University of Strathclyde",
+          "url": "https://www.strath.ac.uk"
+        },
+        {
+          "name": "Glasgow Caledonian University",
+          "url": "https://www.gcu.ac.uk"
+        }
+      ],
+      "tuition": {
+        "label": "£17k–30k per year (international)",
+        "usdPerYear": {
+          "min": 22000,
+          "max": 38000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 1000,
+          "max": 1450
+        },
+        "usdPerMonth": {
+          "min": 1100,
+          "max": 1600
+        }
+      },
+      "languages": [
+        "English"
+      ],
+      "studentLife": [
+        "live music",
+        "football",
+        "street art",
+        "friendly locals",
+        "Highlands trips"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "bristol",
+      "name": "Bristol",
+      "country": "United Kingdom",
+      "countryCode": "GB",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 51.4545,
+        "lon": -2.5879
+      },
+      "qlooId": "09626C80-9A92-4824-ACDC-F506BAE4EC0A",
+      "universities": [
+        {
+          "name": "University of Bristol",
+          "url": "https://www.bristol.ac.uk"
+        },
+        {
+          "name": "University of the West of England",
+          "url": "https://www.uwe.ac.uk"
+        }
+      ],
+      "tuition": {
+        "label": "£20k–33k per year (international)",
+        "usdPerYear": {
+          "min": 25000,
+          "max": 42000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 1100,
+          "max": 1550
+        },
+        "usdPerMonth": {
+          "min": 1200,
+          "max": 1700
+        }
+      },
+      "languages": [
+        "English"
+      ],
+      "studentLife": [
+        "street art",
+        "music scene",
+        "harbour",
+        "cycling",
+        "independent shops"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "florence",
+      "name": "Florence",
+      "country": "Italy",
+      "countryCode": "IT",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 43.7696,
+        "lon": 11.2558
+      },
+      "qlooId": "EEA16019-B3D5-45F6-8AF9-93A7B65FC34B",
+      "universities": [
+        {
+          "name": "University of Florence",
+          "url": "https://www.unifi.it"
+        },
+        {
+          "name": "European University Institute",
+          "url": "https://www.eui.eu"
+        }
+      ],
+      "tuition": {
+        "label": "€0–2.5k per year (public, income-based)",
+        "usdPerYear": {
+          "min": 0,
+          "max": 2800
+        },
+        "note": "The European University Institute is for postgraduate study only."
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 900,
+          "max": 1300
+        },
+        "usdPerMonth": {
+          "min": 1000,
+          "max": 1450
+        }
+      },
+      "languages": [
+        "Italian",
+        "English"
+      ],
+      "studentLife": [
+        "Renaissance art",
+        "food",
+        "fashion",
+        "architecture",
+        "Tuscany trips"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "athens",
+      "name": "Athens",
+      "country": "Greece",
+      "countryCode": "GR",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 37.9838,
+        "lon": 23.7275
+      },
+      "qlooId": "0408C5D2-B89A-4E9A-877C-771D831488FE",
+      "universities": [
+        {
+          "name": "National and Kapodistrian University of Athens",
+          "url": "https://www.uoa.gr"
+        },
+        {
+          "name": "Athens University of Economics and Business",
+          "url": "https://www.aueb.gr"
+        },
+        {
+          "name": "National Technical University of Athens",
+          "url": "https://www.ntua.gr"
+        }
+      ],
+      "tuition": {
+        "label": "€0 (Greek-taught) to €2k–8k (English-taught) per year",
+        "usdPerYear": {
+          "min": 0,
+          "max": 8800
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 650,
+          "max": 1000
+        },
+        "usdPerMonth": {
+          "min": 700,
+          "max": 1100
+        }
+      },
+      "languages": [
+        "Greek",
+        "English"
+      ],
+      "studentLife": [
+        "ancient history",
+        "islands nearby",
+        "nightlife",
+        "street food",
+        "sunshine"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "ljubljana",
+      "name": "Ljubljana",
+      "country": "Slovenia",
+      "countryCode": "SI",
+      "region": "Europe",
+      "coordinates": {
+        "lat": 46.0569,
+        "lon": 14.5058
+      },
+      "qlooId": "DABC59ED-7A8D-44FE-9C85-4764A6F0037E",
+      "universities": [
+        {
+          "name": "University of Ljubljana",
+          "url": "https://www.uni-lj.si"
+        },
+        {
+          "name": "School of Economics and Business, University of Ljubljana",
+          "url": "https://www.ef.uni-lj.si"
+        }
+      ],
+      "tuition": {
+        "label": "€0 (EU) to €3k–6k (non-EU) per year",
+        "usdPerYear": {
+          "min": 0,
+          "max": 6600
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 650,
+          "max": 950
+        },
+        "usdPerMonth": {
+          "min": 700,
+          "max": 1050
+        }
+      },
+      "languages": [
+        "Slovenian",
+        "English"
+      ],
+      "studentLife": [
+        "green city",
+        "Alps and lakes",
+        "cafés",
+        "cycling",
+        "safe"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "philadelphia",
+      "name": "Philadelphia",
+      "country": "United States",
+      "countryCode": "US",
+      "region": "North America",
+      "coordinates": {
+        "lat": 39.9526,
+        "lon": -75.1652
+      },
+      "qlooId": "182F18D8-7E24-4BAC-BC47-75CC284C4777",
+      "universities": [
+        {
+          "name": "University of Pennsylvania",
+          "url": "https://www.upenn.edu"
+        },
+        {
+          "name": "Drexel University",
+          "url": "https://drexel.edu"
+        },
+        {
+          "name": "Temple University",
+          "url": "https://www.temple.edu"
+        }
+      ],
+      "tuition": {
+        "label": "$35k–68k per year",
+        "usdPerYear": {
+          "min": 35000,
+          "max": 68000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 1500,
+          "max": 2300
+        },
+        "usdPerMonth": {
+          "min": 1650,
+          "max": 2550
+        }
+      },
+      "languages": [
+        "English"
+      ],
+      "studentLife": [
+        "history",
+        "food scene",
+        "sports",
+        "murals",
+        "music"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "washington-dc",
+      "name": "Washington, D.C.",
+      "country": "United States",
+      "countryCode": "US",
+      "region": "North America",
+      "coordinates": {
+        "lat": 38.9072,
+        "lon": -77.0369
+      },
+      "qlooId": "76AC9341-14AC-475A-A17A-8C530FD6BABA",
+      "universities": [
+        {
+          "name": "Georgetown University",
+          "url": "https://www.georgetown.edu"
+        },
+        {
+          "name": "George Washington University",
+          "url": "https://www.gwu.edu"
+        },
+        {
+          "name": "American University",
+          "url": "https://www.american.edu"
+        }
+      ],
+      "tuition": {
+        "label": "$55k–68k per year",
+        "usdPerYear": {
+          "min": 55000,
+          "max": 68000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 1800,
+          "max": 2700
+        },
+        "usdPerMonth": {
+          "min": 2000,
+          "max": 2950
+        }
+      },
+      "languages": [
+        "English"
+      ],
+      "studentLife": [
+        "politics",
+        "free museums",
+        "international crowd",
+        "internships",
+        "parks"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "miami",
+      "name": "Miami",
+      "country": "United States",
+      "countryCode": "US",
+      "region": "North America",
+      "coordinates": {
+        "lat": 25.7617,
+        "lon": -80.1918
+      },
+      "qlooId": "C85DC4D6-172D-4629-85AA-A35C6B7638CA",
+      "universities": [
+        {
+          "name": "University of Miami",
+          "url": "https://welcome.miami.edu"
+        },
+        {
+          "name": "Florida International University",
+          "url": "https://www.fiu.edu"
+        }
+      ],
+      "tuition": {
+        "label": "$20k–60k per year",
+        "usdPerYear": {
+          "min": 20000,
+          "max": 60000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 1500,
+          "max": 2300
+        },
+        "usdPerMonth": {
+          "min": 1650,
+          "max": 2550
+        }
+      },
+      "languages": [
+        "English",
+        "Spanish"
+      ],
+      "studentLife": [
+        "beaches",
+        "Latin culture",
+        "nightlife",
+        "art deco",
+        "sunshine"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "denver",
+      "name": "Denver",
+      "country": "United States",
+      "countryCode": "US",
+      "region": "North America",
+      "coordinates": {
+        "lat": 39.7392,
+        "lon": -104.9903
+      },
+      "qlooId": "D87E0EEF-6976-43B3-9F77-F9E7E86A380E",
+      "universities": [
+        {
+          "name": "University of Denver",
+          "url": "https://www.du.edu"
+        },
+        {
+          "name": "University of Colorado Denver",
+          "url": "https://www.ucdenver.edu"
+        }
+      ],
+      "tuition": {
+        "label": "$30k–58k per year",
+        "usdPerYear": {
+          "min": 30000,
+          "max": 58000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 1400,
+          "max": 2100
+        },
+        "usdPerMonth": {
+          "min": 1550,
+          "max": 2300
+        }
+      },
+      "languages": [
+        "English"
+      ],
+      "studentLife": [
+        "Rocky Mountains",
+        "skiing",
+        "craft beer",
+        "hiking",
+        "sunshine"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "atlanta",
+      "name": "Atlanta",
+      "country": "United States",
+      "countryCode": "US",
+      "region": "North America",
+      "coordinates": {
+        "lat": 33.749,
+        "lon": -84.388
+      },
+      "qlooId": "205387A7-9500-4C01-A1BE-979A0AD7A296",
+      "universities": [
+        {
+          "name": "Georgia Institute of Technology",
+          "url": "https://www.gatech.edu"
+        },
+        {
+          "name": "Emory University",
+          "url": "https://www.emory.edu"
+        },
+        {
+          "name": "Georgia State University",
+          "url": "https://www.gsu.edu"
+        }
+      ],
+      "tuition": {
+        "label": "$30k–60k per year",
+        "usdPerYear": {
+          "min": 30000,
+          "max": 60000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 1400,
+          "max": 2100
+        },
+        "usdPerMonth": {
+          "min": 1550,
+          "max": 2300
+        }
+      },
+      "languages": [
+        "English"
+      ],
+      "studentLife": [
+        "hip-hop",
+        "film industry",
+        "food",
+        "sports",
+        "Southern culture"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "ottawa",
+      "name": "Ottawa",
+      "country": "Canada",
+      "countryCode": "CA",
+      "region": "North America",
+      "coordinates": {
+        "lat": 45.4215,
+        "lon": -75.6972
+      },
+      "qlooId": "AE031A80-F395-4EDE-8D92-614FC7CEA43C",
+      "universities": [
+        {
+          "name": "University of Ottawa",
+          "url": "https://www.uottawa.ca"
+        },
+        {
+          "name": "Carleton University",
+          "url": "https://carleton.ca"
+        }
+      ],
+      "tuition": {
+        "label": "CA$30k–50k per year (international)",
+        "usdPerYear": {
+          "min": 22000,
+          "max": 37000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 1000,
+          "max": 1500
+        },
+        "usdPerMonth": {
+          "min": 1100,
+          "max": 1650
+        }
+      },
+      "languages": [
+        "English",
+        "French"
+      ],
+      "studentLife": [
+        "bilingual",
+        "politics",
+        "canal skating",
+        "museums",
+        "safe"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "fukuoka",
+      "name": "Fukuoka",
+      "country": "Japan",
+      "countryCode": "JP",
+      "region": "Asia",
+      "coordinates": {
+        "lat": 33.5904,
+        "lon": 130.4017
+      },
+      "qlooId": "439B2E6A-E020-4EE1-B134-8C5503D0D1A9",
+      "universities": [
+        {
+          "name": "Kyushu University",
+          "url": "https://www.kyushu-u.ac.jp"
+        },
+        {
+          "name": "Fukuoka University",
+          "url": "https://www.fukuoka-u.ac.jp"
+        }
+      ],
+      "tuition": {
+        "label": "¥540k (national) to ¥1.1M (private) per year",
+        "usdPerYear": {
+          "min": 3600,
+          "max": 7500
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 600,
+          "max": 900
+        },
+        "usdPerMonth": {
+          "min": 650,
+          "max": 1000
+        }
+      },
+      "languages": [
+        "Japanese",
+        "English"
+      ],
+      "studentLife": [
+        "ramen",
+        "food stalls",
+        "beaches",
+        "startups",
+        "affordable"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "busan",
+      "name": "Busan",
+      "country": "South Korea",
+      "countryCode": "KR",
+      "region": "Asia",
+      "coordinates": {
+        "lat": 35.1796,
+        "lon": 129.0756
+      },
+      "qlooId": "AF7A6B85-B485-4319-99DE-7DAC4E130C8F",
+      "universities": [
+        {
+          "name": "Pusan National University",
+          "url": "https://www.pusan.ac.kr"
+        },
+        {
+          "name": "Pukyong National University",
+          "url": "https://www.pknu.ac.kr"
+        }
+      ],
+      "tuition": {
+        "label": "₩4M–9M per year",
+        "usdPerYear": {
+          "min": 3000,
+          "max": 6800
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 550,
+          "max": 900
+        },
+        "usdPerMonth": {
+          "min": 600,
+          "max": 1000
+        }
+      },
+      "languages": [
+        "Korean",
+        "English"
+      ],
+      "studentLife": [
+        "beaches",
+        "seafood",
+        "film festival",
+        "hiking",
+        "port city"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "mumbai",
+      "name": "Mumbai",
+      "country": "India",
+      "countryCode": "IN",
+      "region": "Asia",
+      "coordinates": {
+        "lat": 19.076,
+        "lon": 72.8777
+      },
+      "qlooId": "95C14EAA-284D-468F-8AFF-42DCE47EA15C",
+      "universities": [
+        {
+          "name": "IIT Bombay",
+          "url": "https://www.iitb.ac.in"
+        },
+        {
+          "name": "University of Mumbai",
+          "url": "https://mu.ac.in"
+        },
+        {
+          "name": "NMIMS",
+          "url": "https://www.nmims.edu"
+        }
+      ],
+      "tuition": {
+        "label": "$3k–15k per year (foreign national fees)",
+        "usdPerYear": {
+          "min": 3000,
+          "max": 15000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 450,
+          "max": 850
+        },
+        "usdPerMonth": {
+          "min": 500,
+          "max": 950
+        }
+      },
+      "languages": [
+        "English",
+        "Hindi",
+        "Marathi"
+      ],
+      "studentLife": [
+        "Bollywood",
+        "street food",
+        "sea face",
+        "finance",
+        "nightlife"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "new-delhi",
+      "name": "New Delhi",
+      "country": "India",
+      "countryCode": "IN",
+      "region": "Asia",
+      "coordinates": {
+        "lat": 28.6139,
+        "lon": 77.209
+      },
+      "qlooId": "C1EE34B8-7C80-4261-92AE-C73313559326",
+      "universities": [
+        {
+          "name": "University of Delhi",
+          "url": "https://www.du.ac.in"
+        },
+        {
+          "name": "Jawaharlal Nehru University",
+          "url": "https://www.jnu.ac.in"
+        },
+        {
+          "name": "IIT Delhi",
+          "url": "https://home.iitd.ac.in"
+        }
+      ],
+      "tuition": {
+        "label": "$2k–10k per year (foreign national fees)",
+        "usdPerYear": {
+          "min": 2000,
+          "max": 10000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 350,
+          "max": 700
+        },
+        "usdPerMonth": {
+          "min": 400,
+          "max": 750
+        }
+      },
+      "languages": [
+        "English",
+        "Hindi"
+      ],
+      "studentLife": [
+        "history",
+        "street food",
+        "markets",
+        "politics",
+        "festivals"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "ho-chi-minh-city",
+      "name": "Ho Chi Minh City",
+      "country": "Vietnam",
+      "countryCode": "VN",
+      "region": "Asia",
+      "coordinates": {
+        "lat": 10.8231,
+        "lon": 106.6297
+      },
+      "qlooId": "BC1B0D1B-B3C6-471C-A532-F094B9635CBF",
+      "universities": [
+        {
+          "name": "RMIT University Vietnam",
+          "url": "https://www.rmit.edu.vn"
+        },
+        {
+          "name": "Vietnam National University Ho Chi Minh City",
+          "url": "https://vnuhcm.edu.vn"
+        },
+        {
+          "name": "Fulbright University Vietnam",
+          "url": "https://fulbright.edu.vn"
+        }
+      ],
+      "tuition": {
+        "label": "$3k–20k per year",
+        "usdPerYear": {
+          "min": 3000,
+          "max": 20000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 400,
+          "max": 700
+        },
+        "usdPerMonth": {
+          "min": 450,
+          "max": 750
+        }
+      },
+      "languages": [
+        "Vietnamese",
+        "English"
+      ],
+      "studentLife": [
+        "street food",
+        "coffee culture",
+        "motorbikes",
+        "nightlife",
+        "startups"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "manila",
+      "name": "Manila",
+      "country": "Philippines",
+      "countryCode": "PH",
+      "region": "Asia",
+      "coordinates": {
+        "lat": 14.5995,
+        "lon": 120.9842
+      },
+      "qlooId": "D57F9DE7-D6D9-467E-A73E-5BBBD910B952",
+      "universities": [
+        {
+          "name": "University of the Philippines Diliman",
+          "url": "https://upd.edu.ph"
+        },
+        {
+          "name": "Ateneo de Manila University",
+          "url": "https://www.ateneo.edu"
+        },
+        {
+          "name": "De La Salle University",
+          "url": "https://www.dlsu.edu.ph"
+        }
+      ],
+      "tuition": {
+        "label": "$2k–8k per year",
+        "usdPerYear": {
+          "min": 2000,
+          "max": 8000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 400,
+          "max": 700
+        },
+        "usdPerMonth": {
+          "min": 450,
+          "max": 750
+        }
+      },
+      "languages": [
+        "English",
+        "Filipino"
+      ],
+      "studentLife": [
+        "malls",
+        "beaches nearby",
+        "music",
+        "friendly locals",
+        "food"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "hangzhou",
+      "name": "Hangzhou",
+      "country": "China",
+      "countryCode": "CN",
+      "region": "Asia",
+      "coordinates": {
+        "lat": 30.2741,
+        "lon": 120.1551
+      },
+      "qlooId": "B6F16057-0526-4634-AE3D-67D56F52FC3B",
+      "universities": [
+        {
+          "name": "Zhejiang University",
+          "url": "https://www.zju.edu.cn"
+        },
+        {
+          "name": "Zhejiang University of Technology",
+          "url": "https://www.zjut.edu.cn"
+        }
+      ],
+      "tuition": {
+        "label": "¥20k–35k (CNY) per year",
+        "usdPerYear": {
+          "min": 2800,
+          "max": 4900
+        },
+        "note": "Chinese government scholarships cover tuition for many students."
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 550,
+          "max": 900
+        },
+        "usdPerMonth": {
+          "min": 600,
+          "max": 1000
+        }
+      },
+      "languages": [
+        "Mandarin",
+        "English"
+      ],
+      "studentLife": [
+        "West Lake",
+        "tea culture",
+        "tech companies",
+        "parks",
+        "cycling"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "perth",
+      "name": "Perth",
+      "country": "Australia",
+      "countryCode": "AU",
+      "region": "Oceania",
+      "coordinates": {
+        "lat": -31.9505,
+        "lon": 115.8605
+      },
+      "qlooId": "533BAF3A-4863-490A-8D46-54DC98C425F0",
+      "universities": [
+        {
+          "name": "The University of Western Australia",
+          "url": "https://www.uwa.edu.au"
+        },
+        {
+          "name": "Curtin University",
+          "url": "https://www.curtin.edu.au"
+        }
+      ],
+      "tuition": {
+        "label": "A$32k–48k per year (international)",
+        "usdPerYear": {
+          "min": 21000,
+          "max": 32000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 1000,
+          "max": 1450
+        },
+        "usdPerMonth": {
+          "min": 1100,
+          "max": 1600
+        }
+      },
+      "languages": [
+        "English"
+      ],
+      "studentLife": [
+        "beaches",
+        "sunshine",
+        "outdoor life",
+        "wildlife",
+        "relaxed"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "adelaide",
+      "name": "Adelaide",
+      "country": "Australia",
+      "countryCode": "AU",
+      "region": "Oceania",
+      "coordinates": {
+        "lat": -34.9285,
+        "lon": 138.6007
+      },
+      "qlooId": "914C00E7-7E0A-413E-AF29-66D4377ABCD1",
+      "universities": [
+        {
+          "name": "The University of Adelaide",
+          "url": "https://www.adelaide.edu.au"
+        },
+        {
+          "name": "Flinders University",
+          "url": "https://www.flinders.edu.au"
+        }
+      ],
+      "tuition": {
+        "label": "A$32k–48k per year (international)",
+        "usdPerYear": {
+          "min": 21000,
+          "max": 32000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 900,
+          "max": 1350
+        },
+        "usdPerMonth": {
+          "min": 1000,
+          "max": 1500
+        }
+      },
+      "languages": [
+        "English"
+      ],
+      "studentLife": [
+        "festivals",
+        "wine regions",
+        "beaches",
+        "food",
+        "affordable for Australia"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "christchurch",
+      "name": "Christchurch",
+      "country": "New Zealand",
+      "countryCode": "NZ",
+      "region": "Oceania",
+      "coordinates": {
+        "lat": -43.5321,
+        "lon": 172.6362
+      },
+      "qlooId": "BB55A19A-E615-4082-A075-FBF771C2C497",
+      "universities": [
+        {
+          "name": "University of Canterbury",
+          "url": "https://www.canterbury.ac.nz"
+        },
+        {
+          "name": "Lincoln University",
+          "url": "https://www.lincoln.ac.nz"
+        }
+      ],
+      "tuition": {
+        "label": "NZ$30k–45k per year (international)",
+        "usdPerYear": {
+          "min": 18000,
+          "max": 27000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 950,
+          "max": 1350
+        },
+        "usdPerMonth": {
+          "min": 1050,
+          "max": 1500
+        }
+      },
+      "languages": [
+        "English"
+      ],
+      "studentLife": [
+        "outdoor life",
+        "skiing nearby",
+        "gardens",
+        "cycling",
+        "rebuilt city centre"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "rio-de-janeiro",
+      "name": "Rio de Janeiro",
+      "country": "Brazil",
+      "countryCode": "BR",
+      "region": "Latin America",
+      "coordinates": {
+        "lat": -22.9068,
+        "lon": -43.1729
+      },
+      "qlooId": "55005323-606E-4D33-A2E2-BE5E3CD6AD6A",
+      "universities": [
+        {
+          "name": "Federal University of Rio de Janeiro",
+          "url": "https://ufrj.br"
+        },
+        {
+          "name": "PUC-Rio",
+          "url": "https://www.puc-rio.br"
+        }
+      ],
+      "tuition": {
+        "label": "Free (UFRJ) to $8k–15k (PUC-Rio) per year",
+        "usdPerYear": {
+          "min": 0,
+          "max": 15000
+        },
+        "note": "Public universities are free but admission is very competitive."
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 550,
+          "max": 950
+        },
+        "usdPerMonth": {
+          "min": 600,
+          "max": 1050
+        }
+      },
+      "languages": [
+        "Portuguese"
+      ],
+      "studentLife": [
+        "beaches",
+        "samba",
+        "football",
+        "hiking",
+        "carnival"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "medellin",
+      "name": "Medellín",
+      "country": "Colombia",
+      "countryCode": "CO",
+      "region": "Latin America",
+      "coordinates": {
+        "lat": 6.2442,
+        "lon": -75.5812
+      },
+      "qlooId": "13C58791-14F9-4572-9C4C-890BC019135D",
+      "universities": [
+        {
+          "name": "Universidad de Antioquia",
+          "url": "https://www.udea.edu.co"
+        },
+        {
+          "name": "Universidad EAFIT",
+          "url": "https://www.eafit.edu.co"
+        }
+      ],
+      "tuition": {
+        "label": "$1k (public) to $5k–9k (private) per year",
+        "usdPerYear": {
+          "min": 1000,
+          "max": 9000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 450,
+          "max": 750
+        },
+        "usdPerMonth": {
+          "min": 500,
+          "max": 850
+        }
+      },
+      "languages": [
+        "Spanish"
+      ],
+      "studentLife": [
+        "spring climate",
+        "reggaeton",
+        "startups",
+        "coffee",
+        "mountains"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "montevideo",
+      "name": "Montevideo",
+      "country": "Uruguay",
+      "countryCode": "UY",
+      "region": "Latin America",
+      "coordinates": {
+        "lat": -34.9011,
+        "lon": -56.1645
+      },
+      "qlooId": "78A99A24-82AF-4869-B67D-4C20A1EC823E",
+      "universities": [
+        {
+          "name": "Universidad de la República",
+          "url": "https://udelar.edu.uy"
+        },
+        {
+          "name": "Universidad ORT Uruguay",
+          "url": "https://www.ort.edu.uy"
+        }
+      ],
+      "tuition": {
+        "label": "Free (public) to $5k–10k (private) per year",
+        "usdPerYear": {
+          "min": 0,
+          "max": 10000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 650,
+          "max": 1000
+        },
+        "usdPerMonth": {
+          "min": 700,
+          "max": 1100
+        }
+      },
+      "languages": [
+        "Spanish"
+      ],
+      "studentLife": [
+        "beaches",
+        "football",
+        "mate",
+        "safe",
+        "relaxed"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "guadalajara",
+      "name": "Guadalajara",
+      "country": "Mexico",
+      "countryCode": "MX",
+      "region": "Latin America",
+      "coordinates": {
+        "lat": 20.6597,
+        "lon": -103.3496
+      },
+      "qlooId": "BCE5238A-DCAA-441B-8412-97FA7A289EB9",
+      "universities": [
+        {
+          "name": "Universidad de Guadalajara",
+          "url": "https://www.udg.mx"
+        },
+        {
+          "name": "ITESO",
+          "url": "https://www.iteso.mx"
+        },
+        {
+          "name": "Tecnológico de Monterrey",
+          "url": "https://tec.mx"
+        }
+      ],
+      "tuition": {
+        "label": "Near €0 (public) to $6k–14k (private) per year",
+        "usdPerYear": {
+          "min": 0,
+          "max": 14000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 450,
+          "max": 750
+        },
+        "usdPerMonth": {
+          "min": 500,
+          "max": 850
+        }
+      },
+      "languages": [
+        "Spanish"
+      ],
+      "studentLife": [
+        "mariachi",
+        "tech hub",
+        "food",
+        "festivals",
+        "colonial centre"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "riyadh",
+      "name": "Riyadh",
+      "country": "Saudi Arabia",
+      "countryCode": "SA",
+      "region": "Middle East",
+      "coordinates": {
+        "lat": 24.7136,
+        "lon": 46.6753
+      },
+      "qlooId": "42B304BE-7993-44D1-85FA-FB2C4210E2C1",
+      "universities": [
+        {
+          "name": "King Saud University",
+          "url": "https://ksu.edu.sa"
+        },
+        {
+          "name": "Alfaisal University",
+          "url": "https://www.alfaisal.edu"
+        }
+      ],
+      "tuition": {
+        "label": "$0 (scholarships) to $10k–20k per year",
+        "usdPerYear": {
+          "min": 0,
+          "max": 20000
+        },
+        "note": "Many international students study on full government scholarships."
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 800,
+          "max": 1300
+        },
+        "usdPerMonth": {
+          "min": 900,
+          "max": 1450
+        }
+      },
+      "languages": [
+        "Arabic",
+        "English"
+      ],
+      "studentLife": [
+        "desert trips",
+        "modern entertainment",
+        "food",
+        "safe",
+        "growing arts scene"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "sharjah",
+      "name": "Sharjah",
+      "country": "United Arab Emirates",
+      "countryCode": "AE",
+      "region": "Middle East",
+      "coordinates": {
+        "lat": 25.3463,
+        "lon": 55.4209
+      },
+      "qlooId": "69040415-5A49-4165-A5F0-92870AFDE4D3",
+      "universities": [
+        {
+          "name": "American University of Sharjah",
+          "url": "https://www.aus.edu"
+        },
+        {
+          "name": "University of Sharjah",
+          "url": "https://www.sharjah.ac.ae"
+        }
+      ],
+      "tuition": {
+        "label": "$15k–28k per year",
+        "usdPerYear": {
+          "min": 15000,
+          "max": 28000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 800,
+          "max": 1300
+        },
+        "usdPerMonth": {
+          "min": 900,
+          "max": 1450
+        }
+      },
+      "languages": [
+        "English",
+        "Arabic"
+      ],
+      "studentLife": [
+        "museums",
+        "culture",
+        "beaches",
+        "near Dubai",
+        "safe"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "stellenbosch",
+      "name": "Stellenbosch",
+      "country": "South Africa",
+      "countryCode": "ZA",
+      "region": "Africa",
+      "coordinates": {
+        "lat": -33.9321,
+        "lon": 18.8602
+      },
+      "qlooId": "6737682E-E98A-4D10-886D-4AE63728EFAC",
+      "universities": [
+        {
+          "name": "Stellenbosch University",
+          "url": "https://www.sun.ac.za"
+        }
+      ],
+      "tuition": {
+        "label": "R70k–130k per year (international)",
+        "usdPerYear": {
+          "min": 3800,
+          "max": 7200
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 450,
+          "max": 800
+        },
+        "usdPerMonth": {
+          "min": 500,
+          "max": 900
+        }
+      },
+      "languages": [
+        "English",
+        "Afrikaans"
+      ],
+      "studentLife": [
+        "wine",
+        "mountains",
+        "student town",
+        "hiking",
+        "outdoor life"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "kampala",
+      "name": "Kampala",
+      "country": "Uganda",
+      "countryCode": "UG",
+      "region": "Africa",
+      "coordinates": {
+        "lat": 0.3476,
+        "lon": 32.5825
+      },
+      "qlooId": "1D477EB7-F648-49E4-ABBE-CBDABB32781B",
+      "universities": [
+        {
+          "name": "Makerere University",
+          "url": "https://www.mak.ac.ug"
+        },
+        {
+          "name": "Kampala International University",
+          "url": "https://kiu.ac.ug"
+        }
+      ],
+      "tuition": {
+        "label": "$1.5k–5k per year (international)",
+        "usdPerYear": {
+          "min": 1500,
+          "max": 5000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 350,
+          "max": 650
+        },
+        "usdPerMonth": {
+          "min": 400,
+          "max": 700
+        }
+      },
+      "languages": [
+        "English"
+      ],
+      "studentLife": [
+        "nightlife",
+        "Lake Victoria",
+        "music",
+        "food markets",
+        "friendly locals"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "lagos",
+      "name": "Lagos",
+      "country": "Nigeria",
+      "countryCode": "NG",
+      "region": "Africa",
+      "coordinates": {
+        "lat": 6.5244,
+        "lon": 3.3792
+      },
+      "qlooId": "CB861641-CE41-4587-AB34-4466B5317F69",
+      "universities": [
+        {
+          "name": "University of Lagos",
+          "url": "https://unilag.edu.ng"
+        },
+        {
+          "name": "Pan-Atlantic University",
+          "url": "https://pau.edu.ng"
+        }
+      ],
+      "tuition": {
+        "label": "$1k–10k per year",
+        "usdPerYear": {
+          "min": 1000,
+          "max": 10000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 400,
+          "max": 750
+        },
+        "usdPerMonth": {
+          "min": 450,
+          "max": 850
+        }
+      },
+      "languages": [
+        "English"
+      ],
+      "studentLife": [
+        "Afrobeats",
+        "nightlife",
+        "fashion",
+        "beaches",
+        "startups"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
+    },
+    {
+      "id": "rabat",
+      "name": "Rabat",
+      "country": "Morocco",
+      "countryCode": "MA",
+      "region": "Africa",
+      "coordinates": {
+        "lat": 34.0209,
+        "lon": -6.8416
+      },
+      "qlooId": "0E29E659-9FDF-4795-A7D3-850F4B71A5BB",
+      "universities": [
+        {
+          "name": "Mohammed V University",
+          "url": "https://www.um5.ac.ma"
+        },
+        {
+          "name": "International University of Rabat",
+          "url": "https://www.uir.ac.ma"
+        }
+      ],
+      "tuition": {
+        "label": "$1k (public) to $7k–10k (private) per year",
+        "usdPerYear": {
+          "min": 1000,
+          "max": 10000
+        }
+      },
+      "costOfLiving": {
+        "eurPerMonth": {
+          "min": 400,
+          "max": 700
+        },
+        "usdPerMonth": {
+          "min": 450,
+          "max": 750
+        }
+      },
+      "languages": [
+        "Arabic",
+        "French",
+        "English"
+      ],
+      "studentLife": [
+        "Atlantic coast",
+        "history",
+        "surfing",
+        "medinas",
+        "food"
+      ],
+      "source": "University fee pages and public student cost-of-living guides",
+      "checked": "2026-10-26",
+      "accuracy": "estimate, check official site"
     }
   ]
 }

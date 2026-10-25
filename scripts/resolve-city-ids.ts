@@ -4,6 +4,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { searchEntities, type QlooEntity } from "../lib/qloo";
 import type { City } from "../lib/cities";
+import { distanceKm } from "../lib/geo";
 
 const file = join(__dirname, "..", "data", "cities.json");
 const force = process.argv.includes("--force");
@@ -12,14 +13,6 @@ const normalize = (s: string) =>
   s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/-shi$/, "").trim();
 
 const MAX_DISTANCE_KM = 60;
-
-function distanceKm(a: { lat: number; lon: number }, b: { lat: number; lon: number }): number {
-  const rad = (d: number) => (d * Math.PI) / 180;
-  const h =
-    Math.sin(rad(b.lat - a.lat) / 2) ** 2 +
-    Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(rad(b.lon - a.lon) / 2) ** 2;
-  return 6371 * 2 * Math.asin(Math.sqrt(h));
-}
 
 // Country names differ between sources ("England", "Czech Republic"), so match on distance instead.
 function pickMatch(city: City, candidates: QlooEntity[]): QlooEntity | undefined {

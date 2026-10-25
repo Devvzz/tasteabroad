@@ -1,0 +1,69 @@
+import type { City, Region } from "@/lib/cities";
+import type { Lang } from "@/lib/i18n";
+
+export interface MatchFilters {
+  maxTuitionUsd?: number;
+  maxMonthlyUsd?: number;
+  language?: string;
+  regions?: Region[];
+}
+
+export interface MatchRequest {
+  likes: string[];
+  filters: MatchFilters;
+  lang: Lang;
+}
+
+export type StepKey = "plan" | "search" | "match" | "similar" | "cities" | "explain" | "fallback";
+export type ErrorCode = "generic" | "rateLimited" | "noTaste" | "qloo" | "badRequest";
+export type NoteKey = "filtersRelaxed" | "nearestFallback" | "llmFallback" | "unresolved";
+
+export interface TraceEntry {
+  tool: string;
+  args: string;
+  ms: number;
+  ok: boolean;
+}
+
+export type AgentEvent =
+  | { type: "step"; step: StepKey; status: "running" | "done" | "error"; detail?: string }
+  | { type: "tool"; entry: TraceEntry }
+  | { type: "result"; result: MatchResult }
+  | { type: "error"; code: ErrorCode };
+
+/** A user input that Qloo resolved to an entity or a tag. */
+export interface ResolvedSignal {
+  input: string;
+  id: string;
+  name: string;
+  kind: "entity" | "tag";
+  type: string;
+}
+
+export interface CityMatch {
+  city: City;
+  /** Qloo taste affinity as a percentage. */
+  score: number;
+  why: string;
+  studentLife: string;
+}
+
+export interface AlsoLikedItem {
+  id: string;
+  name: string;
+  type: string;
+  imageUrl?: string;
+}
+
+export interface MatchResult {
+  lang: Lang;
+  likes: string[];
+  resolved: ResolvedSignal[];
+  unresolved: string[];
+  cities: CityMatch[];
+  alsoLiked: AlsoLikedItem[];
+  worldwide: { name: string; countryCode?: string }[];
+  notes: NoteKey[];
+  trace: TraceEntry[];
+  mode: "agent" | "fallback";
+}

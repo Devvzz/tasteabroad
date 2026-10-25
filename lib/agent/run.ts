@@ -1,0 +1,253 @@
+// Runs the TasteAbroad agent: the LLM plans and calls Qloo tools; if the LLM is unavailable,
+// a fixed pipeline calls the same tools so the user always gets a result.
+import { getMessages, LANG_NAMES, translate } from "@/lib/i18n";
+import { chat, type ChatMessage } from "@/lib/llm";
+import { QlooError } from "@/lib/qloo";
+import {
+  AgentContext,
+  executeTool,
+  qlooDestinationAffinity,
+  qlooSearch,
+  qlooSimilar,
+  TOOL_DEFINITIONS,
+  type RankedCity,
+} from "./tools";
+import type { AgentEvent, CityMatch, MatchRequest, MatchResult, ResolvedSignal } from "./types";
+
+const MAX_TURNS = 6;
+const TOP_N = 5;
+// Writing short explanations needs no planning, so a faster model is enough.
+const WRITER_MODEL = "gemini-3.1-flash-lite";
+// Time budget (from the start of the run) so the whole request stays under the 60s function limit.
+const AGENT_BUDGET_MS = 30_000;
+const WRITER_BUDGET_MS = 48_000;
+
+export class AgentError extends Error {
+  constructor(readonly code: "noTaste" | "qloo" | "rateLimited") {
+    super(code);
+  }
+}
+
+export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) => void): Promise<MatchResult> {
+  const ctx = new AgentContext(request, emit);
+  const startedAt = Date.now();
+  let mode: MatchResult["mode"] = "agent";
+
+  try {
+    ctx.step("plan", "running");
+    await agentLoop(ctx, startedAt + AGENT_BUDGET_MS);
+  } catch (err) {
+    if (err instanceof QlooError) throw toAgentError(err);
+    mode = "fallback";
+    ctx.step("fallback", "running");
+  }
+
+  // Fill in anything the model skipped (or everything, if it failed).
+  try {
+    await completePipeline(ctx);
+  } catch (err) {
+    if (err instanceof QlooError) throw toAgentError(err);
+    throw err;
+  }
+  if (!ctx.ranked?.length) throw new AgentError("noTaste");
+
+  const top = ctx.ranked.slice(0, TOP_N);
+  ctx.step("explain", "running");
+  const cities = await explain(ctx, top, startedAt + WRITER_BUDGET_MS);
+  ctx.step("explain", "done");
+
+  const resolvedInputs = new Set(ctx.selected.map((s) => s.input.toLowerCase()));
+  const unresolved = request.likes.filter((l) => !resolvedInputs.has(l.toLowerCase()));
+  if (unresolved.length) ctx.notes.add("unresolved");
+
+  return {
+    lang: request.lang,
+    likes: request.likes,
+    resolved: ctx.selected,
+    unresolved,
+    cities,
+    alsoLiked: (ctx.alsoLiked ?? []).map((e) => ({ id: e.id, name: e.name, type: e.type, imageUrl: e.imageUrl })),
+    worldwide: worldwideExtras(ctx),
+    notes: [...ctx.notes],
+    trace: ctx.trace,
+    mode,
+  };
+}
+
+// ---------- LLM agent loop ----------
+
+function systemPrompt(req: MatchRequest): string {
+  const f = req.filters;
+  const filters = [
+    f.maxTuitionUsd !== undefined && `max tuition ${f.maxTuitionUsd} USD/year`,
+    f.maxMonthlyUsd !== undefined && `max living costs ${f.maxMonthlyUsd} USD/month`,
+    f.language && `teaching language ${f.language}`,
+    f.regions?.length && `regions ${f.regions.join(", ")}`,
+  ].filter(Boolean);
+  return [
+    "You are the TasteAbroad agent. You help students find university cities abroad whose culture fits their taste.",
+    "Work only through the tools, in this order:",
+    "1. Call qloo_search once with all of the user's likes.",
+    "2. For each like, choose the single best match: an entity when the like names a specific artist, film, show, brand or place; a tag when it is a genre, cuisine or hobby (e.g. 'techno', 'street food', 'hiking'). Skip likes with no sensible match.",
+    "3. In ONE turn, call qloo_destination_affinity and qloo_similar with the same chosen IDs.",
+    "4. Call get_city_info for each of the top 5 ranked cities (parallel calls in one turn).",
+    "5. Reply with a one-line summary. Do not invent IDs, cities or numbers.",
+    `User filters: ${filters.length ? filters.join("; ") : "none"}.`,
+  ].join("\n");
+}
+
+async function agentLoop(ctx: AgentContext, deadline: number): Promise<void> {
+  const messages: ChatMessage[] = [
+    { role: "system", content: systemPrompt(ctx.request) },
+    { role: "user", content: `My likes: ${ctx.request.likes.map((l) => `"${l}"`).join(", ")}` },
+  ];
+
+  for (let turn = 0; turn < MAX_TURNS; turn++) {
+    const reply = await chat({ messages, tools: TOOL_DEFINITIONS, temperature: 0.2, deadline });
+    if (turn === 0) ctx.step("plan", "done");
+    messages.push(reply);
+    const calls = reply.tool_calls ?? [];
+    if (!calls.length) return;
+
+    const outputs = await Promise.all(calls.map((call) => executeTool(ctx, call.function.name, call.function.arguments)));
+    calls.forEach((call, i) => messages.push({ role: "tool", tool_call_id: call.id, content: outputs[i] }));
+  }
+}
+
+// ---------- fixed pipeline (fills gaps / replaces the LLM) ----------
+
+const normalize = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+
+/** Pick the best candidate per input: a closely named entity, else a closely named tag, else the top entity. */
+function pickSignals(ctx: AgentContext): ResolvedSignal[] {
+  const byInput = new Map<string, ResolvedSignal[]>();
+  for (const c of ctx.candidates.values()) byInput.set(c.input, [...(byInput.get(c.input) ?? []), c]);
+
+  const picks: ResolvedSignal[] = [];
+  for (const [input, options] of byInput) {
+    const q = normalize(input);
+    const close = (s: ResolvedSignal) => normalize(s.name) === q || normalize(s.name).includes(q) || q.includes(normalize(s.name));
+    const pick =
+      options.find((o) => o.kind === "entity" && close(o)) ??
+      options.find((o) => o.kind === "tag" && close(o)) ??
+      options.find((o) => o.kind === "entity") ??
+      options[0];
+    if (pick) picks.push(pick);
+  }
+  return picks;
+}
+
+async function completePipeline(ctx: AgentContext): Promise<void> {
+  if (!ctx.candidates.size) {
+    ctx.step("search", "running");
+    await qlooSearch(ctx, ctx.request.likes);
+    ctx.step("search", "done");
+  }
+  if (!ctx.selected.length) ctx.selected = pickSignals(ctx);
+  if (!ctx.selected.length) throw new AgentError("noTaste");
+
+  const ids = { entity: ctx.signals().entityIds, tag: ctx.signals().tagIds };
+  const pending: Promise<unknown>[] = [];
+  if (!ctx.ranked) {
+    ctx.step("match", "running");
+    pending.push(qlooDestinationAffinity(ctx, ids.entity, ids.tag).then(() => ctx.step("match", "done")));
+  }
+  if (!ctx.alsoLiked) {
+    ctx.step("similar", "running");
+    pending.push(
+      qlooSimilar(ctx, ids.entity, ids.tag)
+        .then(() => ctx.step("similar", "done"))
+        .catch(() => ctx.step("similar", "error")),
+    );
+  }
+  await Promise.all(pending);
+  ctx.step("cities", "done");
+}
+
+// ---------- explanations ----------
+
+async function explain(ctx: AgentContext, top: RankedCity[], deadline: number): Promise<CityMatch[]> {
+  const messages = getMessages(ctx.request.lang);
+  const fallback = (r: RankedCity): CityMatch => ({
+    ...r,
+    why: translate(messages, "fallback.why", {
+      likes: ctx.selected.slice(0, 3).map((s) => s.input).join(", "),
+      score: r.score,
+      city: r.city.name,
+    }),
+    studentLife: translate(messages, "fallback.studentLife", { tags: r.city.studentLife.slice(0, 3).join(", ") }),
+  });
+
+  try {
+    const written = await writeExplanations(ctx, top, deadline);
+    return top.map((r) => {
+      const w = written.get(r.city.id);
+      return w ? { ...r, ...w } : fallback(r);
+    });
+  } catch {
+    ctx.notes.add("llmFallback");
+    return top.map(fallback);
+  }
+}
+
+async function writeExplanations(ctx: AgentContext, top: RankedCity[], deadline: number) {
+  const payload = {
+    user_likes: ctx.selected.map((s) => ({ typed: s.input, qloo_match: s.name, kind: s.kind })),
+    cities: top.map((r) => ({
+      id: r.city.id,
+      name: r.city.name,
+      country: r.city.country,
+      qloo_match_score: r.score,
+      student_life: r.city.studentLife,
+      languages: r.city.languages,
+    })),
+    also_liked: (ctx.alsoLiked ?? []).slice(0, 6).map((e) => e.name),
+  };
+  const reply = await chat({
+    json: true,
+    temperature: 0.6,
+    model: process.env.LLM_WRITER_MODEL || WRITER_MODEL,
+    deadline,
+    messages: [
+      {
+        role: "system",
+        content: [
+          `Write in ${LANG_NAMES[ctx.request.lang]}. Friendly, concrete, no hype.`,
+          "For each city write:",
+          "- why: 2 short sentences on why this city's culture fits the user. Mention at least one of the user's likes by the name they typed. The score is shown separately, so do not repeat the number. Talk about what people with similar tastes enjoy, not predictions about the user.",
+          "- studentLife: 1 short sentence about student life there.",
+          "Do not invent numbers, prices or rankings. Do not use long dashes.",
+          'Return JSON: {"cities":[{"id":"...","why":"...","studentLife":"..."}]}',
+        ].join("\n"),
+      },
+      { role: "user", content: JSON.stringify(payload) },
+    ],
+  });
+
+  const parsed = JSON.parse(reply.content ?? "{}") as { cities?: { id?: string; why?: string; studentLife?: string }[] };
+  const out = new Map<string, { why: string; studentLife: string }>();
+  for (const c of parsed.cities ?? []) {
+    if (c.id && c.why && c.studentLife) out.set(c.id, { why: c.why.trim(), studentLife: c.studentLife.trim() });
+  }
+  if (!out.size) throw new Error("Empty explanations");
+  return out;
+}
+
+// ---------- helpers ----------
+
+function worldwideExtras(ctx: AgentContext): MatchResult["worldwide"] {
+  const seen = new Set(ctx.ranked?.map((r) => r.city.name.toLowerCase()));
+  const out: MatchResult["worldwide"] = [];
+  for (const d of ctx.worldwide) {
+    const key = d.name.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({ name: d.name, countryCode: d.countryCode });
+    if (out.length === 6) break;
+  }
+  return out;
+}
+
+function toAgentError(err: QlooError): AgentError {
+  return new AgentError(err.code === "rate_limited" ? "rateLimited" : "qloo");
+}

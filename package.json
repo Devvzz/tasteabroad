@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test:qloo": "tsx --env-file=.env.local scripts/test-qloo.ts",
-    "resolve:cities": "tsx --env-file=.env.local scripts/resolve-city-ids.ts"
+    "resolve:cities": "tsx --env-file=.env.local scripts/resolve-city-ids.ts",
+    "test:agent": "tsx --env-file=.env.local scripts/test-agent.ts"
   },
   "dependencies": {
     "next": "16.4.3",

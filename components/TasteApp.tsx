@@ -370,7 +370,12 @@ export function TasteApp() {
         />
       )}
 
-      <footer className="mt-12 border-t border-line pt-4 text-xs text-muted">{t("footer.poweredBy")}</footer>
+      <footer className="mt-12 flex flex-wrap justify-between gap-2 border-t border-line pt-4 text-xs text-muted">
+        <span>{t("footer.poweredBy")}</span>
+        <Link href={lang === "en" ? "/about" : `/about?lang=${lang}`} className="underline-offset-2 hover:underline">
+          {t("app.about")}
+        </Link>
+      </footer>
     </div>
   );
 }

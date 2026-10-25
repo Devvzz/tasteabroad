@@ -101,5 +101,28 @@
   },
   "footer": {
     "poweredBy": "City matching powered by Qloo's taste graph."
+  },
+  "about": {
+    "title": "How TasteAbroad works",
+    "intro": "Rankings and price tell you where you could study. TasteAbroad adds the question that decides whether you will be happy there: will the culture of the city feel like home?",
+    "stepsTitle": "What happens when you press the button",
+    "step1": "You type what you love: artists, films, shows, food, hobbies, brands or places.",
+    "step2": "An AI agent (Google Gemini) reads your list and calls tools. First it looks up every like on Qloo: a specific name becomes a Qloo entity (Dua Lipa, Studio Ghibli), a genre or hobby becomes a Qloo tag (techno, street food, hiking).",
+    "step3": "With those signals the agent asks Qloo's taste graph to score {count} university cities worldwide by taste affinity, and also fetches Qloo's top destinations around the world.",
+    "step4": "It asks Qloo what else people with the same taste like (music, films, TV, places).",
+    "step5": "It reads our curated data for the best cities: well-known universities, typical international tuition and a monthly student budget.",
+    "step6": "Finally the AI writes a short explanation for each city that refers to what you typed. In the compare view, Qloo also suggests places inside each city that people like you love.",
+    "roleTitle": "Who decides what",
+    "roleQloo": "Qloo decides which cities fit and how strongly. Every match score is a Qloo affinity score.",
+    "roleAi": "The AI decides which Qloo lookups to make and puts the results into words. It can only use cities and IDs that Qloo actually returned.",
+    "roleData": "Universities, tuition and living costs come from our own dataset. They are rough ranges, so always check the official university site.",
+    "reliabilityTitle": "Built to keep working",
+    "reliability": "If the AI is busy or rate-limited, a backup pipeline calls the same Qloo tools in a fixed order, so you still get results. Identical searches are cached for 30 minutes and every visitor has a fair-use limit to protect the free API quotas.",
+    "limitsTitle": "What the results do not mean",
+    "limits": "Qloo describes what groups of people with similar tastes enjoy. A high score is not a prediction about you, and it says nothing about admission chances, visas or safety.",
+    "privacyTitle": "Privacy",
+    "privacy": "No account, no tracking. Only the things you type are sent to Qloo and Gemini to compute the result. Your search lives in the page link so you can share it.",
+    "back": "Try it",
+    "source": "Source code on GitHub"
   }
 }

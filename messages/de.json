@@ -101,5 +101,28 @@
   },
   "footer": {
     "poweredBy": "Städte-Matching mit Qloos Geschmacksgraph."
+  },
+  "about": {
+    "title": "So funktioniert TasteAbroad",
+    "intro": "Rankings und Preise zeigen dir, wo du studieren könntest. TasteAbroad stellt die Frage, die über dein Glück dort entscheidet: Fühlt sich die Kultur der Stadt wie zu Hause an?",
+    "stepsTitle": "Was passiert, wenn du auf den Button drückst",
+    "step1": "Du gibst ein, was du liebst: Künstler, Filme, Serien, Essen, Hobbys, Marken oder Orte.",
+    "step2": "Ein KI-Agent (Google Gemini) liest deine Liste und ruft Tools auf. Zuerst sucht er jede Vorliebe auf Qloo: Ein konkreter Name wird zu einer Qloo-Entität (Dua Lipa, Studio Ghibli), ein Genre oder Hobby zu einem Qloo-Tag (Techno, Streetfood, Wandern).",
+    "step3": "Mit diesen Signalen lässt der Agent Qloos Geschmacksgraph {count} Uni-Städte weltweit nach Geschmacksaffinität bewerten und holt zusätzlich Qloos Top-Ziele weltweit.",
+    "step4": "Er fragt Qloo, was Leute mit demselben Geschmack noch mögen (Musik, Filme, Serien, Orte).",
+    "step5": "Er liest unsere kuratierten Daten zu den besten Städten: bekannte Unis, typische Studiengebühren für internationale Studierende und ein monatliches Budget.",
+    "step6": "Zum Schluss schreibt die KI zu jeder Stadt eine kurze Erklärung, die sich auf deine Eingaben bezieht. In der Vergleichsansicht schlägt Qloo außerdem Orte in jeder Stadt vor, die Leute wie du lieben.",
+    "roleTitle": "Wer entscheidet was",
+    "roleQloo": "Qloo entscheidet, welche Städte passen und wie stark. Jeder Match-Wert ist ein Qloo-Affinitätswert.",
+    "roleAi": "Die KI entscheidet, welche Qloo-Abfragen sie macht, und fasst die Ergebnisse in Worte. Sie kann nur Städte und IDs nutzen, die Qloo wirklich geliefert hat.",
+    "roleData": "Unis, Studiengebühren und Lebenshaltungskosten stammen aus unserem eigenen Datensatz. Es sind grobe Spannen, prüfe also immer die offizielle Uni-Website.",
+    "reliabilityTitle": "Gebaut, um weiterzulaufen",
+    "reliability": "Wenn die KI ausgelastet ist oder ihr Limit erreicht, ruft eine Ersatz-Pipeline dieselben Qloo-Tools in fester Reihenfolge auf, sodass du trotzdem Ergebnisse bekommst. Gleiche Suchen werden 30 Minuten zwischengespeichert, und jeder Besucher hat ein faires Limit, um die kostenlosen API-Kontingente zu schützen.",
+    "limitsTitle": "Was die Ergebnisse nicht bedeuten",
+    "limits": "Qloo beschreibt, was Gruppen von Menschen mit ähnlichem Geschmack mögen. Ein hoher Wert ist keine Vorhersage über dich und sagt nichts über Zulassungschancen, Visa oder Sicherheit aus.",
+    "privacyTitle": "Datenschutz",
+    "privacy": "Kein Konto, kein Tracking. Nur deine Eingaben gehen an Qloo und Gemini, um das Ergebnis zu berechnen. Deine Suche steckt im Link der Seite, damit du sie teilen kannst.",
+    "back": "Ausprobieren",
+    "source": "Quellcode auf GitHub"
   }
 }

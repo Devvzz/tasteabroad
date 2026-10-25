@@ -101,5 +101,28 @@
   },
   "footer": {
     "poweredBy": "Përputhja e qyteteve mundësohet nga grafiku i shijeve i Qloo."
+  },
+  "about": {
+    "title": "Si funksionon TasteAbroad",
+    "intro": "Renditjet dhe çmimi të tregojnë ku mund të studiosh. TasteAbroad shton pyetjen që vendos nëse do të jesh i lumtur atje: a do ta ndjesh kulturën e qytetit si shtëpi?",
+    "stepsTitle": "Çfarë ndodh kur shtyp butonin",
+    "step1": "Shkruan çfarë të pëlqen: artistë, filma, seriale, ushqim, hobi, marka ose vende.",
+    "step2": "Një agjent AI (Google Gemini) lexon listën tënde dhe thërret mjete. Së pari kërkon çdo pëlqim në Qloo: një emër i caktuar bëhet entitet në Qloo (Dua Lipa, Studio Ghibli), një zhanër ose hobi bëhet etiketë (techno, ushqim rrugësh, ecje në mal).",
+    "step3": "Me këto sinjale agjenti i kërkon grafikut të shijeve të Qloo të vlerësojë {count} qytete universitare në mbarë botën sipas afinitetit të shijeve, dhe merr edhe destinacionet kryesore të Qloo në botë.",
+    "step4": "Pyet Qloo çfarë tjetër pëlqejnë njerëzit me të njëjtën shije (muzikë, filma, TV, vende).",
+    "step5": "Lexon të dhënat tona për qytetet më të mira: universitete të njohura, tarifat tipike për studentë ndërkombëtarë dhe një buxhet mujor studenti.",
+    "step6": "Në fund AI shkruan një shpjegim të shkurtër për çdo qytet që lidhet me atë që shkrove. Në pamjen e krahasimit, Qloo sugjeron edhe vende brenda çdo qyteti që i duan njerëzit si ti.",
+    "roleTitle": "Kush vendos çfarë",
+    "roleQloo": "Qloo vendos cilat qytete përshtaten dhe sa fort. Çdo përqindje përputhjeje është një vlerësim afiniteti i Qloo.",
+    "roleAi": "AI vendos cilat kërkime të bëjë në Qloo dhe i kthen rezultatet në fjalë. Mund të përdorë vetëm qytete dhe ID që Qloo i ka kthyer vërtet.",
+    "roleData": "Universitetet, tarifat dhe kostot e jetesës vijnë nga të dhënat tona. Janë intervale të përafërta, ndaj kontrollo gjithmonë faqen zyrtare të universitetit.",
+    "reliabilityTitle": "Ndërtuar që të vazhdojë të punojë",
+    "reliability": "Nëse AI është i zënë ose ka arritur kufirin, një rrugë rezervë thërret të njëjtat mjete të Qloo me radhë të caktuar, ndaj merr përsëri rezultate. Kërkimet e njëjta ruhen për 30 minuta dhe çdo vizitor ka një kufi të arsyeshëm për të mbrojtur kuotat falas të API-ve.",
+    "limitsTitle": "Çfarë nuk do të thonë rezultatet",
+    "limits": "Qloo përshkruan çfarë pëlqejnë grupet e njerëzve me shije të ngjashme. Një vlerësim i lartë nuk është parashikim për ty dhe nuk thotë asgjë për shanset e pranimit, vizat apo sigurinë.",
+    "privacyTitle": "Privatësia",
+    "privacy": "Pa llogari, pa gjurmim. Vetëm ato që shkruan dërgohen te Qloo dhe Gemini për të llogaritur rezultatin. Kërkimi yt ruhet te lidhja e faqes që ta ndash.",
+    "back": "Provoje",
+    "source": "Kodi burimor në GitHub"
   }
 }

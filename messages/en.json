@@ -48,6 +48,7 @@
     "universities": "Universities",
     "tuition": "Tuition per year (international)",
     "living": "Cost of living per month",
+    "range": "{min} to {max}",
     "livingMissing": "No cost data yet. Check local student guides.",
     "languages": "Teaching languages",
     "studentLife": "Student life",

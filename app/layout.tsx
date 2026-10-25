@@ -12,10 +12,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const description = "Find the university city abroad that fits your taste in music, film, food and hobbies.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://tasteabroad.vercel.app"),
   title: "TasteAbroad",
-  description:
-    "Find the university city abroad that fits your taste in music, film, food and hobbies.",
+  description,
+  openGraph: { title: "TasteAbroad", description, siteName: "TasteAbroad", type: "website" },
+  twitter: { card: "summary", title: "TasteAbroad", description },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,0 +1,105 @@
+{
+  "app": {
+    "name": "TasteAbroad",
+    "tagline": "Finde die Uni-Stadt im Ausland, in der sich dein Geschmack zu Hause fühlt.",
+    "about": "So funktioniert's",
+    "language": "Sprache"
+  },
+  "form": {
+    "label": "Was liebst du?",
+    "hint": "Künstler, Filme, Serien, Essen, Hobbys, Marken oder Orte. Drück nach jedem Eintrag Enter.",
+    "placeholder": "z. B. Dua Lipa",
+    "add": "Hinzufügen",
+    "remove": "{item} entfernen",
+    "suggestions": "Probier",
+    "filters": "Optionale Filter",
+    "maxTuition": "Max. Studiengebühren pro Jahr (USD)",
+    "maxMonthly": "Max. Monatsbudget (USD)",
+    "language": "Studiensprache",
+    "regions": "Regionen",
+    "any": "Egal",
+    "submit": "Meine Städte finden",
+    "running": "Suche deine Städte...",
+    "needLikes": "Füge mindestens eine Sache hinzu, die du liebst."
+  },
+  "regions": {
+    "Europe": "Europa",
+    "North America": "Nordamerika",
+    "Asia": "Asien",
+    "Oceania": "Ozeanien",
+    "Latin America": "Lateinamerika",
+    "Middle East": "Naher Osten",
+    "Africa": "Afrika"
+  },
+  "steps": {
+    "title": "Was der Agent gerade macht",
+    "plan": "Lese deine Vorlieben...",
+    "search": "Suche deine Vorlieben auf Qloo...",
+    "match": "Vergleiche Städte weltweit...",
+    "similar": "Finde, was Leute wie du noch mögen...",
+    "cities": "Suche Unis und Kosten...",
+    "explain": "Schreibe, warum jede Stadt zu dir passt...",
+    "fallback": "Die KI ist ausgelastet, ich wechsle zur Ersatz-Pipeline..."
+  },
+  "results": {
+    "title": "Deine passendsten Städte",
+    "match": "{score}% Geschmacks-Match",
+    "why": "Warum du hinpasst",
+    "universities": "Universitäten",
+    "tuition": "Studiengebühren pro Jahr (international)",
+    "living": "Lebenshaltungskosten pro Monat",
+    "range": "{min} bis {max}",
+    "livingMissing": "Noch keine Kostendaten. Schau in lokale Studierenden-Guides.",
+    "languages": "Unterrichtssprachen",
+    "studentLife": "Studentenleben",
+    "estimate": "Nur Schätzungen. Prüfe immer die offizielle Uni-Website.",
+    "proxy": "Bewertet über {proxy} in derselben Metropolregion.",
+    "qlooMatched": "Qloo hat erkannt",
+    "worldwide": "Qloo sieht außerdem starke Matches in",
+    "share": "Link kopieren",
+    "copied": "Link kopiert!",
+    "trace": "Agent-Protokoll ({count} Tool-Aufrufe)"
+  },
+  "compare": {
+    "select": "Vergleichen",
+    "pickOne": "Wähle noch eine Stadt zum Vergleichen",
+    "open": "{a} und {b} vergleichen",
+    "title": "Im Vergleich",
+    "close": "Schließen",
+    "clear": "Zurücksetzen",
+    "picks": "Orte, die Leute wie du hier lieben",
+    "picksLoading": "Frage Qloo...",
+    "picksEmpty": "Keine Ortsvorschläge von Qloo für diese Stadt."
+  },
+  "alsoLiked": {
+    "title": "Leute wie du mochten auch...",
+    "types": {
+      "urn:entity:artist": "Musik",
+      "urn:entity:movie": "Film",
+      "urn:entity:tv_show": "TV",
+      "urn:entity:place": "Ort",
+      "urn:entity:book": "Buch",
+      "urn:entity:brand": "Marke"
+    }
+  },
+  "notes": {
+    "filtersRelaxed": "Keine Stadt erfüllt alle deine Filter, deshalb siehst du die besten Treffer ohne sie.",
+    "nearestFallback": "Qloo hatte keinen direkten Wert für unsere Städteliste, deshalb siehst du unsere Städte, die Qloos Top-Zielen für dich am nächsten liegen.",
+    "llmFallback": "Der KI-Texter war nicht verfügbar, daher kommen die Erklärungen direkt aus den Qloo-Daten.",
+    "unresolved": "Qloo hat nicht erkannt: {items}."
+  },
+  "errors": {
+    "generic": "Etwas ist schiefgelaufen. Bitte versuch es noch einmal.",
+    "rateLimited": "Gerade zu viele Anfragen. Warte eine Minute und versuch es dann noch einmal.",
+    "noTaste": "Qloo konnte keine deiner Eingaben erkennen. Probier bekannte Künstler, Filme oder Hobbys.",
+    "qloo": "Qloo ist gerade nicht erreichbar. Bitte versuch es gleich noch einmal.",
+    "badRequest": "Bitte prüf deine Eingaben und versuch es noch einmal."
+  },
+  "fallback": {
+    "why": "Leute, die {likes} mögen, zeigen auf Qloos Geschmacksgraph eine Affinität von {score}% zu {city}.",
+    "studentLife": "Bekannt für {tags}."
+  },
+  "footer": {
+    "poweredBy": "Städte-Matching mit Qloos Geschmacksgraph."
+  }
+}

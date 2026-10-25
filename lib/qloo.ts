@@ -34,6 +34,8 @@ export interface QlooEntity {
   location?: { lat: number; lon: number };
   imageUrl?: string;
   description?: string;
+  /** Tag IDs attached to the entity (e.g. "urn:tag:genre:place:hotel"). */
+  tagIds: string[];
 }
 
 export interface QlooTag {
@@ -49,6 +51,8 @@ export interface InsightsQuery {
   tagIds?: string[];
   /** Restrict results to these entity IDs (used to score our own city list). */
   resultEntityIds?: string[];
+  /** Only return results within this radius of a point (for places in one city). */
+  location?: { lat: number; lon: number; radiusMeters: number };
   take?: number;
 }
 
@@ -180,6 +184,7 @@ interface RawEntity {
   popularity?: number;
   location?: { lat: number; lon: number };
   query?: { affinity?: number };
+  tags?: { id?: string; tag_id?: string }[];
   properties?: {
     country?: string;
     geocode?: { country_code?: string };
@@ -208,6 +213,7 @@ function toEntity(raw: RawEntity): QlooEntity {
     location: raw.location ? { lat: raw.location.lat, lon: raw.location.lon } : undefined,
     imageUrl: props.image?.url,
     description: props.short_description,
+    tagIds: (raw.tags ?? []).map((t) => t.id ?? t.tag_id).filter((id): id is string => Boolean(id)),
   };
 }
 
@@ -242,6 +248,8 @@ export async function getInsights(q: InsightsQuery): Promise<QlooEntity[]> {
     "signal.interests.entities": q.entityIds?.join(","),
     "signal.interests.tags": q.tagIds?.join(","),
     "filter.results.entities": q.resultEntityIds?.join(","),
+    "filter.location": q.location ? `POINT(${q.location.lon} ${q.location.lat})` : undefined,
+    "filter.location.radius": q.location?.radiusMeters,
     take: q.take ?? 20,
   });
   return (json?.results?.entities ?? []).map(toEntity);
@@ -271,6 +279,29 @@ export async function scoreDestinations(signals: TasteSignals, destinationIds: s
 /** Worldwide destinations with the strongest taste affinity. */
 export function topDestinations(signals: TasteSignals, take = 30): Promise<QlooEntity[]> {
   return getInsights({ filterType: "urn:entity:destination", ...signals, take });
+}
+
+const CITY_RADIUS_METERS = 12_000;
+// Very obscure places often only have local-script names; prefer ones people have heard of.
+const MIN_PLACE_POPULARITY = 0.3;
+// Hotels and hostels rank high for travellers but say little about student life.
+const LODGING_TAG = "urn:tag:genre:place:hotel";
+
+/** Places inside one city that people with this taste rate highest. */
+export async function placesNear(
+  signals: TasteSignals,
+  point: { lat: number; lon: number },
+  take = 4,
+): Promise<QlooEntity[]> {
+  const places = await getInsights({
+    filterType: "urn:entity:place",
+    ...signals,
+    location: { ...point, radiusMeters: CITY_RADIUS_METERS },
+    take: 30,
+  });
+  const notLodging = places.filter((p) => !p.tagIds.some((id) => id.startsWith(LODGING_TAG)));
+  const known = notLodging.filter((p) => (p.popularity ?? 0) >= MIN_PLACE_POPULARITY);
+  return (known.length >= take ? known : notLodging).slice(0, take);
 }
 
 /** "People like you also liked…": other entities of a given type with high affinity. */

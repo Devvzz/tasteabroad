@@ -199,12 +199,16 @@ export async function qlooDestinationAffinity(ctx: AgentContext, entityIds?: str
     if (ranked.length) ctx.notes.add("nearestFallback");
   }
 
-  const filtered = ranked.filter((r) => passesFilters(r.city, ctx.request.filters));
-  if (filtered.length) {
-    ctx.ranked = filtered;
-  } else {
-    ctx.ranked = ranked;
-    if (ranked.length) ctx.notes.add("filtersRelaxed");
+  // If nothing passes every filter, relax the strictest ones first and keep the region as long as possible.
+  const f = ctx.request.filters;
+  const attempts: MatchRequest["filters"][] = [f, { regions: f.regions, language: f.language }, { regions: f.regions }, {}];
+  ctx.ranked = ranked;
+  for (const [i, attempt] of attempts.entries()) {
+    const passing = ranked.filter((r) => passesFilters(r.city, attempt));
+    if (!passing.length) continue;
+    ctx.ranked = passing;
+    if (i > 0) ctx.notes.add("filtersRelaxed");
+    break;
   }
 
   const datasetIds = new Set(cities.map((c) => c.qlooId));

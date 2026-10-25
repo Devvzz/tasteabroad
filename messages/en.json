@@ -83,7 +83,7 @@
     }
   },
   "notes": {
-    "filtersRelaxed": "No city matched all your filters, so these are the closest fits without them.",
+    "filtersRelaxed": "No city matched all your filters, so we relaxed the strictest ones (budget first, region last).",
     "nearestFallback": "Qloo had no direct score for our city list, so these are our cities closest to Qloo's top destinations for you.",
     "llmFallback": "The AI writer was unavailable, so the explanations come straight from Qloo data.",
     "unresolved": "Qloo didn't recognise: {items}."

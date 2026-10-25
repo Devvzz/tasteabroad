@@ -83,7 +83,7 @@
     }
   },
   "notes": {
-    "filtersRelaxed": "Asnjë qytet nuk i plotësoi të gjithë filtrat, ndaj këto janë përputhjet më të afërta pa to.",
+    "filtersRelaxed": "Asnjë qytet nuk i plotësoi të gjithë filtrat, ndaj i lehtësuam më të rreptët (fillimisht buxhetin, rajonin në fund).",
     "nearestFallback": "Qloo nuk kishte vlerësim të drejtpërdrejtë për listën tonë, ndaj këto janë qytetet tona më afër destinacioneve kryesore të Qloo për ty.",
     "llmFallback": "Shkruesi AI nuk ishte i disponueshëm, ndaj shpjegimet vijnë drejtpërdrejt nga të dhënat e Qloo.",
     "unresolved": "Qloo nuk e njohu: {items}."

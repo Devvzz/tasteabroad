@@ -83,7 +83,7 @@
     }
   },
   "notes": {
-    "filtersRelaxed": "Keine Stadt erfüllt alle deine Filter, deshalb siehst du die besten Treffer ohne sie.",
+    "filtersRelaxed": "Keine Stadt erfüllt alle deine Filter, deshalb haben wir die strengsten gelockert (zuerst das Budget, die Region zuletzt).",
     "nearestFallback": "Qloo hatte keinen direkten Wert für unsere Städteliste, deshalb siehst du unsere Städte, die Qloos Top-Zielen für dich am nächsten liegen.",
     "llmFallback": "Der KI-Texter war nicht verfügbar, daher kommen die Erklärungen direkt aus den Qloo-Daten.",
     "unresolved": "Qloo hat nicht erkannt: {items}."

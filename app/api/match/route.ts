@@ -2,24 +2,14 @@
 import { parseMatchRequest, requestKey } from "@/lib/agent/request";
 import { AgentError, runAgent } from "@/lib/agent/run";
 import type { AgentEvent, ErrorCode, MatchResult } from "@/lib/agent/types";
+import { clientIp, isRateLimited } from "@/lib/rate-limit";
 
 export const maxDuration = 60;
 
 const RATE_LIMIT = 8;
-const RATE_WINDOW_MS = 60_000;
 const RESULT_TTL_MS = 30 * 60_000;
 
-// Per-instance memory: good enough to protect the free API quotas during a demo.
-const hits = new Map<string, number[]>();
 const results = new Map<string, { expires: number; result: MatchResult }>();
-
-function rateLimited(ip: string): boolean {
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
-  recent.push(now);
-  hits.set(ip, recent);
-  return recent.length > RATE_LIMIT;
-}
 
 function errorCode(err: unknown): ErrorCode {
   if (err instanceof AgentError) return err.code;
@@ -31,11 +21,12 @@ export async function POST(request: Request) {
   const matchRequest = parseMatchRequest(body);
   if (!matchRequest) return Response.json({ type: "error", code: "badRequest" }, { status: 400 });
 
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
   const key = requestKey(matchRequest);
   const cached = results.get(key);
   const fresh = cached && cached.expires > Date.now() ? cached.result : undefined;
-  if (!fresh && rateLimited(ip)) return Response.json({ type: "error", code: "rateLimited" }, { status: 429 });
+  if (!fresh && isRateLimited(`match:${clientIp(request)}`, RATE_LIMIT)) {
+    return Response.json({ type: "error", code: "rateLimited" }, { status: 429 });
+  }
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({

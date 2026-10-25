@@ -65,7 +65,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "munich",
@@ -119,7 +119,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "vienna",
@@ -177,7 +177,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "amsterdam",
@@ -201,7 +201,7 @@
         }
       ],
       "tuition": {
-        "label": "€2.5k (EU) – €20k+ (non-EU) per year",
+        "label": "€2.5k (EU) to €20k+ (non-EU) per year",
         "usdPerYear": {
           "min": 2800,
           "max": 24000
@@ -231,7 +231,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "lisbon",
@@ -254,12 +254,12 @@
           "url": "https://www.unl.pt"
         },
         {
-          "name": "Iscte – University Institute of Lisbon",
+          "name": "Iscte University Institute of Lisbon",
           "url": "https://www.iscte-iul.pt"
         }
       ],
       "tuition": {
-        "label": "€700 (EU) – €7k (international) per year",
+        "label": "€700 (EU) to €7k (international) per year",
         "usdPerYear": {
           "min": 800,
           "max": 7700
@@ -289,7 +289,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "barcelona",
@@ -348,7 +348,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "paris",
@@ -376,7 +376,7 @@
         }
       ],
       "tuition": {
-        "label": "€175 (EU) – ~€4k (non-EU) per year (public)",
+        "label": "€175 (EU) to ~€4k (non-EU) per year (public)",
         "usdPerYear": {
           "min": 200,
           "max": 4400
@@ -406,7 +406,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "london",
@@ -463,7 +463,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "prague",
@@ -487,7 +487,7 @@
         }
       ],
       "tuition": {
-        "label": "€0 (Czech-taught) – €3k–15k (English-taught)",
+        "label": "€0 (Czech-taught) to €3k–15k (English-taught)",
         "usdPerYear": {
           "min": 0,
           "max": 16500
@@ -517,7 +517,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "stockholm",
@@ -545,7 +545,7 @@
         }
       ],
       "tuition": {
-        "label": "€0 (EU) – €8k–27k (non-EU) per year",
+        "label": "€0 (EU) to €8k–27k (non-EU) per year",
         "usdPerYear": {
           "min": 0,
           "max": 30000
@@ -575,7 +575,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "toronto",
@@ -632,7 +632,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "montreal",
@@ -690,7 +690,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "boston",
@@ -747,7 +747,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "new-york",
@@ -775,7 +775,7 @@
         }
       ],
       "tuition": {
-        "label": "$18k (CUNY) – $70k (private) per year",
+        "label": "$18k (CUNY) to $70k (private) per year",
         "usdPerYear": {
           "min": 18000,
           "max": 70000
@@ -804,7 +804,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "tokyo",
@@ -832,7 +832,7 @@
         }
       ],
       "tuition": {
-        "label": "¥540k (national) – ¥1.5M (private) per year",
+        "label": "¥540k (national) to ¥1.5M (private) per year",
         "usdPerYear": {
           "min": 3600,
           "max": 10000
@@ -862,7 +862,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "kyoto",
@@ -890,7 +890,7 @@
         }
       ],
       "tuition": {
-        "label": "¥540k (national) – ¥1.4M (private) per year",
+        "label": "¥540k (national) to ¥1.4M (private) per year",
         "usdPerYear": {
           "min": 3600,
           "max": 9500
@@ -920,7 +920,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "seoul",
@@ -978,7 +978,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site",
+      "accuracy": "estimate, check official site",
       "qlooProxy": {
         "id": "F2554E67-7E16-405E-93E3-927D1AA02F9A",
         "name": "Suwon",
@@ -1040,7 +1040,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "hong-kong",
@@ -1097,7 +1097,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "melbourne",
@@ -1153,7 +1153,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "sydney",
@@ -1209,7 +1209,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "mexico-city",
@@ -1237,7 +1237,7 @@
         }
       ],
       "tuition": {
-        "label": "Near €0 (UNAM) – $10k–20k (private) per year",
+        "label": "Near €0 (UNAM) to $10k–20k (private) per year",
         "usdPerYear": {
           "min": 0,
           "max": 20000
@@ -1266,7 +1266,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "buenos-aires",
@@ -1294,7 +1294,7 @@
         }
       ],
       "tuition": {
-        "label": "Free (UBA undergrad) – $3k–10k (private) per year",
+        "label": "Free (UBA undergrad) to $3k–10k (private) per year",
         "usdPerYear": {
           "min": 0,
           "max": 10000
@@ -1323,7 +1323,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "dubai",
@@ -1381,7 +1381,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     },
     {
       "id": "cape-town",
@@ -1438,7 +1438,7 @@
       ],
       "source": "University fee pages and public student cost-of-living guides",
       "checked": "2026-10-25",
-      "accuracy": "estimate – check official site"
+      "accuracy": "estimate, check official site"
     }
   ]
 }

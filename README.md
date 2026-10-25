@@ -2,7 +2,7 @@
 
 Find the university city abroad where you'd actually feel at home.
 
-Tell TasteAbroad what you love — artists, films, shows, food, hobbies — and it uses
+Tell TasteAbroad what you love, like artists, films, shows, food and hobbies, and it uses
 [Qloo](https://www.qloo.com/)'s taste graph to rank student cities around the world by cultural
 fit, then shows well-known universities, typical international tuition and monthly cost of living
 for each one.

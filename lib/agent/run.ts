@@ -229,7 +229,7 @@ async function writeExplanations(ctx: AgentContext, top: RankedCity[], deadline:
         content: [
           `Write in ${LANG_NAMES[ctx.request.lang]}. Friendly, concrete, no hype.`,
           "For each city write:",
-          "- why: 2 short sentences on why this city's culture fits the user. Mention at least one of the user's likes by the name they typed. The score is shown separately, so do not repeat the number. Talk about what people with similar tastes enjoy, not predictions about the user.",
+          "- why: 2 short sentences on why this city's culture fits the user. Mention at least one of the user's likes: keep names of artists, films, brands and places as typed, but translate generic words like 'beaches' or 'coffee' into the output language. The score is shown separately, so do not repeat the number. Talk about what people with similar tastes enjoy, not predictions about the user.",
           "- studentLife: 1 short sentence about student life there.",
           "Do not invent numbers, prices or rankings. Do not use long dashes.",
           'Return JSON: {"cities":[{"id":"...","why":"...","studentLife":"..."}]}',

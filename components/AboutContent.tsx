@@ -1,12 +1,9 @@
-"use client";
-
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { getMessages, isLang, translate } from "@/lib/i18n";
+import { t } from "@/lib/i18n";
 
 const REPO_URL = "https://github.com/Devvzz/tasteabroad";
 
-// The agent flow, shown as a simple diagram. Tool names are code, so they stay untranslated.
+// The agent flow, shown as a simple diagram.
 const FLOW = [
   { tool: "qloo_search", api: "GET /search · GET /v2/tags" },
   { tool: "qloo_destination_affinity", api: "GET /v2/insights · urn:entity:destination" },
@@ -15,11 +12,7 @@ const FLOW = [
 ];
 
 export function AboutContent({ cityCount }: { cityCount: number }) {
-  const params = useSearchParams();
-  const langParam = params.get("lang");
-  const lang = isLang(langParam) ? langParam : "en";
-  const t = (key: string, vars?: Record<string, string | number>) => translate(getMessages(lang), key, vars);
-  const home = lang === "en" ? "/" : `/?lang=${lang}`;
+  const home = "/";
   const steps = ["step1", "step2", "step3", "step4", "step5", "step6"];
 
   return (

@@ -160,7 +160,10 @@ function passesFilters(city: City, filters: MatchRequest["filters"]): boolean {
   if (filters.maxMonthlyUsd !== undefined && city.costOfLiving && city.costOfLiving.usdPerMonth.min > filters.maxMonthlyUsd) {
     return false;
   }
-  if (filters.language && !city.languages.some((l) => l.toLowerCase() === filters.language!.toLowerCase())) return false;
+  if (filters.languages?.length) {
+    const wanted = new Set(filters.languages.map((l) => l.toLowerCase()));
+    if (!city.languages.some((l) => wanted.has(l.toLowerCase()))) return false;
+  }
   if (filters.regions?.length && !filters.regions.includes(city.region)) return false;
   return true;
 }
@@ -201,7 +204,7 @@ export async function qlooDestinationAffinity(ctx: AgentContext, entityIds?: str
 
   // If nothing passes every filter, relax the strictest ones first and keep the region as long as possible.
   const f = ctx.request.filters;
-  const attempts: MatchRequest["filters"][] = [f, { regions: f.regions, language: f.language }, { regions: f.regions }, {}];
+  const attempts: MatchRequest["filters"][] = [f, { regions: f.regions, languages: f.languages }, { regions: f.regions }, {}];
   ctx.ranked = ranked;
   for (const [i, attempt] of attempts.entries()) {
     const passing = ranked.filter((r) => passesFilters(r.city, attempt));

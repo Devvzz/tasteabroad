@@ -1,17 +1,16 @@
 import type { City, Region } from "@/lib/cities";
-import type { Lang } from "@/lib/i18n";
 
 export interface MatchFilters {
   maxTuitionUsd?: number;
   maxMonthlyUsd?: number;
-  language?: string;
+  /** Languages the student could take classes in; a city matches if it teaches in any of them. */
+  languages?: string[];
   regions?: Region[];
 }
 
 export interface MatchRequest {
   likes: string[];
   filters: MatchFilters;
-  lang: Lang;
 }
 
 export type StepKey = "plan" | "search" | "match" | "similar" | "cities" | "explain" | "fallback";
@@ -56,8 +55,8 @@ export interface AlsoLikedItem {
 }
 
 export interface MatchResult {
-  lang: Lang;
   likes: string[];
+  filters: MatchFilters;
   resolved: ResolvedSignal[];
   unresolved: string[];
   cities: CityMatch[];

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { AboutContent } from "@/components/AboutContent";
 import { cities } from "@/lib/cities";
 
@@ -11,9 +10,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <main className="flex-1">
-      <Suspense>
-        <AboutContent cityCount={cities.length} />
-      </Suspense>
+      <AboutContent cityCount={cities.length} />
     </main>
   );
 }

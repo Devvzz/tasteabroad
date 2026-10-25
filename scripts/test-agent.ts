@@ -4,7 +4,7 @@ import { runAgent } from "../lib/agent/run";
 async function main() {
   const likes = process.argv.slice(2).length ? process.argv.slice(2) : ["Dua Lipa", "anime", "street food", "hiking"];
   const started = Date.now();
-  const result = await runAgent({ likes, filters: {}, lang: "en" }, (event) => {
+  const result = await runAgent({ likes, filters: {} }, (event) => {
     const t = `${((Date.now() - started) / 1000).toFixed(1)}s`;
     if (event.type === "step") console.log(t, "step", event.step, event.status, event.detail ?? "");
     if (event.type === "tool") console.log(t, "  tool", event.entry.tool, event.entry.ok ? "ok" : "FAILED", `${event.entry.ms}ms`, event.entry.args.slice(0, 120));

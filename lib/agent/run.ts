@@ -1,6 +1,6 @@
 // Runs the TasteAbroad agent: the LLM plans and calls Qloo tools; if the LLM is unavailable,
 // a fixed pipeline calls the same tools so the user always gets a result.
-import { getMessages, LANG_NAMES, translate } from "@/lib/i18n";
+import { t } from "@/lib/i18n";
 import { chat, type ChatMessage } from "@/lib/llm";
 import { QlooError } from "@/lib/qloo";
 import {
@@ -66,8 +66,8 @@ export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) 
   if (unresolved.length) ctx.notes.add("unresolved");
 
   return {
-    lang: request.lang,
     likes: request.likes,
+    filters: request.filters,
     resolved: ctx.selected,
     unresolved,
     cities,
@@ -86,7 +86,7 @@ function systemPrompt(req: MatchRequest): string {
   const filters = [
     f.maxTuitionUsd !== undefined && `max tuition ${f.maxTuitionUsd} USD/year`,
     f.maxMonthlyUsd !== undefined && `max living costs ${f.maxMonthlyUsd} USD/month`,
-    f.language && `teaching language ${f.language}`,
+    f.languages?.length && `can study in ${f.languages.join(" or ")}`,
     f.regions?.length && `regions ${f.regions.join(", ")}`,
   ].filter(Boolean);
   return [
@@ -181,15 +181,14 @@ async function completePipeline(ctx: AgentContext): Promise<void> {
 // ---------- explanations ----------
 
 async function explain(ctx: AgentContext, top: RankedCity[], deadline: number): Promise<CityMatch[]> {
-  const messages = getMessages(ctx.request.lang);
   const fallback = (r: RankedCity): CityMatch => ({
     ...r,
-    why: translate(messages, "fallback.why", {
+    why: t("fallback.why", {
       likes: ctx.selected.slice(0, 3).map((s) => s.input).join(", "),
       score: r.score,
       city: r.city.name,
     }),
-    studentLife: translate(messages, "fallback.studentLife", { tags: r.city.studentLife.slice(0, 3).join(", ") }),
+    studentLife: t("fallback.studentLife", { tags: r.city.studentLife.slice(0, 3).join(", ") }),
   });
 
   try {
@@ -227,9 +226,9 @@ async function writeExplanations(ctx: AgentContext, top: RankedCity[], deadline:
       {
         role: "system",
         content: [
-          `Write in ${LANG_NAMES[ctx.request.lang]}. Friendly, concrete, no hype.`,
+          "Write in English. Friendly, concrete, no hype.",
           "For each city write:",
-          "- why: 2 short sentences on why this city's culture fits the user. Mention at least one of the user's likes: keep names of artists, films, brands and places as typed, but translate generic words like 'beaches' or 'coffee' into the output language. The score is shown separately, so do not repeat the number. Talk about what people with similar tastes enjoy, not predictions about the user.",
+          "- why: 2 short sentences on why this city's culture fits the user. Mention at least one of the user's likes by name. The score is shown separately, so do not repeat the number. Talk about what people with similar tastes enjoy, not predictions about the user.",
           "- studentLife: 1 short sentence about student life there.",
           "Do not invent numbers, prices or rankings. Do not use long dashes.",
           'Return JSON: {"cities":[{"id":"...","why":"...","studentLife":"..."}]}',

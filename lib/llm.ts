@@ -3,8 +3,10 @@
 // Server-side only.
 
 const DEFAULT_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai";
-const DEFAULT_MODEL = "gemini-3.5-flash";
-const DEFAULT_FALLBACK_MODELS = "gemini-3.1-flash-lite,gemini-3.5-flash-lite";
+// Flash Lite models get far higher free-tier quotas (15 RPM / 500 RPD vs 5 / 20 for Flash),
+// so they do the work and the bigger model is only a last resort.
+const DEFAULT_MODEL = "gemini-3.1-flash-lite";
+const DEFAULT_FALLBACK_MODELS = "gemini-3.5-flash-lite,gemini-3.5-flash";
 const TIMEOUT_MS = 15_000;
 const MIN_CALL_MS = 2_000;
 const BUSY_RETRY_MS = 800;

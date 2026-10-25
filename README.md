@@ -40,7 +40,7 @@ npm run dev
 | `QLOO_API_KEY` | Qloo API key (server-side only) |
 | `GEMINI_API_KEY` | Google Gemini API key (server-side only) |
 | `QLOO_BASE_URL` | Optional, defaults to `https://hackathon.api.qloo.com` |
-| `LLM_MODEL` | Optional, defaults to `gemini-3.5-flash` |
+| `LLM_MODEL` | Optional, defaults to `gemini-3.1-flash-lite` |
 | `LLM_FALLBACK_MODELS` | Optional, comma-separated models tried when the main one is busy |
 | `LLM_WRITER_MODEL` | Optional, model that writes the city explanations |
 | `LLM_BASE_URL` / `LLM_API_KEY` | Optional, point the agent at any OpenAI-compatible provider |

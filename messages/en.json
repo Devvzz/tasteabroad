@@ -1,0 +1,93 @@
+{
+  "app": {
+    "name": "TasteAbroad",
+    "tagline": "Find the university city abroad where your taste feels at home.",
+    "about": "How it works",
+    "language": "Language"
+  },
+  "form": {
+    "label": "What do you love?",
+    "hint": "Artists, films, shows, food, hobbies, brands or places. Press Enter after each one.",
+    "placeholder": "e.g. Dua Lipa",
+    "add": "Add",
+    "remove": "Remove {item}",
+    "suggestions": "Try",
+    "filters": "Optional filters",
+    "maxTuition": "Max tuition per year (USD)",
+    "maxMonthly": "Max monthly budget (USD)",
+    "language": "Language of study",
+    "regions": "Regions",
+    "any": "Any",
+    "submit": "Find my cities",
+    "running": "Finding your cities...",
+    "needLikes": "Add at least one thing you love."
+  },
+  "regions": {
+    "Europe": "Europe",
+    "North America": "North America",
+    "Asia": "Asia",
+    "Oceania": "Oceania",
+    "Latin America": "Latin America",
+    "Middle East": "Middle East",
+    "Africa": "Africa"
+  },
+  "steps": {
+    "title": "What the agent is doing",
+    "plan": "Reading your tastes...",
+    "search": "Searching your tastes on Qloo...",
+    "match": "Matching cities worldwide...",
+    "similar": "Finding what people like you also like...",
+    "cities": "Finding universities and costs...",
+    "explain": "Writing why each city fits you...",
+    "fallback": "The AI is busy, switching to the backup pipeline..."
+  },
+  "results": {
+    "title": "Your best-fit cities",
+    "match": "{score}% taste match",
+    "why": "Why you'd fit",
+    "universities": "Universities",
+    "tuition": "Tuition per year (international)",
+    "living": "Cost of living per month",
+    "livingMissing": "No cost data yet. Check local student guides.",
+    "languages": "Teaching languages",
+    "studentLife": "Student life",
+    "estimate": "Estimates only. Always check the official university site.",
+    "proxy": "Scored via {proxy}, in the same metro area.",
+    "qlooMatched": "Qloo understood",
+    "worldwide": "Qloo also sees strong taste fits in",
+    "share": "Copy share link",
+    "copied": "Link copied!",
+    "trace": "Agent trace ({count} tool calls)"
+  },
+  "alsoLiked": {
+    "title": "People like you also liked...",
+    "types": {
+      "urn:entity:artist": "Music",
+      "urn:entity:movie": "Film",
+      "urn:entity:tv_show": "TV",
+      "urn:entity:place": "Place",
+      "urn:entity:book": "Book",
+      "urn:entity:brand": "Brand"
+    }
+  },
+  "notes": {
+    "filtersRelaxed": "No city matched all your filters, so these are the closest fits without them.",
+    "nearestFallback": "Qloo had no direct score for our city list, so these are our cities closest to Qloo's top destinations for you.",
+    "llmFallback": "The AI writer was unavailable, so the explanations come straight from Qloo data.",
+    "unresolved": "Qloo didn't recognise: {items}."
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "rateLimited": "Too many requests right now. Please wait a minute and try again.",
+    "noTaste": "Qloo couldn't recognise any of your inputs. Try well-known artists, films or hobbies.",
+    "qloo": "Qloo is not reachable right now. Please try again shortly.",
+    "badRequest": "Please check your inputs and try again."
+  },
+  "fallback": {
+    "why": "People who like {likes} show a {score}% taste affinity with {city} on Qloo's taste graph.",
+    "studentLife": "Known for {tags}."
+  },
+  "footer": {
+    "poweredBy": "City matching powered by Qloo's taste graph."
+  }
+}

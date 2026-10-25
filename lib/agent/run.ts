@@ -17,7 +17,8 @@ import type { AgentEvent, CityMatch, MatchRequest, MatchResult, ResolvedSignal }
 const MAX_TURNS = 6;
 const TOP_N = 5;
 // The writer uses a different model than the planner so the two share the free quota load.
-const WRITER_MODEL = "gemini-3.5-flash-lite";
+// It has the most generous time budget, so the slower model is fine here.
+const WRITER_MODEL = "gemini-3.1-flash-lite";
 // Time budget (from the start of the run) so the whole request stays under the 60s function limit.
 const AGENT_BUDGET_MS = 30_000;
 const WRITER_BUDGET_MS = 48_000;

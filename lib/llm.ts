@@ -4,10 +4,12 @@
 
 const DEFAULT_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai";
 // Flash Lite models get far higher free-tier quotas (15 RPM / 500 RPD vs 5 / 20 for Flash),
-// so they do the work and the bigger model is only a last resort.
-const DEFAULT_MODEL = "gemini-3.1-flash-lite";
-const DEFAULT_FALLBACK_MODELS = "gemini-3.5-flash-lite,gemini-3.5-flash";
-const TIMEOUT_MS = 15_000;
+// so they do the work and the bigger model is only a last resort. 3.5 Flash Lite answers tool calls
+// in about a second; 3.1 Flash Lite often takes 2 to 10s, so it is the backup here.
+const DEFAULT_MODEL = "gemini-3.5-flash-lite";
+const DEFAULT_FALLBACK_MODELS = "gemini-3.1-flash-lite,gemini-3.5-flash";
+// A healthy call takes a few seconds; a call that hangs longer is better retried on the next model.
+const TIMEOUT_MS = 10_000;
 const MIN_CALL_MS = 2_000;
 const BUSY_RETRY_MS = 800;
 

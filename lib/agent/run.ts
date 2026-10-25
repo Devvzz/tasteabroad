@@ -16,8 +16,8 @@ import type { AgentEvent, CityMatch, MatchRequest, MatchResult, ResolvedSignal }
 
 const MAX_TURNS = 6;
 const TOP_N = 5;
-// Writing short explanations needs no planning, so a faster model is enough.
-const WRITER_MODEL = "gemini-3.1-flash-lite";
+// The writer uses a different model than the planner so the two share the free quota load.
+const WRITER_MODEL = "gemini-3.5-flash-lite";
 // Time budget (from the start of the run) so the whole request stays under the 60s function limit.
 const AGENT_BUDGET_MS = 30_000;
 const WRITER_BUDGET_MS = 48_000;
@@ -38,6 +38,7 @@ export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) 
     await agentLoop(ctx, startedAt + AGENT_BUDGET_MS);
   } catch (err) {
     if (err instanceof QlooError) throw toAgentError(err);
+    console.warn("agent loop stopped, using fixed pipeline:", err instanceof Error ? err.message : err);
     // Only report a fallback when the pipeline actually has to take over work.
     if (!ctx.ranked || !ctx.alsoLiked) {
       mode = "fallback";
@@ -125,7 +126,10 @@ async function agentLoop(ctx: AgentContext, deadline: number): Promise<void> {
 
 const normalize = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
 
-/** Pick the best candidate per input: a closely named entity, else a closely named tag, else the top entity. */
+/**
+ * Pick the best candidate per input. Lowercase inputs ("anime", "street food") are usually hobbies or
+ * genres, so an exactly named tag wins; otherwise prefer a closely named entity, then a tag, then the top entity.
+ */
 function pickSignals(ctx: AgentContext): ResolvedSignal[] {
   const byInput = new Map<string, ResolvedSignal[]>();
   for (const c of ctx.candidates.values()) byInput.set(c.input, [...(byInput.get(c.input) ?? []), c]);
@@ -134,7 +138,9 @@ function pickSignals(ctx: AgentContext): ResolvedSignal[] {
   for (const [input, options] of byInput) {
     const q = normalize(input);
     const close = (s: ResolvedSignal) => normalize(s.name) === q || normalize(s.name).includes(q) || q.includes(normalize(s.name));
+    const looksLikeHobby = input === input.toLowerCase();
     const pick =
+      (looksLikeHobby ? options.find((o) => o.kind === "tag" && normalize(o.name) === q) : undefined) ??
       options.find((o) => o.kind === "entity" && close(o)) ??
       options.find((o) => o.kind === "tag" && close(o)) ??
       options.find((o) => o.kind === "entity") ??
@@ -191,7 +197,8 @@ async function explain(ctx: AgentContext, top: RankedCity[], deadline: number): 
       const w = written.get(r.city.id);
       return w ? { ...r, ...w } : fallback(r);
     });
-  } catch {
+  } catch (err) {
+    console.warn("explanation writer failed, using templates:", err instanceof Error ? err.message.slice(0, 200) : err);
     ctx.notes.add("llmFallback");
     return top.map(fallback);
   }

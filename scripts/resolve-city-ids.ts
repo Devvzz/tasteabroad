@@ -27,7 +27,7 @@ async function main() {
   const unresolved: string[] = [];
 
   for (const city of data.cities) {
-    if (city.qlooId && !force) continue;
+    if ((city.qlooId || city.qlooProxy) && !force) continue;
     const candidates = await searchEntities(city.name, ["urn:entity:destination"], 5);
     const match = pickMatch(city, candidates);
     if (match) {

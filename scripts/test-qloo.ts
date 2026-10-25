@@ -22,6 +22,9 @@ async function main() {
   const ids = cities.map(scoringId).filter((id): id is string => Boolean(id));
   const scored = await scoreDestinations(signals, ids);
   console.log(`scored ${scored.length}/${cities.length} dataset cities`);
+  const scoredIds = new Set(scored.map((d) => d.id));
+  const unscored = cities.filter((c) => !scoredIds.has(scoringId(c) ?? ""));
+  if (unscored.length) console.log("NOT scored by Qloo:", unscored.map((c) => c.name).join(", "));
   console.log("top 5:", scored.slice(0, 5).map((d) => `${d.name} ${d.affinity?.toFixed(3)}`).join(", "));
   console.log("bottom 3:", scored.slice(-3).map((d) => `${d.name} ${d.affinity?.toFixed(3)}`).join(", "));
 

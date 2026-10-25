@@ -40,6 +40,10 @@ npm run dev
 | `QLOO_API_KEY` | Qloo API key (server-side only) |
 | `GEMINI_API_KEY` | Google Gemini API key (server-side only) |
 | `QLOO_BASE_URL` | Optional, defaults to `https://hackathon.api.qloo.com` |
+| `LLM_MODEL` | Optional, defaults to `gemini-3.5-flash` |
+| `LLM_FALLBACK_MODELS` | Optional, comma-separated models tried when the main one is busy |
+| `LLM_WRITER_MODEL` | Optional, model that writes the city explanations |
+| `LLM_BASE_URL` / `LLM_API_KEY` | Optional, point the agent at any OpenAI-compatible provider |
 
 Keys are only read in server code and never sent to the browser.
 
@@ -48,6 +52,7 @@ Keys are only read in server code and never sent to the browser.
 | Command | What it does |
 | --- | --- |
 | `npm run test:qloo` | Smoke-tests the Qloo client against the live API |
+| `npm run test:agent -- "Dua Lipa" "anime"` | Runs the full agent once and prints each step |
 | `npm run resolve:cities` | Looks up the Qloo destination ID for each city in `data/cities.json` |
 
 ## Licence

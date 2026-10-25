@@ -60,6 +60,17 @@
     "copied": "Link copied!",
     "trace": "Agent trace ({count} tool calls)"
   },
+  "compare": {
+    "select": "Compare",
+    "pickOne": "Pick one more city to compare",
+    "open": "Compare {a} and {b}",
+    "title": "Side by side",
+    "close": "Close",
+    "clear": "Clear",
+    "picks": "Places people like you love here",
+    "picksLoading": "Asking Qloo...",
+    "picksEmpty": "No place picks from Qloo for this city."
+  },
   "alsoLiked": {
     "title": "People like you also liked...",
     "types": {

@@ -1,40 +1,28 @@
 "use client";
 
 import type { CityMatch } from "@/lib/agent/types";
+import { cityGradient, flag, money } from "@/lib/format";
 
 interface Props {
   match: CityMatch;
   rank: number;
   t: (key: string, vars?: Record<string, string | number>) => string;
+  comparing: boolean;
+  compareDisabled: boolean;
+  onCompareToggle: () => void;
 }
 
-/** Country code to flag emoji ("JP" -> 🇯🇵). */
-function flag(countryCode: string): string {
-  return countryCode
-    .toUpperCase()
-    .replace(/[A-Z]/g, (c) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65));
-}
-
-/** A stable colour per city, used as the card header instead of a photo. */
-function hue(id: string): number {
-  let h = 0;
-  for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) % 360;
-  return h;
-}
-
-const money = (n: number, currency: "EUR" | "USD") =>
-  new Intl.NumberFormat("en", { style: "currency", currency, maximumFractionDigits: 0 }).format(n);
-
-export function CityCard({ match, rank, t }: Props) {
+export function CityCard({ match, rank, t, comparing, compareDisabled, onCompareToggle }: Props) {
   const { city, score } = match;
-  const h = hue(city.id);
   const cost = city.costOfLiving;
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-line bg-card shadow-sm">
+    <article
+      className={`overflow-hidden rounded-2xl border bg-card shadow-sm ${comparing ? "border-accent ring-2 ring-accent" : "border-line"}`}
+    >
       <header
         className="flex items-end justify-between gap-3 px-4 pb-3 pt-8 text-white"
-        style={{ background: `linear-gradient(135deg, hsl(${h} 55% 38%), hsl(${(h + 40) % 360} 60% 52%))` }}
+        style={{ background: cityGradient(city.id) }}
       >
         <div>
           <p className="text-xs font-medium opacity-80">#{rank}</p>
@@ -104,6 +92,21 @@ export function CityCard({ match, rank, t }: Props) {
         <p className="text-xs text-muted">
           {t("results.languages")}: {city.languages.join(", ")} · {t("results.estimate")}
         </p>
+
+        <label
+          className={`flex w-fit items-center gap-2 rounded-lg border px-3 py-2 font-medium ${
+            comparing ? "border-accent bg-accent-soft text-accent" : "border-line"
+          } ${compareDisabled ? "opacity-50" : "cursor-pointer"}`}
+        >
+          <input
+            type="checkbox"
+            checked={comparing}
+            disabled={compareDisabled}
+            onChange={onCompareToggle}
+            className="size-4 accent-[var(--accent)]"
+          />
+          {t("compare.select")}
+        </label>
       </div>
     </article>
   );

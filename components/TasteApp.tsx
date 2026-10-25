@@ -10,6 +10,7 @@ import { fromSearchParams, toSearchParams } from "@/lib/share";
 import { AgentSteps, type StepStatus } from "./AgentSteps";
 import { AlsoLiked } from "./AlsoLiked";
 import { CityCard } from "./CityCard";
+import { ComparePanel } from "./ComparePanel";
 
 const SUGGESTIONS = ["Dua Lipa", "anime", "street food", "hiking", "techno", "Studio Ghibli", "Bad Bunny", "K-pop"];
 const REGIONS: Region[] = ["Europe", "North America", "Asia", "Oceania", "Latin America", "Middle East", "Africa"];
@@ -32,6 +33,8 @@ export function TasteApp() {
   const [result, setResult] = useState<MatchResult | null>(null);
   const [error, setError] = useState<ErrorCode | "needLikes" | null>(null);
   const [copied, setCopied] = useState(false);
+  const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [showCompare, setShowCompare] = useState(false);
   const autoRan = useRef(false);
   const outputRef = useRef<HTMLDivElement>(null);
 
@@ -75,6 +78,8 @@ export function TasteApp() {
       setDetails({});
       setResult(null);
       setError(null);
+      setCompareIds([]);
+      setShowCompare(false);
       router.replace(`${pathname}?${toSearchParams(state).toString()}`, { scroll: false });
       // On phones the progress appears below the form, so bring it into view.
       requestAnimationFrame(() => outputRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
@@ -146,10 +151,19 @@ export function TasteApp() {
     setFilters({ ...filters, regions: current.includes(region) ? current.filter((r) => r !== region) : [...current, region] });
   };
 
+  const toggleCompare = (cityId: string) =>
+    setCompareIds((ids) => (ids.includes(cityId) ? ids.filter((id) => id !== cityId) : [...ids, cityId].slice(-2)));
+
+  // Memoised so the compare panel only fetches place picks once per pair.
+  const comparePair = useMemo(() => {
+    const picked = compareIds.map((id) => result?.cities.find((c) => c.city.id === id)).filter((c) => c !== undefined);
+    return picked.length === 2 ? ([picked[0], picked[1]] as const) : null;
+  }, [compareIds, result]);
+
   const showSteps = running || (Object.keys(steps).length > 0 && !result);
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 pb-16 pt-6">
+    <div className="mx-auto w-full max-w-3xl px-4 pb-28 pt-6">
       <nav className="mb-8 flex items-center justify-between gap-3">
         <Link href="/" className="text-lg font-bold tracking-tight">
           Taste<span className="text-accent">Abroad</span>
@@ -314,8 +328,47 @@ export function TasteApp() {
 
         {showSteps && <AgentSteps steps={steps} details={details} t={t} />}
 
-        {result && <Results result={result} t={t} onCopy={copyLink} copied={copied} />}
+        {result && (
+          <Results
+            result={result}
+            t={t}
+            onCopy={copyLink}
+            copied={copied}
+            compareIds={compareIds}
+            onCompareToggle={toggleCompare}
+          />
+        )}
       </div>
+
+      {result && compareIds.length > 0 && !showCompare && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-card/95 p-3 backdrop-blur">
+          <div className="mx-auto flex max-w-3xl items-center gap-2">
+            {comparePair ? (
+              <button
+                type="button"
+                onClick={() => setShowCompare(true)}
+                className="flex-1 rounded-xl bg-accent px-4 py-3 font-semibold text-white"
+              >
+                {t("compare.open", { a: comparePair[0].city.name, b: comparePair[1].city.name })}
+              </button>
+            ) : (
+              <p className="flex-1 text-sm text-muted">{t("compare.pickOne")}</p>
+            )}
+            <button type="button" onClick={() => setCompareIds([])} className="rounded-xl border border-line px-3 py-3 text-sm">
+              {t("compare.clear")}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showCompare && comparePair && result && (
+        <ComparePanel
+          cities={comparePair}
+          signals={result.resolved}
+          t={t}
+          onClose={() => setShowCompare(false)}
+        />
+      )}
 
       <footer className="mt-12 border-t border-line pt-4 text-xs text-muted">{t("footer.poweredBy")}</footer>
     </div>
@@ -327,9 +380,11 @@ interface ResultsProps {
   t: (key: string, vars?: Record<string, string | number>) => string;
   onCopy: () => void;
   copied: boolean;
+  compareIds: string[];
+  onCompareToggle: (cityId: string) => void;
 }
 
-function Results({ result, t, onCopy, copied }: ResultsProps) {
+function Results({ result, t, onCopy, copied, compareIds, onCompareToggle }: ResultsProps) {
   return (
     <>
       <section className="space-y-3">
@@ -354,7 +409,15 @@ function Results({ result, t, onCopy, copied }: ResultsProps) {
 
       <div className="space-y-5">
         {result.cities.map((match, i) => (
-          <CityCard key={match.city.id} match={match} rank={i + 1} t={t} />
+          <CityCard
+            key={match.city.id}
+            match={match}
+            rank={i + 1}
+            t={t}
+            comparing={compareIds.includes(match.city.id)}
+            compareDisabled={compareIds.length >= 2 && !compareIds.includes(match.city.id)}
+            onCompareToggle={() => onCompareToggle(match.city.id)}
+          />
         ))}
       </div>
 

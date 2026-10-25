@@ -284,8 +284,30 @@ export function topDestinations(signals: TasteSignals, take = 30): Promise<QlooE
 const CITY_RADIUS_METERS = 12_000;
 // Very obscure places often only have local-script names; prefer ones people have heard of.
 const MIN_PLACE_POPULARITY = 0.3;
-// Hotels and hostels rank high for travellers but say little about student life.
-const LODGING_TAG = "urn:tag:genre:place:hotel";
+// Location results include anything with an address (trade fairs, TV studios, apartment blocks),
+// so only keep the kinds of places students actually go to.
+const STUDENT_PLACE_TAGS = [
+  "urn:tag:genre:place:restaurant", // includes bars, cafés and coffee shops
+  "urn:tag:genre:place:tourist_attraction",
+  "urn:tag:genre:place:historical_landmark",
+  "urn:tag:genre:place:museum",
+  "urn:tag:genre:place:park",
+  "urn:tag:genre:place:stadium",
+  "urn:tag:genre:place:brewery",
+  "urn:tag:genre:place:festival",
+  "urn:tag:genre:place:music_venue",
+  "urn:tag:genre:place:nightlife",
+  "urn:tag:genre:place:market",
+  "urn:tag:genre:place:theater",
+  "urn:tag:genre:place:beach",
+];
+// Hotels rank high for travellers, and trade-fair venues are tagged as attractions too.
+const EXCLUDED_PLACE_TAGS = ["urn:tag:genre:place:hotel", "urn:tag:genre:place:event_venue", "urn:tag:genre:place:convention_center"];
+
+function isStudentPlace(place: QlooEntity): boolean {
+  const has = (prefixes: string[]) => place.tagIds.some((id) => prefixes.some((p) => id.startsWith(p)));
+  return has(STUDENT_PLACE_TAGS) && !has(EXCLUDED_PLACE_TAGS);
+}
 
 /** Places inside one city that people with this taste rate highest. */
 export async function placesNear(
@@ -299,9 +321,9 @@ export async function placesNear(
     location: { ...point, radiusMeters: CITY_RADIUS_METERS },
     take: 30,
   });
-  const notLodging = places.filter((p) => !p.tagIds.some((id) => id.startsWith(LODGING_TAG)));
-  const known = notLodging.filter((p) => (p.popularity ?? 0) >= MIN_PLACE_POPULARITY);
-  return (known.length >= take ? known : notLodging).slice(0, take);
+  const good = places.filter(isStudentPlace);
+  const known = good.filter((p) => (p.popularity ?? 0) >= MIN_PLACE_POPULARITY);
+  return (known.length >= take ? known : good).slice(0, take);
 }
 
 /** "People like you also liked…": other entities of a given type with high affinity. */

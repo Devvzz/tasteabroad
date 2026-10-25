@@ -38,8 +38,11 @@ export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) 
     await agentLoop(ctx, startedAt + AGENT_BUDGET_MS);
   } catch (err) {
     if (err instanceof QlooError) throw toAgentError(err);
-    mode = "fallback";
-    ctx.step("fallback", "running");
+    // Only report a fallback when the pipeline actually has to take over work.
+    if (!ctx.ranked || !ctx.alsoLiked) {
+      mode = "fallback";
+      ctx.step("fallback", "running");
+    }
   }
 
   // Fill in anything the model skipped (or everything, if it failed).
@@ -111,6 +114,10 @@ async function agentLoop(ctx: AgentContext, deadline: number): Promise<void> {
 
     const outputs = await Promise.all(calls.map((call) => executeTool(ctx, call.function.name, call.function.arguments)));
     calls.forEach((call, i) => messages.push({ role: "tool", tool_call_id: call.id, content: outputs[i] }));
+
+    // Once cities are ranked, similar items found and city facts read, the closing summary adds nothing.
+    const readCities = calls.some((c) => c.function.name === "get_city_info");
+    if (readCities && ctx.ranked && ctx.alsoLiked) return;
   }
 }
 

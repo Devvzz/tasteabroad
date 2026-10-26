@@ -13,6 +13,7 @@ import {
   type RankedCity,
 } from "./tools";
 import { AgentError } from "./errors";
+import { pickSignal } from "./pick";
 import { bestValue, buildRanking } from "./ranking";
 import type { AgentEvent, CityMatch, MatchRequest, MatchResult, ResolvedSignal } from "./types";
 
@@ -141,30 +142,11 @@ async function agentLoop(ctx: AgentContext, deadline: number): Promise<void> {
 
 // ---------- fixed pipeline (fills gaps / replaces the LLM) ----------
 
-const normalize = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
-
-/**
- * Pick the best candidate per input. Lowercase inputs ("anime", "street food") are usually hobbies or
- * genres, so an exactly named tag wins; otherwise prefer a closely named entity, then a tag, then the top entity.
- */
+/** The fixed pipeline's choice of Qloo match for each like (see pickSignal). */
 function pickSignals(ctx: AgentContext): ResolvedSignal[] {
   const byInput = new Map<string, ResolvedSignal[]>();
   for (const c of ctx.candidates.values()) byInput.set(c.input, [...(byInput.get(c.input) ?? []), c]);
-
-  const picks: ResolvedSignal[] = [];
-  for (const [input, options] of byInput) {
-    const q = normalize(input);
-    const close = (s: ResolvedSignal) => normalize(s.name) === q || normalize(s.name).includes(q) || q.includes(normalize(s.name));
-    const looksLikeHobby = input === input.toLowerCase();
-    const pick =
-      (looksLikeHobby ? options.find((o) => o.kind === "tag" && normalize(o.name) === q) : undefined) ??
-      options.find((o) => o.kind === "entity" && close(o)) ??
-      options.find((o) => o.kind === "tag" && close(o)) ??
-      options.find((o) => o.kind === "entity") ??
-      options[0];
-    if (pick) picks.push(pick);
-  }
-  return picks;
+  return [...byInput].map(([input, options]) => pickSignal(input, options)).filter((p): p is ResolvedSignal => Boolean(p));
 }
 
 async function completePipeline(ctx: AgentContext): Promise<void> {

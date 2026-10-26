@@ -16,7 +16,7 @@ import { MAX_LIKES } from "./request";
 import { rankCities, scoreTaste, type TasteScore } from "./scoring";
 import type { AgentEvent, MatchRequest, NoteKey, ResolvedSignal, StepKey, TasteRank, TraceEntry } from "./types";
 
-const SEARCH_TYPES: EntityType[] = [
+export const SEARCH_TYPES: EntityType[] = [
   "urn:entity:artist",
   "urn:entity:movie",
   "urn:entity:tv_show",

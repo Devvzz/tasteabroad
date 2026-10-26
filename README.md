@@ -4,6 +4,8 @@ Find the university city abroad where you'd actually feel at home.
 
 **Live demo: [tasteabroad.vercel.app](https://tasteabroad.vercel.app)** (no login needed)
 
+[Watch the trailer](https://youtu.be/ok7XA0F1fVQ) · [Devpost submission](https://devpost.com/software/1511225) · Built for the Qloo Agentic Hackathon 2026
+
 ![TasteAbroad results for Studio Ghibli, ramen and jazz: Kyoto first, with its rank for each taste](docs/screenshot.jpg)
 
 Millions of students choose where to study abroad by rankings and price, then feel lost because

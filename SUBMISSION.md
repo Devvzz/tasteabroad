@@ -26,7 +26,7 @@ TasteAbroad answers three questions at once:
 3. **Can I afford it?** Typical international tuition and the monthly cost of living.
 
 You type what you love: artists, films, shows, food, hobbies, brands or places. For example
-"Studio Ghibli, street food, cycling". TasteAbroad then:
+"Studio Ghibli, street food, J-pop". TasteAbroad then:
 
 1. **Matches you to cities** around the world by taste. Qloo ranks a curated list of 105 student
    cities on every continent once for each of your tastes; you get your top 5 with a match score and
@@ -44,12 +44,16 @@ You type what you love: artists, films, shows, food, hobbies, brands or places. 
 7. **Best value pick**: the cheapest year of study among your 15 best matches.
 8. **Exchange and scholarships**: Erasmus+ status and official government scholarship links
    (DAAD, Chevening, Fulbright, MEXT and more) for each city's country.
-9. Works on any phone, and every result is a **shareable link**.
+9. **Honest about what Qloo knows**: each like is checked with Qloo as soon as you add it, and one
+   that Qloo has no city data for (like "hiking") is flagged right away instead of quietly ignored.
+10. Works on any phone, and every result is a **shareable link**.
 
 One switch limits results to English-taught programmes; "I also speak..." adds other languages,
 which matters because many public universities are free or cheap in the local language (German in
 Berlin, Spanish in Mexico City). Optional filters for tuition, budget and region narrow things
-further. Nothing is filtered by default, so the match is purely about taste.
+further. Tuition filters use the fee non-EU students pay (Stockholm is free for EU students but
+$9k+ for others) unless you tick "I have an EU/EEA passport". Nothing is filtered by default, so
+the match is purely about taste.
 
 ## How Qloo powers it
 
@@ -125,10 +129,13 @@ the per-taste ranks, and a readable log shows every Qloo call the agent made.
 - **Not every city exists in Qloo.** Qloo has no destination for Wellington or Kigali, so they
   were replaced with cities it can score (Christchurch, Kampala). Seoul and Lima are scored
   through a district in the same metro area (Suwon, Miraflores), and the card says so.
-- **Free LLM quotas and latency.** Production logs showed some Gemini calls timing out. I measured
-  the models and moved the agent to the one that answers in about a second. The app also keeps a
-  time budget, and if the AI is unavailable a fixed pipeline calls the same Qloo tools, so users
-  always get results with the same Qloo scores.
+- **Free LLM quotas and latency.** On the free tier Gemini models sometimes stop answering for
+  minutes. Tracing every call showed searches spending most of their time waiting on hangs. Now
+  each call races two models and takes the first answer, a model that hangs is set aside for a few
+  minutes, and the cities appear as soon as Qloo has ranked them while the notes are written in
+  parallel. Under the same bad conditions that took searches from 45 seconds with template notes
+  to 10 to 27 seconds with real ones. If the AI is unavailable, a fixed pipeline calls the same
+  Qloo tools, so users always get results with the same Qloo scores.
 - **Every city looked the same.** Scoring all tastes in one call put every city between 0.69 and
   0.82, and one famous name drowned out the hobbies. Testing showed why: most tags (jazz, techno,
   climbing, hiking) give every destination exactly the same affinity. Scoring each taste on its own,

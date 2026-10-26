@@ -88,6 +88,7 @@ function assemble(ctx: AgentContext, cities: CityMatch[], mode: MatchResult["mod
     ranking: buildRanking(ctx.allRanked.length ? ctx.allRanked : ranked, ranked),
     bestValueId: bestValue(ranked),
     alsoLiked: (ctx.alsoLiked ?? []).map((e) => ({ id: e.id, name: e.name, type: e.type, imageUrl: e.imageUrl })),
+    tasteSignals: ctx.tasteSignals,
     worldwide: worldwideExtras(ctx),
     notes: [...ctx.notes],
     // A copy, so the partial result does not keep growing as later tools are logged.

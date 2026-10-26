@@ -108,6 +108,8 @@ export interface MatchResult {
   /** The cheapest city to live and study in among the strong matches. */
   bestValueId?: string;
   alsoLiked: AlsoLikedItem[];
+  /** The Qloo IDs the ranking used, so place picks in the compare view match the same taste. */
+  tasteSignals?: { entityIds: string[]; tagIds: string[] };
   worldwide: { name: string; countryCode?: string }[];
   notes: NoteKey[];
   trace: TraceEntry[];

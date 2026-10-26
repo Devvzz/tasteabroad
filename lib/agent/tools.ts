@@ -47,6 +47,8 @@ export class AgentContext {
   alsoLiked: QlooEntity[] | null = null;
   /** Inputs Qloo recognised but has no city data for. */
   unscored: string[] = [];
+  /** What the ranking was built from (bridge artists instead of bare genre tags), reused for place picks. */
+  tasteSignals?: TasteSignals;
   /** Called once the cities are ranked, so the page can show them before the notes are written. */
   onRanked?: () => void;
   /** Per-taste scoring, started by whichever tool needs it first. */
@@ -222,7 +224,8 @@ export async function qlooDestinationAffinity(ctx: AgentContext, entityIds?: str
   if (!tastes.length) throw new AgentError("noCityData");
 
   const ranked = rankCities(tastes);
-  const worldwide = await topDestinations(tasteSignals(tastes, ctx.signals()), 30);
+  ctx.tasteSignals = tasteSignals(tastes, ctx.signals());
+  const worldwide = await topDestinations(ctx.tasteSignals, 30);
   ctx.worldwide = worldwide;
 
   // If nothing passes every filter, relax the strictest ones first and keep the region as long as possible.

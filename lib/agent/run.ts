@@ -23,7 +23,9 @@ const TOP_N = 5;
 // It has the most generous time budget, so the slower model is fine here.
 const WRITER_MODEL = "gemini-3.1-flash-lite";
 // Time budget (from the start of the run) so the whole request stays under the 60s function limit.
-const AGENT_BUDGET_MS = 30_000;
+// The agent needs two raced steps, under 10s when Gemini is fine; past 20s it is stuck on hangs, and the
+// fixed pipeline shows the cities sooner.
+const AGENT_BUDGET_MS = 20_000;
 const WRITER_BUDGET_MS = 48_000;
 
 export { AgentError };
@@ -32,11 +34,16 @@ export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) 
   const ctx = new AgentContext(request, emit);
   const startedAt = Date.now();
   let mode: MatchResult["mode"] = "agent";
-  // Show the ranked cities right away; writing the notes can take the language model a while.
+  // Show the ranked cities right away, and start writing their notes at once: the writer only needs the
+  // ranking, and Gemini can be slow, so it gets every second until the deadline instead of waiting its turn.
+  let early: { top: RankedCity[]; notes: Promise<CityMatch[]> } | undefined;
   ctx.onRanked = () => {
     ctx.onRanked = undefined;
-    const placeholders = ctx.ranked!.slice(0, TOP_N).map((r) => ({ ...r, why: "", studentLife: "", pending: true }));
+    const top = ctx.ranked!.slice(0, TOP_N);
+    const placeholders = top.map((r) => ({ ...r, why: "", studentLife: "", pending: true }));
     emit({ type: "partial", result: assemble(ctx, placeholders, mode) });
+    ctx.step("explain", "running");
+    early = { top, notes: explain(ctx, top, startedAt + WRITER_BUDGET_MS) };
   };
 
   try {
@@ -63,8 +70,10 @@ export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) 
   if (!ctx.ranked?.length) throw new AgentError("noTaste");
 
   const top = ctx.ranked.slice(0, TOP_N);
-  ctx.step("explain", "running");
-  const cities = await explain(ctx, top, startedAt + WRITER_BUDGET_MS);
+  // Reuse the early notes unless the agent ranked again and the top cities changed since.
+  const sameTop = early?.top.length === top.length && early.top.every((r, i) => r.city.id === top[i].city.id);
+  if (!sameTop) ctx.step("explain", "running");
+  const cities = sameTop ? await early!.notes : await explain(ctx, top, startedAt + WRITER_BUDGET_MS);
   ctx.step("explain", "done");
 
   return assemble(ctx, cities, mode);
@@ -126,7 +135,8 @@ async function agentLoop(ctx: AgentContext, deadline: number): Promise<void> {
   ];
 
   for (let turn = 0; turn < MAX_TURNS; turn++) {
-    const reply = await chat({ messages, tools: TOOL_DEFINITIONS, temperature: 0.2, deadline });
+    // Raced like the notes: a step that hangs on one model would otherwise eat a third of the time budget.
+    const reply = await chat({ messages, tools: TOOL_DEFINITIONS, temperature: 0.2, deadline, hedge: true });
     if (turn === 0) ctx.step("plan", "done");
     messages.push(reply);
     const calls = reply.tool_calls ?? [];
@@ -135,9 +145,9 @@ async function agentLoop(ctx: AgentContext, deadline: number): Promise<void> {
     const outputs = await Promise.all(calls.map((call) => executeTool(ctx, call.function.name, call.function.arguments)));
     calls.forEach((call, i) => messages.push({ role: "tool", tool_call_id: call.id, content: outputs[i] }));
 
-    // Once cities are ranked, similar items found and city facts read, the closing summary adds nothing.
-    const readCities = calls.some((c) => c.function.name === "get_city_info");
-    if (readCities && ctx.ranked && ctx.alsoLiked) return;
+    // Once cities are ranked and similar items found, the model's remaining steps only read our own city
+    // data (the pipeline does that anyway) and write a summary nobody sees. Each would cost a Gemini call.
+    if (ctx.ranked && ctx.alsoLiked) return;
   }
 }
 
@@ -225,6 +235,8 @@ async function writeExplanations(ctx: AgentContext, top: RankedCity[], deadline:
     json: true,
     temperature: 0.6,
     model: process.env.LLM_WRITER_MODEL || WRITER_MODEL,
+    // Two models race and the first good answer wins.
+    hedge: true,
     deadline,
     messages: [
       {

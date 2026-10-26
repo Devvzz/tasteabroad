@@ -3,7 +3,9 @@
 
 const DEFAULT_BASE_URL = "https://hackathon.api.qloo.com";
 const TIMEOUT_MS = 8_000;
-const MAX_RETRIES = 2;
+const MAX_RETRIES = 3;
+// A search with 12 likes fans out into dozens of lookups; more than a few at once trips Qloo's rate limit.
+const MAX_IN_FLIGHT = 6;
 const CACHE_TTL_MS = 60 * 60 * 1000;
 const CACHE_MAX_ENTRIES = 500;
 
@@ -117,6 +119,23 @@ function buildUrl(path: string, params: Params): string {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// Shared by every request on this server instance, so parallel searches queue instead of failing.
+let inFlight = 0;
+const waiting: (() => void)[] = [];
+
+async function limited<T>(run: () => Promise<T>): Promise<T> {
+  // A finished request hands its slot straight to the next one in line, so the count never overshoots.
+  if (inFlight < MAX_IN_FLIGHT) inFlight++;
+  else await new Promise<void>((resolve) => waiting.push(resolve));
+  try {
+    return await run();
+  } finally {
+    const next = waiting.shift();
+    if (next) next();
+    else inFlight--;
+  }
+}
+
 function retryDelay(attempt: number, retryAfter: string | null): number {
   const seconds = retryAfter ? Number(retryAfter) : NaN;
   if (Number.isFinite(seconds) && seconds > 0) return Math.min(seconds * 1000, 5_000);
@@ -145,10 +164,12 @@ async function qlooGet<T>(path: string, params: Params): Promise<T | null> {
   let lastError: QlooError | undefined;
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const res = await fetch(url, {
-        headers: { "X-Api-Key": key, Accept: "application/json" },
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-      });
+      const res = await limited(() =>
+        fetch(url, {
+          headers: { "X-Api-Key": key, Accept: "application/json" },
+          signal: AbortSignal.timeout(TIMEOUT_MS),
+        }),
+      );
 
       // Qloo answers 404 when a search has no results; treat that as empty, not as a failure.
       if (res.status === 404) {

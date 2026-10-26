@@ -121,7 +121,9 @@
     "clear": "Clear",
     "picks": "Places people like you love here",
     "picksLoading": "Asking Qloo...",
-    "picksEmpty": "No place picks from Qloo for this city."
+    "picksEmpty": "No place picks from Qloo for this city.",
+    "picksError": "Couldn't load place picks from Qloo just now.",
+    "retry": "Try again"
   },
   "alsoLiked": {
     "title": "People like you also liked...",

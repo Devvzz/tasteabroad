@@ -196,6 +196,15 @@ export function TasteApp() {
     return picked.length === 2 ? ([picked[0], picked[1]] as const) : null;
   }, [compareIds, result]);
 
+  // What the ranking used; older cached results fall back to the matched likes that had city data.
+  const placeSignals = useMemo(() => {
+    if (result?.tasteSignals) return result.tasteSignals;
+    const scored = result?.resolved.filter((r) => r.scored !== false) ?? [];
+    return {
+      entityIds: scored.filter((s) => s.kind === "entity").map((s) => s.id),
+      tagIds: scored.filter((s) => s.kind === "tag").map((s) => s.id),
+    };
+  }, [result]);
   const showSteps = running || (Object.keys(steps).length > 0 && !result);
 
   return (
@@ -420,7 +429,7 @@ export function TasteApp() {
       {showCompare && comparePair && result && (
         <ComparePanel
           cities={comparePair}
-          signals={result.resolved}
+          signals={placeSignals}
           t={t}
           onClose={() => setShowCompare(false)}
         />

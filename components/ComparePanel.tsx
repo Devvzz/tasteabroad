@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { CityMatch, ResolvedSignal } from "@/lib/agent/types";
+import type { CityMatch, MatchResult } from "@/lib/agent/types";
 import { cityGradient, flag, money } from "@/lib/format";
 
 interface Place {
@@ -27,21 +27,18 @@ function mapsLink(place: Place): string {
 
 interface Props {
   cities: readonly [CityMatch, CityMatch];
-  signals: ResolvedSignal[];
+  /** The Qloo IDs the ranking used, so the places fit the same taste. */
+  signals: NonNullable<MatchResult["tasteSignals"]>;
   t: (key: string, vars?: Record<string, string | number>) => string;
   onClose: () => void;
 }
 
-async function loadPicks(cityId: string, signals: ResolvedSignal[]): Promise<Picks> {
+async function loadPicks(cityId: string, signals: Props["signals"]): Promise<Picks> {
   try {
     const res = await fetch("/api/city-picks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        cityId,
-        entityIds: signals.filter((s) => s.kind === "entity").map((s) => s.id),
-        tagIds: signals.filter((s) => s.kind === "tag").map((s) => s.id),
-      }),
+      body: JSON.stringify({ cityId, ...signals }),
     });
     if (!res.ok) return { status: "error" };
     const body = (await res.json()) as { places?: Place[] };
@@ -76,6 +73,11 @@ export function ComparePanel({ cities, signals, t, onClose }: Props) {
     };
   }, [cities, signals]);
 
+  const retry = (cityId: string) => {
+    setPicks((prev) => ({ ...prev, [cityId]: { status: "loading" } }));
+    void loadPicks(cityId, signals).then((p) => setPicks((prev) => ({ ...prev, [cityId]: p })));
+  };
+
   const rows: { label: string; render: (m: CityMatch) => React.ReactNode }[] = [
     { label: t("results.why"), render: (m) => m.why },
     { label: t("results.tuition"), render: (m) => m.city.tuition.label },
@@ -96,7 +98,18 @@ export function ComparePanel({ cities, signals, t, onClose }: Props) {
       render: (m) => {
         const p = picks[m.city.id] ?? { status: "loading" };
         if (p.status === "loading") return <span className="text-muted">{t("compare.picksLoading")}</span>;
-        if (p.status === "error" || !p.places.length) return <span className="text-muted">{t("compare.picksEmpty")}</span>;
+        // A failed lookup is not the same as Qloo having nothing for the city, so say which one it was.
+        if (p.status === "error") {
+          return (
+            <span className="text-muted">
+              {t("compare.picksError")}{" "}
+              <button type="button" onClick={() => retry(m.city.id)} className="font-medium text-accent underline-offset-2 hover:underline">
+                {t("compare.retry")}
+              </button>
+            </span>
+          );
+        }
+        if (!p.places.length) return <span className="text-muted">{t("compare.picksEmpty")}</span>;
         return (
           <ul className="space-y-2">
             {p.places.map((place) => (

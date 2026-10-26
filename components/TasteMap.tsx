@@ -35,15 +35,9 @@ export function TasteMap({ ranking, topIds, selectedId, onSelect, t }: Props) {
           const top = topIds.indexOf(r.id);
           const selected = r.id === selectedId;
           return (
-            <g
-              key={r.id}
-              role="button"
-              tabIndex={0}
-              aria-label={t("map.dot", { name: r.name, score: r.score, rank: r.rank })}
-              onClick={() => onSelect(r.id)}
-              onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onSelect(r.id)}
-              className="cursor-pointer outline-none"
-            >
+            // Not in the tab order: 105 stops would trap keyboard users, and the city picker below does the same job.
+            <g key={r.id} onClick={() => onSelect(r.id)} className="cursor-pointer">
+
               <title>{t("map.dot", { name: r.name, score: r.score, rank: r.rank })}</title>
               {/* A larger invisible circle makes small dots easy to tap on a phone. */}
               <circle cx={x} cy={y} r={16} fill="transparent" />

@@ -9,10 +9,14 @@ const MAX_LIKE_LENGTH = 60;
 const MIN_LIKE_LENGTH = 2;
 const MAX_LANGUAGES = 6;
 
-/** Drops HTML tags and extra spaces so "<b>Beyoncé</b>" becomes "Beyoncé" before it reaches Qloo or the model. */
-function cleanLike(like: string): string {
+/**
+ * Drops HTML tags, emoji and extra spaces so "<b>Beyoncé</b>" becomes "Beyoncé" and "🍣 sushi" becomes
+ * "sushi" before it reaches Qloo or the model.
+ */
+export function cleanLike(like: string): string {
   return like
     .replace(/<[^>]*>/g, " ")
+    .replace(/[\p{Extended_Pictographic}\u{FE0F}\u{200D}]/gu, " ")
     .replace(/\s+/g, " ")
     .trim()
     .slice(0, MAX_LIKE_LENGTH);

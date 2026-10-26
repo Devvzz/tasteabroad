@@ -152,6 +152,10 @@
           "min": 0,
           "max": 3400
         },
+        "nonEuUsdPerYear": {
+          "min": 3300,
+          "max": 3400
+        },
         "note": "EU/EEA students mostly pay only the student union fee."
       },
       "costOfLiving": {
@@ -204,6 +208,10 @@
         "label": "€2.5k (EU) to €20k+ (non-EU) per year",
         "usdPerYear": {
           "min": 2800,
+          "max": 24000
+        },
+        "nonEuUsdPerYear": {
+          "min": 22000,
           "max": 24000
         },
         "note": "Statutory fee for EU/EEA; institutional fee for others."
@@ -262,6 +270,10 @@
         "label": "€700 (EU) to €7k (international) per year",
         "usdPerYear": {
           "min": 800,
+          "max": 7700
+        },
+        "nonEuUsdPerYear": {
+          "min": 7700,
           "max": 7700
         },
         "note": "International-student fees vary a lot by faculty."
@@ -379,6 +391,10 @@
         "label": "€175 (EU) to ~€4k (non-EU) per year (public)",
         "usdPerYear": {
           "min": 200,
+          "max": 4400
+        },
+        "nonEuUsdPerYear": {
+          "min": 4400,
           "max": 4400
         },
         "note": "Many public universities waive the higher non-EU fee; grandes écoles cost more."
@@ -548,6 +564,10 @@
         "label": "€0 (EU) to €8k–27k (non-EU) per year",
         "usdPerYear": {
           "min": 0,
+          "max": 30000
+        },
+        "nonEuUsdPerYear": {
+          "min": 8800,
           "max": 30000
         },
         "note": "EU/EEA students study free; scholarships exist for others."
@@ -1698,6 +1718,10 @@
           "min": 0,
           "max": 19000
         },
+        "nonEuUsdPerYear": {
+          "min": 11000,
+          "max": 19000
+        },
         "note": "EU/EEA students study free."
       },
       "costOfLiving": {
@@ -1750,6 +1774,10 @@
         "label": "€0 (EU) to €13k–18k (non-EU) per year",
         "usdPerYear": {
           "min": 0,
+          "max": 20000
+        },
+        "nonEuUsdPerYear": {
+          "min": 14300,
           "max": 20000
         },
         "note": "Scholarships often cover part of non-EU fees."
@@ -1971,6 +1999,10 @@
         "label": "€3k (EU) to €18k–30k (non-EU) per year",
         "usdPerYear": {
           "min": 3300,
+          "max": 33000
+        },
+        "nonEuUsdPerYear": {
+          "min": 19800,
           "max": 33000
         }
       },
@@ -2250,6 +2282,10 @@
         "label": "€1k (EU) to €3k–9k (non-EU) per year",
         "usdPerYear": {
           "min": 1100,
+          "max": 9900
+        },
+        "nonEuUsdPerYear": {
+          "min": 3300,
           "max": 9900
         }
       },
@@ -3809,6 +3845,10 @@
           "min": 200,
           "max": 4400
         },
+        "nonEuUsdPerYear": {
+          "min": 4400,
+          "max": 4400
+        },
         "note": "Many public universities waive the higher non-EU fee."
       },
       "costOfLiving": {
@@ -3921,6 +3961,10 @@
           "min": 0,
           "max": 3800
         },
+        "nonEuUsdPerYear": {
+          "min": 3300,
+          "max": 3800
+        },
         "note": "Baden-Württemberg charges non-EU students €1,500 per semester at public universities."
       },
       "costOfLiving": {
@@ -3974,6 +4018,10 @@
         "usdPerYear": {
           "min": 2800,
           "max": 22000
+        },
+        "nonEuUsdPerYear": {
+          "min": 13200,
+          "max": 22000
         }
       },
       "costOfLiving": {
@@ -4026,6 +4074,10 @@
         "label": "€2.5k (EU) to €10k–18k (non-EU) per year",
         "usdPerYear": {
           "min": 2800,
+          "max": 20000
+        },
+        "nonEuUsdPerYear": {
+          "min": 11000,
           "max": 20000
         }
       },
@@ -4133,6 +4185,10 @@
         "label": "€700 (EU) to €3k–7k (international) per year",
         "usdPerYear": {
           "min": 800,
+          "max": 7700
+        },
+        "nonEuUsdPerYear": {
+          "min": 3300,
           "max": 7700
         }
       },
@@ -4405,6 +4461,10 @@
         "label": "€0 (EU) to €3k–6k (non-EU) per year",
         "usdPerYear": {
           "min": 0,
+          "max": 6600
+        },
+        "nonEuUsdPerYear": {
+          "min": 3300,
           "max": 6600
         }
       },

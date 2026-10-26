@@ -18,17 +18,18 @@ You type what you love, like artists, films, shows, food and hobbies. An AI agen
 around the world by cultural fit, then shows well-known universities, typical international
 tuition, the monthly cost of living and a short explanation of why each city fits you.
 
-> **Every match score comes straight from Qloo.** The percentage on a city card is Qloo's own
-> taste-affinity value for that city, shown unchanged (0.93 becomes 93%). The AI never sets,
-> adjusts or ranks a score. It only decides which Qloo lookups to make and writes the
-> explanations around Qloo's results.
+> **Every match score is built from Qloo's data, never by the AI.** Qloo ranks all 105 cities
+> separately for each of your tastes; a city's score is its average position across those rankings
+> (100 means first for every taste). Each card shows the breakdown, for example
+> "jazz #2 of 105 · anime #17 of 105". The AI only decides which Qloo lookups to make and writes
+> the explanations around Qloo's results.
 
 ## Features
 
 - **Taste-based city matching** for 105 student cities on every continent, scored by Qloo.
 - **Live autocomplete from Qloo** while you type ("tay" suggests Taylor Swift, "sush" suggests Sushi), plus grouped ideas.
 - **Visible AI agent**: every step and tool call is streamed live to the page, with a full agent trace.
-- **City cards** with the Qloo match score, "why you'd fit", universities with links, tuition and monthly costs.
+- **City cards** with a match score and a per-taste breakdown ("Dua Lipa #6 of 105 · jazz #6 of 105"), "why you'd fit", universities with links, tuition and monthly costs.
 - **Study language**: one switch for English-taught programmes, plus "I also speak..." for other languages
   (useful for free or cheap public degrees in the local language).
 - **Compare two cities** side by side, including places in each city that people with your taste love (from Qloo).
@@ -44,7 +45,7 @@ Qloo is not a side feature: without it there is no result. The agent has four to
 | Tool | What it does | Qloo endpoint |
 | --- | --- | --- |
 | `qloo_search` | Turns each like into a Qloo **entity** (Dua Lipa, Studio Ghibli) or **tag** (techno, street food, hiking) | `GET /search`, `GET /v2/tags` |
-| `qloo_destination_affinity` | Scores all dataset cities by taste affinity in one call, plus Qloo's worldwide top destinations | `GET /v2/insights` with `filter.type=urn:entity:destination` and `filter.results.entities` |
+| `qloo_destination_affinity` | Ranks all dataset cities once per taste and combines the ranks, plus Qloo's worldwide top destinations | `GET /v2/insights` with `filter.type=urn:entity:destination` and `filter.results.entities` |
 | `qloo_similar` | "People like you also liked" across artists, films, TV shows and places | `GET /v2/insights` with other `filter.type` values |
 | `get_city_info` | Universities, tuition and living costs from our curated dataset | `data/cities.json` |
 
@@ -52,11 +53,26 @@ The compare view adds one more Qloo call per city: places inside that city (`fil
 with `filter.location`) that people with the same taste rate highest. The input field also uses
 `GET /search` and `GET /v2/tags` for live autocomplete, ranked by Qloo popularity.
 
+### How the match score works
+
+Scoring all tastes in one Qloo call squeezed every city into a few points (0.69 to 0.82 across all
+105 cities in one test), and one famous name drowned out the rest. So each taste is scored on its own:
+
+1. **Names** (artists, films, brands) are sent to Qloo directly.
+2. **Genres and hobbies** mostly have no city data of their own: on their own, tags like "jazz",
+   "techno" or "climbing" give every destination the same affinity. They are scored through the
+   entities Qloo associates with them instead: jazz through Miles Davis, Diana Krall and Chet Baker;
+   climbing through climbing films. Film and TV bridges must actually carry the tag. Food tags such as
+   "street food" carry city data and are used directly.
+3. Qloo ranks all 105 cities for each taste. A city's score is its average percentile across tastes,
+   so a city has to fit all of them, not just one. Ties go to the higher average affinity.
+4. Tastes Qloo has no city data for are left out of the ranking, and the page says so.
+
 **Who decides what:**
 
 | | Decides |
 | --- | --- |
-| **Qloo** | Which cities fit and how strongly. Every match score is Qloo's affinity value, unchanged. The ranking is Qloo's order. |
+| **Qloo** | Where every city ranks for each of your tastes. The match score and ranking are calculated from those Qloo rankings only. |
 | **AI agent (Gemini)** | Which Qloo lookups to make, and the wording of the explanations. The tools only accept IDs that a Qloo search returned, and the city list is built from Qloo's response, not from the model's text. |
 | **Our dataset** | Universities, tuition, living costs and teaching languages (rough ranges, marked as estimates). |
 

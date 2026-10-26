@@ -5,10 +5,10 @@
 - Live demo: https://tasteabroad.vercel.app (no login)
 - Code: https://github.com/Devvzz/tasteabroad (MIT licence)
 
-> **The key point: every match score comes straight from Qloo.** The percentage on each city is
-> Qloo's own taste-affinity value for that city, shown unchanged (0.93 becomes 93%), and the
-> ranking is Qloo's order. The AI never sets or changes a score. It decides which Qloo lookups to
-> make and writes the explanations around Qloo's results.
+> **The key point: every match score is built from Qloo's data, never by the AI.** Qloo ranks all
+> 105 cities separately for each of your tastes, and a city's score is its average position across
+> those rankings. Every card shows the breakdown ("jazz #2 of 105 · anime #17 of 105"). The AI
+> decides which Qloo lookups to make and writes the explanations around Qloo's results.
 
 ## Inspiration
 
@@ -28,8 +28,9 @@ TasteAbroad answers three questions at once:
 You type what you love: artists, films, shows, food, hobbies, brands or places. For example
 "Studio Ghibli, street food, cycling". TasteAbroad then:
 
-1. **Matches you to cities** around the world by taste. A curated list of 105 student cities on
-   every continent is scored by Qloo's taste graph, and you get your top 5 with Qloo's match score.
+1. **Matches you to cities** around the world by taste. Qloo ranks a curated list of 105 student
+   cities on every continent once for each of your tastes; you get your top 5 with a match score and
+   a per-taste breakdown, so you see why ("Berlin: techno #1 of 105").
 2. **Explains each match** in a few sentences that refer to what you typed ("Kyoto feels like
    stepping into a Studio Ghibli film...").
 3. **Shows the practical side**: well-known universities with links, typical international
@@ -53,7 +54,7 @@ function calling with four tools:
 | Tool | Qloo call | Why it fits |
 | --- | --- | --- |
 | `qloo_search` | `GET /search` and `GET /v2/tags` | Turns free text into Qloo signals. A specific name becomes an **entity** (Dua Lipa, Studio Ghibli); a genre or hobby becomes a **tag** (techno, street food, hiking). The agent picks the right one per input. |
-| `qloo_destination_affinity` | `GET /v2/insights`, `filter.type=urn:entity:destination`, `filter.results.entities=<our 105 cities>` | Scores every city in our list by taste affinity, plus Qloo's top destinations worldwide. **These scores are what the user sees.** |
+| `qloo_destination_affinity` | `GET /v2/insights`, `filter.type=urn:entity:destination`, `filter.results.entities=<our 105 cities>`, once per taste | Ranks every city in our list for each taste, then combines the ranks. Genres and hobbies are scored through the entities Qloo links to them (see below). Also fetches Qloo's top destinations worldwide. |
 | `qloo_similar` | `GET /v2/insights` with `filter.type` = artist, movie, tv_show, place | Powers "People like you also liked...". |
 | `get_city_info` | Our curated `data/cities.json` | Adds universities, tuition, cost of living and teaching languages to the cities Qloo picked. |
 
@@ -65,33 +66,41 @@ The compare view makes one more Qloo call per city: `filter.type=urn:entity:plac
 rate highest (only restaurants, bars, cafés, sights, museums, parks and similar; hotels and trade
 fair venues are filtered out).
 
-### Example request (key removed)
+### How a taste becomes a city ranking (key removed)
 
-For "Studio Ghibli, street food":
+Names go to Qloo directly. Most genre and hobby tags have no city data of their own (on their own,
+"jazz" gives every destination the same affinity), so the app first asks Qloo which entities carry
+the tag, then ranks the cities for those:
 
 ```
+# 1. Who stands for "jazz"?   -> Miles Davis, Diana Krall, Chet Baker, Billie Holiday, Jamie Cullum
+GET https://hackathon.api.qloo.com/v2/insights
+  ?filter.type=urn:entity:artist
+  &signal.interests.tags=urn:tag:genre:music:jazz
+
+# 2. Rank all 105 cities for them   -> Lisbon, Washington D.C., Porto, New York, ...
 GET https://hackathon.api.qloo.com/v2/insights
   ?filter.type=urn:entity:destination
-  &signal.interests.entities=<Studio Ghibli entity id>
-  &signal.interests.tags=urn:tag:cuisine:qloo:street_food
+  &signal.interests.entities=<those artists' ids>
   &filter.results.entities=<105 destination ids from data/cities.json>
 X-Api-Key: <hidden>
 ```
 
-Qloo returns an affinity per city (for example Kyoto 0.97). That number, as a percentage, is the
-match score on the card, and Qloo's order is the ranking. The agent then reads the city facts and
-writes the explanations.
+Each taste gives one Qloo ranking of all 105 cities. A city's match score is its average percentile
+across your tastes (100 means first for every taste), and the card shows each rank. Film and TV
+bridges must actually carry the tag; tastes Qloo has no city data for are left out, and the page
+says which ones.
 
 ### Why the AI can't make things up
 
 | | Decides |
 | --- | --- |
-| **Qloo** | Which cities fit, how strongly, and in what order. Every score is Qloo's value, unchanged. |
+| **Qloo** | Where every city ranks for each of your tastes. Scores and order are calculated from those rankings only. |
 | **AI agent** | Which lookups to make, and the wording. The tools only accept IDs that a Qloo search actually returned, and the city list is built from Qloo's response, not from the model's text. |
 | **Dataset** | Universities, tuition, costs and teaching languages, marked as estimates with official links. |
 
-Each result page says this in the app too ("Every match score comes straight from Qloo's taste
-data, not from the AI"), and each card labels its score "Score from Qloo".
+Each result page says this in the app too, each card labels its score "Based on Qloo" and lists
+the per-taste ranks, and a readable log shows every Qloo call the agent made.
 
 ## How I built it
 
@@ -115,6 +124,11 @@ data, not from the AI"), and each card labels its score "Score from Qloo".
   the models and moved the agent to the one that answers in about a second. The app also keeps a
   time budget, and if the AI is unavailable a fixed pipeline calls the same Qloo tools, so users
   always get results with the same Qloo scores.
+- **Every city looked the same.** Scoring all tastes in one call put every city between 0.69 and
+  0.82, and one famous name drowned out the hobbies. Testing showed why: most tags (jazz, techno,
+  climbing, hiking) give every destination exactly the same affinity. Scoring each taste on its own,
+  and bridging tags through the entities Qloo associates with them, fixed it: techno now puts Berlin
+  first, anime puts Kyoto first, and every card can show where the city ranks for each taste.
 - **Hobbies vs. names.** "anime" or "street food" match random entities by name. The agent (and the
   fallback) prefer Qloo tags for genre and hobby inputs.
 

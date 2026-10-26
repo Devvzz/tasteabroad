@@ -70,6 +70,7 @@
     "rankOf": "#{rank} of {of}",
     "via": "via {names}",
     "rankOverall": "#{rank} of {of} overall",
+    "writing": "Writing the notes for this city...",
     "yearly": "One year, roughly",
     "from": "from {cost}",
     "bestValue": "Best value",

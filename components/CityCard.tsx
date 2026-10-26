@@ -55,7 +55,7 @@ export function CityCard({ match, rank, t, studyLanguages, comparing, compareDis
       <div className="space-y-4 p-4 text-sm">
         <section>
           <h4 className="mb-1 font-semibold">{t("results.why")}</h4>
-          <p className="leading-relaxed">{match.why}</p>
+          {match.pending ? <NotePlaceholder label={t("results.writing")} lines={2} /> : <p className="leading-relaxed">{match.why}</p>}
           {city.qlooProxy && <p className="mt-1 text-xs text-muted">{t("results.proxy", { proxy: city.qlooProxy.name })}</p>}
         </section>
 
@@ -104,7 +104,7 @@ export function CityCard({ match, rank, t, studyLanguages, comparing, compareDis
 
         <section>
           <h4 className="mb-1 font-semibold">{t("results.studentLife")}</h4>
-          <p className="leading-relaxed">{match.studentLife}</p>
+          {match.pending ? <NotePlaceholder label={t("results.writing")} lines={1} /> : <p className="leading-relaxed">{match.studentLife}</p>}
           <ul className="mt-2 flex flex-wrap gap-1.5">
             {city.studentLife.map((tag) => (
               <li key={tag} className="rounded-full border border-line px-2 py-0.5 text-xs text-muted">
@@ -153,5 +153,16 @@ export function CityCard({ match, rank, t, studyLanguages, comparing, compareDis
         </label>
       </div>
     </article>
+  );
+}
+
+/** Grey lines where a note will appear, while the agent is still writing it. */
+function NotePlaceholder({ label, lines }: { label: string; lines: number }) {
+  return (
+    <div role="status" aria-label={label} className="space-y-1.5 py-1">
+      {Array.from({ length: lines }, (_, i) => (
+        <span key={i} className={`block h-3 animate-pulse rounded bg-line ${i === lines - 1 ? "w-2/3" : "w-full"}`} />
+      ))}
+    </div>
   );
 }

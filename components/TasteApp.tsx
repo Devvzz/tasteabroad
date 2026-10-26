@@ -65,7 +65,7 @@ export function TasteApp() {
     if (event.type === "step") {
       setSteps((s) => ({ ...s, [event.step]: event.status }));
       if (event.detail) setDetails((d) => ({ ...d, [event.step]: event.detail }));
-    } else if (event.type === "result") {
+    } else if (event.type === "partial" || event.type === "result") {
       setResult(event.result);
     } else if (event.type === "error") {
       setError(event.code);

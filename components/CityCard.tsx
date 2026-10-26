@@ -50,6 +50,29 @@ export function CityCard({ match, rank, t, studyLanguages, comparing, compareDis
           {city.qlooProxy && <p className="mt-1 text-xs text-muted">{t("results.proxy", { proxy: city.qlooProxy.name })}</p>}
         </section>
 
+        {match.breakdown.length > 0 && (
+          <section>
+            <h4 className="mb-2 font-semibold">{t("results.breakdown")}</h4>
+            <ul className="space-y-1.5">
+              {match.breakdown.map((b) => {
+                // Bar length: 100% for rank 1, close to 0 for the last city.
+                const strength = b.of > 1 ? 1 - (b.rank - 1) / (b.of - 1) : 1;
+                return (
+                  <li key={b.taste} className="grid grid-cols-[minmax(0,7rem)_1fr_auto] items-center gap-2 text-xs">
+                    <span className="truncate font-medium" title={b.taste}>
+                      {b.taste}
+                    </span>
+                    <span className="h-1.5 overflow-hidden rounded-full bg-accent-soft" aria-hidden>
+                      <span className="block h-full rounded-full bg-accent" style={{ width: `${Math.max(4, strength * 100)}%` }} />
+                    </span>
+                    <span className="tabular-nums text-muted">{t("results.rankOf", { rank: b.rank, of: b.of })}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
+
         <section>
           <h4 className="mb-1 font-semibold">{t("results.universities")}</h4>
           <ul className="space-y-1">

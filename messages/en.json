@@ -46,7 +46,7 @@
   },
   "results": {
     "title": "Your best-fit cities",
-    "match": "{score}% taste match",
+    "match": "{score}/100 match",
     "why": "Why you'd fit",
     "universities": "Universities",
     "tuition": "Tuition per year (international)",
@@ -62,8 +62,11 @@
     "share": "Copy share link",
     "copied": "Link copied!",
     "studyHere": "You can study here in {langs}",
-    "scoreBy": "Score from Qloo",
-    "scoreNote": "Every match score comes straight from Qloo's taste data, unchanged. Our agent only decides what to look up and writes the notes."
+    "scoreBy": "Based on Qloo",
+    "scoreNote": "Scores come from Qloo's taste data: Qloo ranks all 105 cities for each of your tastes, and the match score is the city's average position. Our agent only decides what to look up and writes the notes.",
+    "breakdown": "How it ranks for each of your tastes",
+    "rankOf": "#{rank} of {of}",
+    "via": "via {names}"
   },
   "compare": {
     "select": "Compare",
@@ -91,7 +94,8 @@
     "filtersRelaxed": "No city matched all your filters, so we relaxed the strictest ones (budget first, region last).",
     "nearestFallback": "Qloo had no direct score for our city list, so these are our cities closest to Qloo's top destinations for you.",
     "llmFallback": "Quick mode: the notes below come straight from Qloo's data.",
-    "unresolved": "Qloo didn't recognise: {items}."
+    "unresolved": "Qloo didn't recognise: {items}.",
+    "unscored": "Left out of the ranking because Qloo has no city-level data for: {items}."
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",
@@ -101,8 +105,9 @@
     "badRequest": "Please check your inputs and try again."
   },
   "fallback": {
-    "why": "People who like {likes} show a {score}% taste affinity with {city} on Qloo's taste graph.",
-    "studentLife": "Known for {tags}."
+    "why": "People who like {likes} rank {city} among the best fits on Qloo's taste data (score {score}/100).",
+    "studentLife": "Known for {tags}.",
+    "whyBest": "Your strongest match in {city} is {taste}: #{rank} of {of} cities on Qloo's taste data."
   },
   "footer": {
     "poweredBy": "City matching powered by Qloo's taste graph."
@@ -113,12 +118,12 @@
     "stepsTitle": "What happens when you press the button",
     "step1": "You type what you love: artists, films, shows, food, hobbies, brands or places.",
     "step2": "The TasteAbroad agent (built on Google Gemini) reads your list and calls tools. First it looks up every like on Qloo: a specific name becomes a Qloo entity (Dua Lipa, Studio Ghibli), a genre or hobby becomes a Qloo tag (techno, street food, hiking).",
-    "step3": "With those signals the agent asks Qloo's taste graph to score {count} university cities worldwide by taste affinity, and also fetches Qloo's top destinations around the world.",
+    "step3": "Qloo then ranks all {count} university cities once for each of your tastes. Names go in directly; genres and hobbies go in through the artists and films Qloo links to them (jazz through Miles Davis and Diana Krall), because most tags have no city data of their own. A city's match score is its average position across your tastes.",
     "step4": "It asks Qloo what else people with the same taste like (music, films, TV, places).",
     "step5": "It reads our curated data for the best cities: well-known universities, typical international tuition, a monthly student budget and the languages you can study in.",
     "step6": "Finally the agent writes a short note for each city that refers to what you typed. In the compare view, Qloo also suggests places inside each city that people like you love.",
     "roleTitle": "Who decides what",
-    "roleQloo": "Qloo decides which cities fit, how strongly and in what order. Every match score is Qloo's own affinity value, shown unchanged as a percentage. The agent never sets or changes a score.",
+    "roleQloo": "Qloo decides where every city ranks for each of your tastes. The match score is calculated only from those rankings, and every card shows them. The agent never sets or changes a score.",
     "roleAi": "The agent decides which Qloo lookups to make and puts the results into words. It can only use cities and IDs that Qloo actually returned.",
     "roleData": "Universities, tuition and living costs come from our own dataset. They are rough ranges, so always check the official university site.",
     "reliabilityTitle": "Built to keep working",

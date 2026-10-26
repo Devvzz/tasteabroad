@@ -400,12 +400,19 @@ function Results({ result, t, onCopy, copied, compareIds, onCompareToggle }: Res
 
         <p className="text-sm text-muted">
           {t("results.qlooMatched")}:{" "}
-          {result.resolved.map((r) => (r.name.toLowerCase() === r.input.toLowerCase() ? r.name : `${r.input} → ${r.name}`)).join(" · ")}
+          {result.resolved
+            .filter((r) => r.scored !== false)
+            .map((r) => {
+              const name = r.name.toLowerCase() === r.input.toLowerCase() ? r.name : `${r.input} → ${r.name}`;
+              // Tags are scored through related names; showing them makes the match traceable.
+              return r.via?.length ? `${name} (${t("results.via", { names: r.via.slice(0, 3).join(", ") })})` : name;
+            })
+            .join(" · ")}
         </p>
 
         {result.notes.map((note) => (
           <p key={note} className="rounded-xl bg-warn-soft p-3 text-sm">
-            {t(`notes.${note}`, { items: result.unresolved.join(", ") })}
+            {t(`notes.${note}`, { items: (note === "unscored" ? result.unscored : result.unresolved).join(", ") })}
           </p>
         ))}
       </section>

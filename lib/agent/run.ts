@@ -70,6 +70,7 @@ export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) 
     filters: request.filters,
     resolved: ctx.selected,
     unresolved,
+    unscored: ctx.unscored,
     cities,
     alsoLiked: (ctx.alsoLiked ?? []).map((e) => ({ id: e.id, name: e.name, type: e.type, imageUrl: e.imageUrl })),
     worldwide: worldwideExtras(ctx),
@@ -181,15 +182,18 @@ async function completePipeline(ctx: AgentContext): Promise<void> {
 // ---------- explanations ----------
 
 async function explain(ctx: AgentContext, top: RankedCity[], deadline: number): Promise<CityMatch[]> {
-  const fallback = (r: RankedCity): CityMatch => ({
-    ...r,
-    why: t("fallback.why", {
-      likes: ctx.selected.slice(0, 3).map((s) => s.input).join(", "),
-      score: r.score,
-      city: r.city.name,
-    }),
-    studentLife: t("fallback.studentLife", { tags: r.city.studentLife.slice(0, 3).join(", ") }),
-  });
+  const fallback = (r: RankedCity): CityMatch => {
+    // Name the taste this city ranks best for, so each card says something different.
+    const best = [...r.breakdown].sort((a, b) => a.rank - b.rank)[0];
+    const why = best
+      ? t("fallback.whyBest", { taste: best.taste, rank: best.rank, of: best.of, city: r.city.name })
+      : t("fallback.why", {
+          likes: ctx.selected.filter((s) => s.scored !== false).slice(0, 3).map((s) => s.input).join(", "),
+          score: r.score,
+          city: r.city.name,
+        });
+    return { ...r, why, studentLife: t("fallback.studentLife", { tags: r.city.studentLife.slice(0, 3).join(", ") }) };
+  };
 
   try {
     const written = await writeExplanations(ctx, top, deadline);
@@ -206,12 +210,14 @@ async function explain(ctx: AgentContext, top: RankedCity[], deadline: number): 
 
 async function writeExplanations(ctx: AgentContext, top: RankedCity[], deadline: number) {
   const payload = {
-    user_likes: ctx.selected.map((s) => ({ typed: s.input, qloo_match: s.name, kind: s.kind })),
+    // Only tastes that actually shaped the ranking, so the notes never credit a city for a taste that did not count.
+    user_likes: ctx.selected.filter((s) => s.scored !== false).map((s) => ({ typed: s.input, qloo_match: s.name, kind: s.kind })),
     cities: top.map((r) => ({
       id: r.city.id,
       name: r.city.name,
       country: r.city.country,
-      qloo_match_score: r.score,
+      match_score: r.score,
+      rank_per_taste: r.breakdown.map((b) => `${b.taste}: #${b.rank} of ${b.of} cities`),
       student_life: r.city.studentLife,
       languages: r.city.languages,
     })),
@@ -228,7 +234,7 @@ async function writeExplanations(ctx: AgentContext, top: RankedCity[], deadline:
         content: [
           "Write in English. Friendly, concrete, no hype.",
           "For each city write:",
-          "- why: 2 short sentences on why this city's culture fits the user. Mention at least one of the user's likes by name. The score is shown separately, so do not repeat the number. Talk about what people with similar tastes enjoy, not predictions about the user.",
+          "- why: 2 short sentences on why this city's culture fits the user. Mention at least one of the user's likes by name, preferring the ones where the city ranks best (rank_per_taste). The scores and ranks are shown separately, so do not repeat numbers. Talk about what people with similar tastes enjoy, not predictions about the user.",
           "- studentLife: 1 short sentence about student life there.",
           "Do not invent numbers, prices or rankings. Do not use long dashes.",
           'Return JSON: {"cities":[{"id":"...","why":"...","studentLife":"..."}]}',

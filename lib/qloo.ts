@@ -289,6 +289,17 @@ export function topDestinations(signals: TasteSignals, take = 30): Promise<QlooE
   return getInsights({ filterType: "urn:entity:destination", ...signals, take });
 }
 
+/**
+ * Well-known entities that really carry a tag ("jazz" -> Miles Davis, Diana Krall...).
+ * Most tags have no destination data of their own, but the entities behind them do.
+ * Results without the tag are dropped: for tags Qloo cannot relate to a type it returns generic filler.
+ */
+export async function entitiesForTag(tagId: string, type: EntityType, take = 5, requireTag = true): Promise<QlooEntity[]> {
+  const candidates = await getInsights({ filterType: type, tagIds: [tagId], take: 15 });
+  // Artists only list a few tags each, so for music genres Qloo's own ranking is trusted as is.
+  return (requireTag ? candidates.filter((e) => e.tagIds.includes(tagId)) : candidates).slice(0, take);
+}
+
 const CITY_RADIUS_METERS = 12_000;
 // Very obscure places often only have local-script names; prefer ones people have heard of.
 const MIN_PLACE_POPULARITY = 0.3;

@@ -13,7 +13,8 @@ import {
   type QlooEntity,
   type TasteSignals,
 } from "@/lib/qloo";
-import type { AgentEvent, MatchRequest, NoteKey, ResolvedSignal, StepKey, TraceEntry } from "./types";
+import { rankCities, scoreTaste, type TasteScore } from "./scoring";
+import type { AgentEvent, MatchRequest, NoteKey, ResolvedSignal, StepKey, TasteRank, TraceEntry } from "./types";
 
 const SEARCH_TYPES: EntityType[] = [
   "urn:entity:artist",
@@ -31,6 +32,7 @@ const MAX_ALSO_LIKED = 10;
 export interface RankedCity {
   city: City;
   score: number;
+  breakdown: TasteRank[];
 }
 
 /** Shared state for one agent run. */
@@ -41,6 +43,10 @@ export class AgentContext {
   ranked: RankedCity[] | null = null;
   worldwide: QlooEntity[] = [];
   alsoLiked: QlooEntity[] | null = null;
+  /** Inputs Qloo recognised but has no city data for. */
+  unscored: string[] = [];
+  /** Per-taste scoring, started by whichever tool needs it first. */
+  tastes?: Promise<TasteScore[]>;
   readonly notes = new Set<NoteKey>();
   readonly trace: TraceEntry[] = [];
 
@@ -178,25 +184,65 @@ function nearestToWorldwide(worldwide: QlooEntity[]): RankedCity[] {
     const nearest = pool.reduce((best, c) =>
       distanceKm(c.coordinates, dest.location!) < distanceKm(best.coordinates, dest.location!) ? c : best,
     );
-    if (!ranked.has(nearest.id)) ranked.set(nearest.id, { city: nearest, score: toScore(dest.affinity) });
+    if (!ranked.has(nearest.id)) ranked.set(nearest.id, { city: nearest, score: toScore(dest.affinity), breakdown: [] });
   }
   return [...ranked.values()];
 }
 
+/**
+ * The per-taste scoring, done once per run: the agent usually calls the city and "also liked" tools
+ * in the same turn, and both need it.
+ */
+function tastesFor(ctx: AgentContext): Promise<TasteScore[]> {
+  ctx.tastes ??= scoreEachTaste(ctx);
+  return ctx.tastes;
+}
+
+/** Signals that carry taste for Qloo: the user's entities, the entities behind their tags, and food tags. */
+function tasteSignals(tastes: TasteScore[], fallback: TasteSignals): TasteSignals {
+  if (!tastes.length) return fallback;
+  return {
+    entityIds: [...new Set(tastes.flatMap((t) => t.used.entityIds.slice(0, 3)))].slice(0, 10),
+    tagIds: [...new Set(tastes.flatMap((t) => t.used.tagIds))],
+  };
+}
+
+/** Scores each distinct input on its own, marking which ones Qloo has city data for. */
+async function scoreEachTaste(ctx: AgentContext): Promise<TasteScore[]> {
+  const firstPerInput = ctx.selected.filter((s, i, all) => all.findIndex((o) => o.input === s.input) === i);
+  const alternatives = (input: string) => [...ctx.candidates.values()].filter((c) => c.input === input);
+  const results = await Promise.all(firstPerInput.map((s) => scoreTaste(s, alternatives(s.input))));
+
+  ctx.selected = firstPerInput.map((s, i) => {
+    const r = results[i];
+    // When an alternative tag worked better, show that one.
+    return r ? { ...r.signal, input: s.input, via: r.via, scored: true } : { ...s, scored: false };
+  });
+  ctx.unscored = ctx.selected.filter((s) => !s.scored).map((s) => s.input);
+  if (ctx.unscored.length) ctx.notes.add("unscored");
+  return results.filter((r): r is TasteScore => r !== null);
+}
+
+/** Old single-call scoring, kept for searches where no taste has per-city data of its own. */
+async function combinedRanking(ctx: AgentContext): Promise<RankedCity[]> {
+  const byScoringId = new Map(cities.map((c) => [scoringId(c), c]));
+  const scored = await scoreDestinations(ctx.signals(), [...byScoringId.keys()].filter((id): id is string => Boolean(id)));
+  return scored
+    .map((d) => ({ city: byScoringId.get(d.id), score: toScore(d.affinity), breakdown: [] as TasteRank[] }))
+    .filter((r): r is RankedCity => Boolean(r.city));
+}
+
 export async function qlooDestinationAffinity(ctx: AgentContext, entityIds?: string[], tagIds?: string[]) {
   selectSignals(ctx, entityIds, tagIds);
-  const signals = ctx.signals();
-  const byScoringId = new Map(cities.map((c) => [scoringId(c), c]));
+  const tastes = await tastesFor(ctx);
 
-  const [scored, worldwide] = await Promise.all([
-    scoreDestinations(signals, [...byScoringId.keys()].filter((id): id is string => Boolean(id))),
-    topDestinations(signals, 30),
+  const [ranked0, worldwide] = await Promise.all([
+    tastes.length ? Promise.resolve(rankCities(tastes)) : combinedRanking(ctx),
+    topDestinations(tasteSignals(tastes, ctx.signals()), 30),
   ]);
   ctx.worldwide = worldwide;
 
-  let ranked: RankedCity[] = scored
-    .map((d) => ({ city: byScoringId.get(d.id), score: toScore(d.affinity) }))
-    .filter((r): r is RankedCity => Boolean(r.city));
+  let ranked: RankedCity[] = ranked0;
   if (!ranked.length) {
     ranked = nearestToWorldwide(worldwide);
     if (ranked.length) ctx.notes.add("nearestFallback");
@@ -216,7 +262,14 @@ export async function qlooDestinationAffinity(ctx: AgentContext, entityIds?: str
 
   const datasetIds = new Set(cities.map((c) => c.qlooId));
   return {
-    ranked_cities: ctx.ranked.slice(0, 8).map((r) => ({ city_id: r.city.id, name: r.city.name, country: r.city.country, match_score: r.score })),
+    ranked_cities: ctx.ranked.slice(0, 8).map((r) => ({
+      city_id: r.city.id,
+      name: r.city.name,
+      country: r.city.country,
+      match_score: r.score,
+      rank_per_taste: r.breakdown.map((b) => `${b.taste} #${b.rank}/${b.of}`).join(", "),
+    })),
+    tastes_without_city_data: ctx.unscored,
     worldwide_top: worldwide
       .filter((d) => !datasetIds.has(d.id))
       .slice(0, 8)
@@ -227,11 +280,14 @@ export async function qlooDestinationAffinity(ctx: AgentContext, entityIds?: str
 
 export async function qlooSimilar(ctx: AgentContext, entityIds?: string[], tagIds?: string[]) {
   selectSignals(ctx, entityIds, tagIds);
-  const signals = ctx.signals();
+  // Bare tags are slow and vague here too, so use the same taste signals as the city ranking.
+  const tastes = await tastesFor(ctx);
+  const signals = tasteSignals(tastes, ctx.signals());
   const lists = await Promise.all(
     SIMILAR_TYPES.map((type) => similarEntities(signals, type, 4).catch(() => [] as QlooEntity[])),
   );
-  const exclude = new Set(ctx.selected.map((s) => s.id));
+  // Leave out the user's own picks and the names their tags were scored through.
+  const exclude = new Set([...ctx.selected.map((s) => s.id), ...signals.entityIds]);
   ctx.alsoLiked = interleave(lists).filter((e) => !exclude.has(e.id)).slice(0, MAX_ALSO_LIKED);
   return ctx.alsoLiked.map((e) => ({ name: e.name, type: e.type }));
 }

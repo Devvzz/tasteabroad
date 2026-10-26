@@ -15,7 +15,7 @@ export interface MatchRequest {
 
 export type StepKey = "plan" | "search" | "match" | "similar" | "cities" | "explain" | "fallback";
 export type ErrorCode = "generic" | "rateLimited" | "noTaste" | "qloo" | "badRequest";
-export type NoteKey = "filtersRelaxed" | "nearestFallback" | "llmFallback" | "unresolved";
+export type NoteKey = "filtersRelaxed" | "nearestFallback" | "llmFallback" | "unresolved" | "unscored";
 
 export interface TraceEntry {
   tool: string;
@@ -39,12 +39,24 @@ export interface ResolvedSignal {
   name: string;
   kind: "entity" | "tag";
   type: string;
+  /** For tags scored through related entities: their names ("jazz" via Miles Davis, Diana Krall). */
+  via?: string[];
+  /** False when Qloo has no city data for this taste, so it did not affect the ranking. */
+  scored?: boolean;
+}
+
+/** Where a city ranks among all cities for one of the user's tastes. */
+export interface TasteRank {
+  taste: string;
+  rank: number;
+  of: number;
 }
 
 export interface CityMatch {
   city: City;
-  /** Qloo taste affinity as a percentage. */
+  /** 0 to 100: the city's average position across the user's tastes, from Qloo's per-taste rankings. */
   score: number;
+  breakdown: TasteRank[];
   why: string;
   studentLife: string;
 }
@@ -61,6 +73,8 @@ export interface MatchResult {
   filters: MatchFilters;
   resolved: ResolvedSignal[];
   unresolved: string[];
+  /** Tastes Qloo recognised but has no city data for. */
+  unscored: string[];
   cities: CityMatch[];
   alsoLiked: AlsoLikedItem[];
   worldwide: { name: string; countryCode?: string }[];

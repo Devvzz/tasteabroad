@@ -11,10 +11,14 @@ async function main() {
   });
 
   console.log(`\nmode=${result.mode} notes=${result.notes.join(",") || "-"} total=${((Date.now() - started) / 1000).toFixed(1)}s`);
-  console.log("resolved:", result.resolved.map((r) => `${r.input} -> ${r.name} (${r.kind})`).join("; "));
+  console.log(
+    "resolved:",
+    result.resolved.map((r) => `${r.input} -> ${r.name} (${r.kind}${r.via ? ` via ${r.via.slice(0, 3).join(", ")}` : ""})`).join("; "),
+  );
   if (result.unresolved.length) console.log("unresolved:", result.unresolved.join(", "));
+  if (result.unscored.length) console.log("no city data:", result.unscored.join(", "));
   for (const c of result.cities) {
-    console.log(`\n${c.score}%  ${c.city.name}, ${c.city.country}`);
+    console.log(`\n${c.score}/100  ${c.city.name}, ${c.city.country}  [${c.breakdown.map((b) => `${b.taste} #${b.rank}`).join(" · ")}]`);
     console.log(`  why: ${c.why}`);
     console.log(`  life: ${c.studentLife}`);
   }

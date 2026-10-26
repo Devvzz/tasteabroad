@@ -10,10 +10,14 @@ const normalize = (s: string) => s.toLowerCase().normalize("NFD").replace(/[Ì€-Í
  */
 export function pickSignal(input: string, options: ResolvedSignal[]): ResolvedSignal | undefined {
   const q = normalize(input);
-  const close = (s: ResolvedSignal) => normalize(s.name) === q || normalize(s.name).includes(q) || q.includes(normalize(s.name));
+  const exact = (s: ResolvedSignal) => normalize(s.name) === q;
+  const close = (s: ResolvedSignal) => exact(s) || normalize(s.name).includes(q) || q.includes(normalize(s.name));
   const looksLikeHobby = input === input.toLowerCase();
   return (
-    (looksLikeHobby ? options.find((o) => o.kind === "tag" && normalize(o.name) === q) : undefined) ??
+    (looksLikeHobby ? options.find((o) => o.kind === "tag" && exact(o)) : undefined) ??
+    // An exact name beats a longer one that only contains it ("EDM" the genre, not "EDM Mall").
+    options.find((o) => o.kind === "entity" && exact(o)) ??
+    options.find((o) => o.kind === "tag" && exact(o)) ??
     options.find((o) => o.kind === "entity" && close(o)) ??
     options.find((o) => o.kind === "tag" && close(o)) ??
     options.find((o) => o.kind === "entity") ??

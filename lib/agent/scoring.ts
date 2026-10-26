@@ -2,7 +2,7 @@
 // position across those rankings. Scoring all tastes at once lets one famous name drown out the rest
 // and squeezes every city into a few points, so the tastes are kept apart.
 import { cities, scoringId, type City } from "@/lib/cities";
-import { entitiesForTag, scoreDestinations, type EntityType, type TasteSignals } from "@/lib/qloo";
+import { entitiesForTag, scoreDestinations, type TasteSignals } from "@/lib/qloo";
 import type { ResolvedSignal, TasteRank } from "./types";
 
 // Most tags give every destination the same affinity (no city data). Anything flatter than this is ignored.
@@ -10,15 +10,11 @@ const FLAT_RANGE = 0.005;
 // How many tags of the same input to try before giving up on it. Failed tries are cheap (one lookup each).
 const MAX_TAG_TRIES = 3;
 
-/**
- * Order for trying a taste's other tags: food first, then film and TV themes (their bridges are checked
- * against the tag), then music genres (not checked, so "football" should not land on a music genre first).
- */
+/** Order for trying a taste's other tags: food tags carry city data, music genres can go through artists. */
 function bridgeOrder(tagId: string): number {
   if (tagId.includes(":cuisine:")) return 0;
-  if (tagId.includes(":keyword:") || tagId.includes(":media:")) return 1;
-  if (tagId.includes(":music:")) return 2;
-  return 3;
+  if (tagId.includes(":music:")) return 1;
+  return 2;
 }
 const BRIDGE_SIZE = 5;
 
@@ -50,28 +46,24 @@ async function affinityFor(signals: TasteSignals): Promise<Map<string, number> |
   return new Map(scored.map((d) => [d.id, d.affinity ?? 0]));
 }
 
-/** Entity types a tag can be bridged through. Music genres go through artists, everything else through films and shows. */
-function bridgeTypes(tagId: string): { type: EntityType; requireTag: boolean }[] {
-  if (tagId.includes(":music:")) return [{ type: "urn:entity:artist", requireTag: false }];
-  return [
-    { type: "urn:entity:movie", requireTag: true },
-    { type: "urn:entity:tv_show", requireTag: true },
-  ];
-}
-
+/**
+ * Food tags carry city data of their own ("street food" puts Seoul and Osaka on top). Music genres go
+ * through their best-known artists (techno puts Berlin first). Other tags are not bridged: through films
+ * every hobby ended up on the same few US cities, which reflects who watches documentaries, not taste.
+ */
 async function scoreTag(tag: ResolvedSignal): Promise<Omit<TasteScore, "input"> | null> {
-  // Food tags carry city data of their own ("street food" puts Seoul and Osaka on top).
   if (tag.id.includes(":cuisine:")) {
     const used = { entityIds: [], tagIds: [tag.id] };
     const affinity = await affinityFor(used);
     if (affinity) return { signal: tag, used, affinity };
   }
-  for (const { type, requireTag } of bridgeTypes(tag.id)) {
-    const entities = await entitiesForTag(tag.id, type, BRIDGE_SIZE, requireTag);
-    if (entities.length < 2) continue;
-    const used = { entityIds: entities.map((e) => e.id), tagIds: [] };
+  if (tag.id.includes(":music:")) {
+    // Artists only list a few tags each, so Qloo's own artist ranking for the genre is used as is.
+    const artists = await entitiesForTag(tag.id, "urn:entity:artist", BRIDGE_SIZE, false);
+    if (artists.length < 2) return null;
+    const used = { entityIds: artists.map((e) => e.id), tagIds: [] };
     const affinity = await affinityFor(used);
-    if (affinity) return { signal: tag, via: entities.map((e) => e.name), used, affinity };
+    if (affinity) return { signal: tag, via: artists.map((e) => e.name), used, affinity };
   }
   return null;
 }

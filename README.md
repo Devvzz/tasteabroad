@@ -28,7 +28,7 @@ tuition, the monthly cost of living and a short explanation of why each city fit
 
 - **Taste-based city matching** for 105 student cities on every continent, scored by Qloo. Up to 12 likes per search.
 - **Live autocomplete from Qloo** while you type ("tay" suggests Taylor Swift, "sush" suggests Sushi), plus
-  idea chips (artists, genres, film and TV, food, brands and teams) that were each checked to give Qloo city data.
+  idea chips (artists, music genres, film and TV, food, brands and teams) that were each checked to give Qloo city data.
 - **Instant check per like**: a like Qloo has no city data for (like "hiking") is flagged as soon as it is added.
 - **Results in two steps**: the cities appear as soon as Qloo has ranked them; the agent's notes follow.
 - **Visible AI agent**: every step and tool call is streamed live to the page, with a full agent trace.

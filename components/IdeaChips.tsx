@@ -3,12 +3,22 @@
 import { useState } from "react";
 
 // Every idea here was checked against Qloo: each one ranks the cities differently, from all over the world.
-// Ideas Qloo has no city data for (coffee, hiking, K-pop and the like) are left out so a tap always counts.
+// Ideas Qloo has no city data for (coffee, hiking, K-pop and the like) are left out so a tap always counts,
+// and so are ones whose top cities would puzzle a student (Qloo puts Taylor Swift fans in Singapore first).
 const IDEAS: Record<string, string[]> = {
-  Artists: ["Dua Lipa", "Bad Bunny", "BTS", "Burna Boy", "Rosalía", "Arctic Monkeys", "Stromae", "Drake"],
-  Genres: ["techno", "jazz", "reggaeton", "Afrobeats", "metal", "hip-hop", "indie rock", "anime"],
-  "Film & TV": ["Studio Ghibli", "One Piece", "Money Heist", "Game of Thrones", "Pixar", "The Office", "Stranger Things", "Marvel"],
-  Food: ["street food", "sushi", "ramen", "tapas", "craft beer"],
+  Artists: [
+    "Dua Lipa", "Bad Bunny", "BTS", "BLACKPINK", "Burna Boy", "Tyla", "Rosalía", "Shakira",
+    "Anitta", "Arctic Monkeys", "Hozier", "Stromae", "Aya Nakamura", "Arijit Singh", "Drake", "Billie Eilish",
+  ],
+  "Music genres": [
+    "techno", "house", "jazz", "reggaeton", "salsa", "bossa nova", "Afrobeats", "afro house",
+    "metal", "punk", "indie rock", "hip-hop", "flamenco", "fado", "J-pop", "opera",
+  ],
+  "Film & TV": [
+    "Studio Ghibli", "anime", "Attack on Titan", "One Piece", "Money Heist", "Lupin", "Dark", "Peaky Blinders",
+    "Breaking Bad", "Game of Thrones", "Bridgerton", "Barbie", "Stranger Things", "The Office", "Pixar",
+  ],
+  Food: ["street food", "sushi", "ramen", "tapas", "pizza", "seafood", "Korean BBQ", "craft beer"],
   "Brands & teams": ["Manchester United", "Red Bull", "Patagonia", "Adidas", "Zara", "Uniqlo", "Lego"],
 };
 const CATEGORIES = Object.keys(IDEAS);

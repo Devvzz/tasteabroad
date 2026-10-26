@@ -26,12 +26,18 @@ tuition, the monthly cost of living and a short explanation of why each city fit
 
 ## Features
 
-- **Taste-based city matching** for 105 student cities on every continent, scored by Qloo.
-- **Live autocomplete from Qloo** while you type ("tay" suggests Taylor Swift, "sush" suggests Sushi), plus grouped ideas.
+- **Taste-based city matching** for 105 student cities on every continent, scored by Qloo. Up to 12 likes per search.
+- **Live autocomplete from Qloo** while you type ("tay" suggests Taylor Swift, "sush" suggests Sushi), plus
+  idea chips (artists, genres, film and TV, food, brands and teams) that were each checked to give Qloo city data.
 - **Visible AI agent**: every step and tool call is streamed live to the page, with a full agent trace.
 - **City cards** with a match score and a per-taste breakdown ("Dua Lipa #6 of 105 · jazz #6 of 105"), "why you'd fit", universities with links, tuition and monthly costs.
 - **Study language**: one switch for English-taught programmes, plus "I also speak..." for other languages
   (useful for free or cheap public degrees in the local language).
+- **Taste map**: every ranked city on a world map, coloured by how well it fits. Tap a dot for details.
+- **Check any city**: see where any of the 105 cities lands for your tastes, not only the top 5.
+- **Best value pick**: the cheapest year of study (lowest tuition plus 12 months of living costs) among your 15 best matches.
+- **Exchange and scholarships**: Erasmus+ status per country and official government scholarship links
+  (DAAD, Chevening, Fulbright, MEXT, GKS, Stipendium Hungaricum and more).
 - **Compare two cities** side by side, including places in each city that people with your taste love (from Qloo).
 - **"People like you also liked..."**: music, films, TV and places from Qloo.
 - **Optional filters** for tuition, monthly budget and region.
@@ -59,11 +65,12 @@ Scoring all tastes in one Qloo call squeezed every city into a few points (0.69 
 105 cities in one test), and one famous name drowned out the rest. So each taste is scored on its own:
 
 1. **Names** (artists, films, brands) are sent to Qloo directly.
-2. **Genres and hobbies** mostly have no city data of their own: on their own, tags like "jazz",
-   "techno" or "climbing" give every destination the same affinity. They are scored through the
-   entities Qloo associates with them instead: jazz through Miles Davis, Diana Krall and Chet Baker;
-   climbing through climbing films. Film and TV bridges must actually carry the tag. Food tags such as
-   "street food" carry city data and are used directly.
+2. **Genres and hobbies** mostly have no city data of their own: on their own, tags like "jazz"
+   or "climbing" give every destination the same affinity. Music genres are scored through the
+   artists Qloo associates with them (jazz through Miles Davis, Diana Krall and Chet Baker). Food
+   tags such as "street food" carry city data and are used directly. Other hobbies were tried
+   through films about them, but that sent every hobby to the same few US cities, so they are now
+   left out instead of guessed.
 3. Qloo ranks all 105 cities for each taste. A city's score is its average percentile across tastes,
    so a city has to fit all of them, not just one. Ties go to the higher average affinity.
 4. Tastes Qloo has no city data for are left out of the ranking, and the page says so.
@@ -149,6 +156,7 @@ Never commit `.env.local`; `.gitignore` already excludes it.
 | `npm run test:qloo` | Smoke-tests the Qloo client and checks that every city can be scored |
 | `npm run test:agent -- "Dua Lipa" "anime"` | Runs the full agent once and prints each step |
 | `npm run resolve:cities` | Looks up the Qloo destination ID for new cities in `data/cities.json` |
+| `npm run build:map` | Regenerates the world outline used by the taste map (`lib/world-path.ts`) |
 
 ## Deploy to Vercel
 
@@ -170,6 +178,11 @@ Each city has country, region, coordinates, 1 to 3 universities with official li
 international tuition, a monthly student budget in EUR and USD, teaching languages and
 student-life tags, plus a `source`, a `checked` date and the mark `estimate, check official site`.
 Values are rough ranges, never quotes.
+
+`lib/funding.ts` holds exchange and scholarship facts per country: Erasmus+ programme countries
+(from the official Erasmus+ programme guide) and one or two government scholarship schemes with
+links to their official pages. These are national schemes; eligibility depends on nationality and
+study level, which the page says. The map outline comes from Natural Earth (via world-atlas).
 
 ## Limitations
 

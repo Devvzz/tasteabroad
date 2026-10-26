@@ -39,7 +39,12 @@ You type what you love: artists, films, shows, food, hobbies, brands or places. 
    same taste enjoy.
 5. **Compare two cities** side by side, including places inside each city that people with your
    taste love, straight from Qloo.
-6. Works on any phone, and every result is a **shareable link**.
+6. **Taste map and "Check any city"**: all 105 cities on a world map, coloured by fit, and a picker
+   to see where any city ranks for your tastes, not only the top 5.
+7. **Best value pick**: the cheapest year of study among your 15 best matches.
+8. **Exchange and scholarships**: Erasmus+ status and official government scholarship links
+   (DAAD, Chevening, Fulbright, MEXT and more) for each city's country.
+9. Works on any phone, and every result is a **shareable link**.
 
 One switch limits results to English-taught programmes; "I also speak..." adds other languages,
 which matters because many public universities are free or cheap in the local language (German in
@@ -66,7 +71,7 @@ The compare view makes one more Qloo call per city: `filter.type=urn:entity:plac
 rate highest (only restaurants, bars, cafés, sights, museums, parks and similar; hotels and trade
 fair venues are filtered out).
 
-### How a taste becomes a city ranking (key removed)
+### How a taste becomes a city ranking
 
 Names go to Qloo directly. Most genre and hobby tags have no city data of their own (on their own,
 "jazz" gives every destination the same affinity), so the app first asks Qloo which entities carry
@@ -87,9 +92,9 @@ X-Api-Key: <hidden>
 ```
 
 Each taste gives one Qloo ranking of all 105 cities. A city's match score is its average percentile
-across your tastes (100 means first for every taste), and the card shows each rank. Film and TV
-bridges must actually carry the tag; tastes Qloo has no city data for are left out, and the page
-says which ones.
+across your tastes (100 means first for every taste), and the card shows each rank. Food tags carry
+city data directly, music genres go through their artists, and tastes Qloo has no city data for are
+left out, and the page says which ones.
 
 ### Why the AI can't make things up
 

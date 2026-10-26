@@ -29,11 +29,13 @@ tuition, the monthly cost of living and a short explanation of why each city fit
 - **Taste-based city matching** for 105 student cities on every continent, scored by Qloo. Up to 12 likes per search.
 - **Live autocomplete from Qloo** while you type ("tay" suggests Taylor Swift, "sush" suggests Sushi), plus
   idea chips (artists, genres, film and TV, food, brands and teams) that were each checked to give Qloo city data.
+- **Instant check per like**: a like Qloo has no city data for (like "hiking") is flagged as soon as it is added.
+- **Results in two steps**: the cities appear as soon as Qloo has ranked them; the agent's notes follow.
 - **Visible AI agent**: every step and tool call is streamed live to the page, with a full agent trace.
 - **City cards** with a match score and a per-taste breakdown ("Dua Lipa #6 of 105 · jazz #6 of 105"), "why you'd fit", universities with links, tuition and monthly costs.
 - **Study language**: one switch for English-taught programmes, plus "I also speak..." for other languages
   (useful for free or cheap public degrees in the local language).
-- **Taste map**: every ranked city on a world map, coloured by how well it fits. Tap a dot for details.
+- **Taste map**: every ranked city on a world map, coloured by how well it fits, with a Europe zoom. Tap a dot for details.
 - **Check any city**: see where any of the 105 cities lands for your tastes, not only the top 5.
 - **Best value pick**: the cheapest year of study (lowest tuition plus 12 months of living costs) among your 15 best matches.
 - **Exchange and scholarships**: Erasmus+ status per country and official government scholarship links

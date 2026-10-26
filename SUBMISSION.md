@@ -39,7 +39,7 @@ You type what you love: artists, films, shows, food, hobbies, brands or places. 
    same taste enjoy.
 5. **Compare two cities** side by side, including places inside each city that people with your
    taste love, straight from Qloo.
-6. **Taste map and "Check any city"**: all 105 cities on a world map, coloured by fit, and a picker
+6. **Taste map and "Check any city"**: all 105 cities on a world map (with a Europe zoom), coloured by fit, and a picker
    to see where any city ranks for your tastes, not only the top 5.
 7. **Best value pick**: the cheapest year of study among your 15 best matches.
 8. **Exchange and scholarships**: Erasmus+ status and official government scholarship links

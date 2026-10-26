@@ -126,7 +126,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     function: {
       name: "get_city_info",
       description:
-        "Curated facts about one city: universities, typical international tuition, monthly student cost of living, teaching languages, student life.",
+        "Facts from our dataset about one city: universities, typical international tuition, monthly student cost of living, teaching languages, student life.",
       parameters: {
         type: "object",
         properties: { city: { type: "string", description: "City id or name, e.g. 'berlin' or 'Mexico City'." } },

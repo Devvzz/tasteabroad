@@ -28,7 +28,7 @@ TasteAbroad answers three questions at once:
 You type what you love: artists, films, shows, food, hobbies, brands or places. For example
 "Studio Ghibli, street food, J-pop". TasteAbroad then:
 
-1. **Matches you to cities** around the world by taste. Qloo ranks a curated list of 105 student
+1. **Matches you to cities** around the world by taste. Qloo ranks a hand-picked list of 105 student
    cities on every continent once for each of your tastes; you get your top 5 with a match score and
    a per-taste breakdown, so you see why ("Berlin: techno #1 of 105").
 2. **Explains each match** in a few sentences that refer to what you typed ("Kyoto feels like
@@ -65,7 +65,7 @@ function calling with four tools:
 | `qloo_search` | `GET /search` and `GET /v2/tags` | Turns free text into Qloo signals. A specific name becomes an **entity** (Dua Lipa, Studio Ghibli); a genre or hobby becomes a **tag** (techno, street food, hiking). The agent picks the right one per input. |
 | `qloo_destination_affinity` | `GET /v2/insights`, `filter.type=urn:entity:destination`, `filter.results.entities=<our 105 cities>`, once per taste | Ranks every city in our list for each taste, then combines the ranks. Genres and hobbies are scored through the entities Qloo links to them (see below). Also fetches Qloo's top destinations worldwide. |
 | `qloo_similar` | `GET /v2/insights` with `filter.type` = artist, movie, tv_show, place | Powers "People like you also liked...". |
-| `get_city_info` | Our curated `data/cities.json` | Adds universities, tuition, cost of living and teaching languages to the cities Qloo picked. |
+| `get_city_info` | Our own `data/cities.json` | Adds universities, tuition, cost of living and teaching languages to the cities Qloo picked. |
 
 While you type, the input suggests matches live from Qloo (`GET /search` and `GET /v2/tags`, ranked
 by Qloo popularity), so "tay" offers Taylor Swift and "sush" offers Sushi before the agent even starts.
@@ -119,7 +119,7 @@ the per-taste ranks, and a readable log shows every Qloo call the agent made.
 - **The agent's steps are streamed live** to the page ("Searching your tastes on Qloo...",
   "Matching cities worldwide...") and a full tool-call trace is shown under the results.
 - **A typed Qloo client** with timeouts, bounded retries, caching and clear errors.
-- **A curated dataset** of 105 cities. A script maps each one to its Qloo destination ID, and a
+- **A hand-built dataset** of 105 cities. A script maps each one to its Qloo destination ID, and a
   check confirms that Qloo can score every single city.
 
 ## Challenges

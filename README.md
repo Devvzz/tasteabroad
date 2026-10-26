@@ -14,7 +14,7 @@ the city doesn't fit them. TasteAbroad answers three questions together:
 3. **Can I afford it?** Typical international tuition and the monthly cost of living.
 
 You type what you love, like artists, films, shows, food and hobbies. An AI agent uses
-[Qloo](https://www.qloo.com/)'s taste graph to rank a curated list of 105 university cities
+[Qloo](https://www.qloo.com/)'s taste graph to rank a hand-picked list of 105 university cities
 around the world by cultural fit, then shows well-known universities, typical international
 tuition, the monthly cost of living and a short explanation of why each city fits you.
 
@@ -55,7 +55,7 @@ Qloo is not a side feature: without it there is no result. The agent has four to
 | `qloo_search` | Turns each like into a Qloo **entity** (Dua Lipa, Studio Ghibli) or **tag** (techno, street food, hiking) | `GET /search`, `GET /v2/tags` |
 | `qloo_destination_affinity` | Ranks all dataset cities once per taste and combines the ranks, plus Qloo's worldwide top destinations | `GET /v2/insights` with `filter.type=urn:entity:destination` and `filter.results.entities` |
 | `qloo_similar` | "People like you also liked" across artists, films, TV shows and places | `GET /v2/insights` with other `filter.type` values |
-| `get_city_info` | Universities, tuition and living costs from our curated dataset | `data/cities.json` |
+| `get_city_info` | Universities, tuition and living costs from our own dataset | `data/cities.json` |
 
 The compare view adds one more Qloo call per city: places inside that city (`filter.type=urn:entity:place`
 with `filter.location`) that people with the same taste rate highest. The input field also uses
@@ -171,7 +171,7 @@ Never commit `.env.local`; `.gitignore` already excludes it.
 
 `data/cities.json` holds a hand-picked list of 105 well-known student cities across all world
 regions (Europe 38, Asia 19, North America 16, Latin America 10, Africa 9, Oceania 7, Middle
-East 6). The list is curated, not taken from a ranking; Qloo then scores every city on it for each
+East 6). The list is picked by hand, not taken from a ranking; Qloo then scores every city on it for each
 search. Every city was checked to have a Qloo destination that can be scored, and cities Qloo
 has no entry for were left out. Seoul and Lima are scored through a district in the same metro
 area (Suwon, Miraflores), which the card says openly.

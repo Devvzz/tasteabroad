@@ -293,7 +293,7 @@ export interface TasteSignals {
 
 const INSIGHTS_MAX_TAKE = 50;
 
-/** Score a fixed list of destinations (our curated cities) against the user's taste. */
+/** Score a fixed list of destinations (our own cities) against the user's taste. */
 export async function scoreDestinations(signals: TasteSignals, destinationIds: string[]): Promise<QlooEntity[]> {
   const batches: string[][] = [];
   for (let i = 0; i < destinationIds.length; i += INSIGHTS_MAX_TAKE) {

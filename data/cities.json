@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "Curated student cities for TasteAbroad. Tuition and cost of living are rough ranges, not quotes.",
+    "description": "Hand-picked student cities for TasteAbroad. Tuition and cost of living are rough ranges, not quotes.",
     "costOfLiving": "Monthly student budget: shared/student rent + food + local transport.",
     "fx": {
       "EURUSD": 1.1,

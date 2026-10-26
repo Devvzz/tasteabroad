@@ -76,6 +76,23 @@
     "bestValueTitle": "Best value pick",
     "bestValueHint": "The cheapest year of study among your 15 best matches: lowest tuition plus 12 months of living costs."
   },
+  "funding": {
+    "title": "Exchange and scholarships",
+    "programme": {
+      "badge": "Erasmus+",
+      "text": "If your home university takes part in Erasmus+, you can come here for an exchange semester with a monthly grant and no extra tuition."
+    },
+    "partner": {
+      "badge": "Erasmus+ partner",
+      "text": "Erasmus+ exchanges are possible when your university has an agreement with one here."
+    },
+    "semp": {
+      "badge": "SEMP",
+      "text": "Switzerland runs the Swiss-European Mobility Programme for exchange semesters with European universities."
+    },
+    "erasmusHungary": "Some Hungarian universities run by public trust foundations are currently excluded from Erasmus+ grants. Ask the university first.",
+    "check": "Government schemes. Eligibility depends on your nationality and level, so check the official page."
+  },
   "map": {
     "title": "Your taste map",
     "hint": "Every city we rank, coloured by how well it fits your tastes. Tap a dot for details.",

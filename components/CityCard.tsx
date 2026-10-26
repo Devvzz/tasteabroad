@@ -1,6 +1,7 @@
 "use client";
 
 import type { CityMatch } from "@/lib/agent/types";
+import { FundingInfo } from "./FundingInfo";
 import { TasteBars } from "./TasteBars";
 import { cityGradient, flag, money } from "@/lib/format";
 
@@ -98,6 +99,8 @@ export function CityCard({ match, rank, t, studyLanguages, comparing, compareDis
             )}
           </section>
         </div>
+
+        <FundingInfo countryCode={city.countryCode} t={t} />
 
         <section>
           <h4 className="mb-1 font-semibold">{t("results.studentLife")}</h4>

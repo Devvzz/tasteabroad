@@ -2,6 +2,7 @@
 
 import type { RankingEntry } from "@/lib/agent/types";
 import { flag, money } from "@/lib/format";
+import { FundingInfo } from "./FundingInfo";
 import { TasteBars } from "./TasteBars";
 
 interface Props {
@@ -64,6 +65,8 @@ export function CityBrief({ entry, of, t }: Props) {
           ))}
         </p>
       )}
+
+      <FundingInfo countryCode={entry.countryCode} t={t} />
     </div>
   );
 }

@@ -76,6 +76,14 @@
     "bestValueTitle": "Best value pick",
     "bestValueHint": "The cheapest year of study among your 15 best matches: lowest tuition plus 12 months of living costs."
   },
+  "map": {
+    "title": "Your taste map",
+    "hint": "Every city we rank, coloured by how well it fits your tastes. Tap a dot for details.",
+    "dot": "{name}: {score}/100, #{rank}",
+    "strong": "Strong fit",
+    "weak": "Weak fit",
+    "outside": "Outside your filters"
+  },
   "checker": {
     "title": "Check any city",
     "hint": "See where any of our {count} cities lands for your tastes.",

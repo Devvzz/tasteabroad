@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Region } from "@/lib/cities";
@@ -18,6 +19,9 @@ import { ComparePanel } from "./ComparePanel";
 import { IdeaChips } from "./IdeaChips";
 import { LikeInput } from "./LikeInput";
 import { ThemeToggle } from "./ThemeToggle";
+
+// The map carries the world outline, so it only loads once there are results to show.
+const TasteMap = dynamic(() => import("./TasteMap").then((m) => m.TasteMap), { ssr: false });
 
 const REGIONS: Region[] = ["Europe", "North America", "Asia", "Oceania", "Latin America", "Middle East", "Africa"];
 // Names match the `languages` values in data/cities.json. English gets its own switch;
@@ -459,6 +463,19 @@ function Results({ result, t, onCopy, copied, compareIds, onCompareToggle }: Res
           </div>
           <CityBrief entry={bestValue} of={ranking.length} t={t} />
         </section>
+      )}
+
+      {ranking.length > 0 && (
+        <TasteMap
+          ranking={ranking}
+          topIds={shownIds}
+          selectedId={checkId}
+          onSelect={(id) => {
+            setCheckId(id);
+            document.getElementById("check-city")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+          t={t}
+        />
       )}
 
       {ranking.length > 0 && (

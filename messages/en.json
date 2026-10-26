@@ -98,6 +98,9 @@
     "title": "Your taste map",
     "hint": "Every city we rank, coloured by how well it fits your tastes. Tap a dot for details.",
     "dot": "{name}: {score}/100, #{rank}",
+    "zoom": "Map area",
+    "world": "World",
+    "europe": "Europe",
     "strong": "Strong fit",
     "weak": "Weak fit",
     "outside": "Outside your filters"

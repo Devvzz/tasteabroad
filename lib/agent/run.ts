@@ -243,10 +243,13 @@ async function writeExplanations(ctx: AgentContext, top: RankedCity[], deadline:
       {
         role: "system",
         content: [
-          "Write in English. Friendly, concrete, no hype.",
+          "Write in English, like a well-travelled friend texting advice: plain, specific, a little dry. No hype.",
           "For each city write:",
           "- why: 2 short sentences on why this city's culture fits the user. Mention at least one of the user's likes by name, preferring the ones where the city ranks best (rank_per_taste). The scores and ranks are shown separately, so do not repeat numbers. Talk about what people with similar tastes enjoy, not predictions about the user.",
           "- studentLife: 1 short sentence about student life there.",
+          "Open with something concrete about the city (a place, a habit, a scene), not with '<city> is'. Start each city's note differently.",
+          "Never use these words or phrases: destination, premier, perfect, paradise, dream, hub, haven, vibrant, bustling, rich tapestry, nestled, gem, lovers, enthusiasts, offers, boasts, aligns, ensures, your interests, look no further, something for everyone, whether you.",
+          "Only state things about a city that are well known. If a taste has no obvious link to the city (fado in Barcelona), say that people who like it rate the city highly instead of inventing a scene, venue or tradition.",
           "Do not invent numbers, prices or rankings. Do not use long dashes.",
           'Return JSON: {"cities":[{"id":"...","why":"...","studentLife":"..."}]}',
         ].join("\n"),

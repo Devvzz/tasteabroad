@@ -57,6 +57,9 @@ function calling with four tools:
 | `qloo_similar` | `GET /v2/insights` with `filter.type` = artist, movie, tv_show, place | Powers "People like you also liked...". |
 | `get_city_info` | Our curated `data/cities.json` | Adds universities, tuition, cost of living and teaching languages to the cities Qloo picked. |
 
+While you type, the input suggests matches live from Qloo (`GET /search` and `GET /v2/tags`, ranked
+by Qloo popularity), so "tay" offers Taylor Swift and "sush" offers Sushi before the agent even starts.
+
 The compare view makes one more Qloo call per city: `filter.type=urn:entity:place` with
 `filter.location` set to the city, so you see places in that city that people with your taste
 rate highest (only restaurants, bars, cafés, sights, museums, parks and similar; hotels and trade

@@ -26,6 +26,7 @@ tuition, the monthly cost of living and a short explanation of why each city fit
 ## Features
 
 - **Taste-based city matching** for 105 student cities on every continent, scored by Qloo.
+- **Live autocomplete from Qloo** while you type ("tay" suggests Taylor Swift, "sush" suggests Sushi), plus grouped ideas.
 - **Visible AI agent**: every step and tool call is streamed live to the page, with a full agent trace.
 - **City cards** with the Qloo match score, "why you'd fit", universities with links, tuition and monthly costs.
 - **Study language**: one switch for English-taught programmes, plus "I also speak..." for other languages
@@ -48,7 +49,8 @@ Qloo is not a side feature: without it there is no result. The agent has four to
 | `get_city_info` | Universities, tuition and living costs from our curated dataset | `data/cities.json` |
 
 The compare view adds one more Qloo call per city: places inside that city (`filter.type=urn:entity:place`
-with `filter.location`) that people with the same taste rate highest.
+with `filter.location`) that people with the same taste rate highest. The input field also uses
+`GET /search` and `GET /v2/tags` for live autocomplete, ranked by Qloo popularity.
 
 **Who decides what:**
 

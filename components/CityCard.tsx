@@ -55,7 +55,11 @@ export function CityCard({ match, rank, t, studyLanguages, comparing, compareDis
       <div className="space-y-4 p-4 text-sm">
         <section>
           <h4 className="mb-1 font-semibold">{t("results.why")}</h4>
-          {match.pending ? <NotePlaceholder label={t("results.writing")} lines={2} /> : <p className="leading-relaxed">{match.why}</p>}
+          {match.pending ? (
+            <NotePlaceholder label={t("results.writing")} lines={2} />
+          ) : (
+            match.why && <p className="leading-relaxed">{match.why}</p>
+          )}
           {city.qlooProxy && <p className="mt-1 text-xs text-muted">{t("results.proxy", { proxy: city.qlooProxy.name })}</p>}
         </section>
 
@@ -104,7 +108,11 @@ export function CityCard({ match, rank, t, studyLanguages, comparing, compareDis
 
         <section>
           <h4 className="mb-1 font-semibold">{t("results.studentLife")}</h4>
-          {match.pending ? <NotePlaceholder label={t("results.writing")} lines={1} /> : <p className="leading-relaxed">{match.studentLife}</p>}
+          {match.pending ? (
+            <NotePlaceholder label={t("results.writing")} lines={1} />
+          ) : (
+            match.studentLife && <p className="leading-relaxed">{match.studentLife}</p>
+          )}
           <ul className="mt-2 flex flex-wrap gap-1.5">
             {city.studentLife.map((tag) => (
               <li key={tag} className="rounded-full border border-line px-2 py-0.5 text-xs text-muted">

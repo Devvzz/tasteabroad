@@ -146,7 +146,8 @@
     "noTaste": "Qloo couldn't recognise any of your inputs. Try well-known artists, films or hobbies.",
     "noCityData": "Qloo recognised your likes but has no city data for them yet. Add an artist, a music genre or a food. All the idea chips work.",
     "qloo": "Qloo is not reachable right now. Please try again shortly.",
-    "badRequest": "Please check your inputs and try again."
+    "badRequest": "Please check your inputs and try again.",
+    "incomplete": "Your ranking below is complete, but the notes for each city did not arrive in time. Search again to get them."
   },
   "fallback": {
     "why": "People who like {likes} rank {city} among the best fits on Qloo's taste data (score {score}/100).",

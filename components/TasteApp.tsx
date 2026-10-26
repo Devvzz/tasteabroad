@@ -43,7 +43,7 @@ export function TasteApp() {
   const [steps, setSteps] = useState<Partial<Record<StepKey, StepStatus>>>({});
   const [details, setDetails] = useState<Partial<Record<StepKey, string>>>({});
   const [result, setResult] = useState<MatchResult | null>(null);
-  const [error, setError] = useState<ErrorCode | "needLikes" | null>(null);
+  const [error, setError] = useState<ErrorCode | "needLikes" | "incomplete" | null>(null);
   const [copied, setCopied] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [showCompare, setShowCompare] = useState(false);
@@ -105,6 +105,14 @@ export function TasteApp() {
       // On phones the progress appears below the form, so bring it into view.
       requestAnimationFrame(() => outputRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
 
+      // Set once the final result or an error arrives; the stream can also just stop (timeout, lost connection).
+      let finished = false;
+      let gotPartial = false;
+      const handle = (event: AgentEvent) => {
+        if (event.type === "result" || event.type === "error") finished = true;
+        if (event.type === "partial") gotPartial = true;
+        onEvent(event);
+      };
       try {
         const res = await fetch("/api/match", {
           method: "POST",
@@ -112,6 +120,7 @@ export function TasteApp() {
           body: JSON.stringify(state),
         });
         if (!res.ok || !res.body) {
+          finished = true;
           const body = (await res.json().catch(() => null)) as { code?: ErrorCode } | null;
           setError(body?.code ?? "generic");
           return;
@@ -126,11 +135,16 @@ export function TasteApp() {
           buffer += decoder.decode(value, { stream: true });
           const lines = buffer.split("\n");
           buffer = lines.pop() ?? "";
-          lines.filter(Boolean).forEach((line) => onEvent(JSON.parse(line) as AgentEvent));
+          lines.filter(Boolean).forEach((line) => handle(JSON.parse(line) as AgentEvent));
         }
       } catch {
-        setError("generic");
+        // Handled below, the same way as a stream that stops early.
       } finally {
+        if (!finished) {
+          // Keep an early result if there is one: its ranking is complete, only the notes are missing.
+          setResult((r) => r && { ...r, cities: r.cities.map((c) => ({ ...c, pending: false })) });
+          setError(gotPartial ? "incomplete" : "generic");
+        }
         setRunning(false);
       }
     },

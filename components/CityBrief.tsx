@@ -66,7 +66,7 @@ export function CityBrief({ entry, of, t }: Props) {
         </p>
       )}
 
-      <FundingInfo countryCode={entry.countryCode} t={t} />
+      <FundingInfo countryCode={entry.countryCode} t={t} headingLevel="h3" />
     </div>
   );
 }

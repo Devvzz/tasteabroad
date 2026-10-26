@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 
-// A handpicked mix that works well with Qloo: well-known names plus genres and hobbies.
+// Every idea here was checked against Qloo: each one ranks the cities differently, from all over the world.
+// Ideas Qloo has no city data for (coffee, hiking, K-pop and the like) are left out so a tap always counts.
 const IDEAS: Record<string, string[]> = {
-  Music: ["Dua Lipa", "Bad Bunny", "Taylor Swift", "BTS", "Arctic Monkeys", "Billie Eilish", "techno", "jazz"],
-  "Film & TV": ["Studio Ghibli", "anime", "Stranger Things", "Harry Potter", "Marvel", "La La Land", "K-drama", "The Office"],
-  Food: ["street food", "sushi", "tapas", "coffee", "pizza", "ramen", "vegan food", "craft beer"],
-  Hobbies: ["hiking", "surfing", "skateboarding", "cycling", "football", "museums", "video games", "photography"],
-  "Places & brands": ["Nike", "IKEA", "Apple", "beaches", "mountains", "nightlife", "vintage shopping", "Lego"],
+  Artists: ["Dua Lipa", "Bad Bunny", "BTS", "Burna Boy", "Rosalía", "Arctic Monkeys", "Stromae", "Drake"],
+  Genres: ["techno", "jazz", "reggaeton", "Afrobeats", "metal", "hip-hop", "indie rock", "anime"],
+  "Film & TV": ["Studio Ghibli", "One Piece", "Money Heist", "Game of Thrones", "Pixar", "The Office", "Stranger Things", "Marvel"],
+  Food: ["street food", "sushi", "ramen", "tapas", "craft beer"],
+  "Brands & teams": ["Manchester United", "Red Bull", "Patagonia", "Adidas", "Zara", "Uniqlo", "Lego"],
 };
 const CATEGORIES = Object.keys(IDEAS);
 

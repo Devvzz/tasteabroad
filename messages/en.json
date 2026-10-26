@@ -6,11 +6,11 @@
   },
   "form": {
     "label": "What do you love?",
-    "hint": "Artists, films, shows, food, hobbies, brands or places. Press Enter after each one.",
+    "hint": "Artists, films, shows, food, hobbies, brands or places. Start typing for suggestions from Qloo.",
     "placeholder": "e.g. Dua Lipa",
     "add": "Add",
     "remove": "Remove {item}",
-    "suggestions": "Try",
+    "suggestions": "Need ideas?",
     "filters": "Optional filters",
     "maxTuition": "Max tuition per year (USD)",
     "maxMonthly": "Max monthly budget (USD)",
@@ -22,7 +22,8 @@
     "studyEnglish": "I want to study in English",
     "studyEnglishHint": "Show cities with English-taught programmes.",
     "alsoSpeak": "I also speak other languages...",
-    "alsoSpeakHint": "Cities that teach in any of these languages also count. Many public universities are free or cheap in the local language."
+    "alsoSpeakHint": "Cities that teach in any of these languages also count. Many public universities are free or cheap in the local language.",
+    "suggestFromQloo": "Suggestions from Qloo"
   },
   "regions": {
     "Europe": "Europe",

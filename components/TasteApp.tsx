@@ -11,8 +11,9 @@ import { AgentSteps, type StepStatus } from "./AgentSteps";
 import { AlsoLiked } from "./AlsoLiked";
 import { CityCard } from "./CityCard";
 import { ComparePanel } from "./ComparePanel";
+import { IdeaChips } from "./IdeaChips";
+import { LikeInput } from "./LikeInput";
 
-const SUGGESTIONS = ["Dua Lipa", "anime", "street food", "hiking", "techno", "Studio Ghibli", "Bad Bunny", "K-pop"];
 const REGIONS: Region[] = ["Europe", "North America", "Asia", "Oceania", "Latin America", "Middle East", "Africa"];
 // Names match the `languages` values in data/cities.json. English gets its own switch;
 // the others sit behind "I also speak..." because most students only need English.
@@ -200,39 +201,9 @@ export function TasteApp() {
           </ul>
         )}
 
-        <div className="flex gap-2">
-          <input
-            id="like-input"
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && draft.trim()) {
-                e.preventDefault();
-                addLike(draft);
-              }
-            }}
-            placeholder={t("form.placeholder")}
-            maxLength={60}
-            className="min-w-0 flex-1 rounded-xl border border-line bg-background px-3 py-2"
-          />
-          <button type="button" onClick={() => addLike(draft)} className="rounded-xl border border-line px-4 py-2 text-sm font-medium">
-            {t("form.add")}
-          </button>
-        </div>
+        <LikeInput value={draft} onChange={setDraft} onAdd={addLike} t={t} />
 
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="text-muted">{t("form.suggestions")}:</span>
-          {SUGGESTIONS.filter((s) => !likes.includes(s)).map((s) => (
-            <button
-              key={s}
-              type="button"
-              onClick={() => addLike(s)}
-              className="rounded-full border border-line px-3 py-1 hover:border-accent hover:text-accent"
-            >
-              + {s}
-            </button>
-          ))}
-        </div>
+        <IdeaChips likes={likes} onAdd={addLike} t={t} />
 
         <fieldset className="space-y-2 text-sm">
           <legend className="sr-only">{t("form.language")}</legend>

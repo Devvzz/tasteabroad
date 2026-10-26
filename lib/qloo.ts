@@ -34,6 +34,10 @@ export interface QlooEntity {
   location?: { lat: number; lon: number };
   imageUrl?: string;
   description?: string;
+  /** English category name for places, e.g. "Coffee shop" or "Art museum". */
+  category?: string;
+  /** English neighbourhood name for places, e.g. "Downtown Seoul". */
+  neighborhood?: string;
   /** Tag IDs attached to the entity (e.g. "urn:tag:genre:place:hotel"). */
   tagIds: string[];
 }
@@ -190,6 +194,8 @@ interface RawEntity {
     geocode?: { country_code?: string };
     image?: { url?: string };
     short_description?: string;
+    primary_genre?: { name?: string };
+    neighborhood?: unknown;
   };
 }
 
@@ -213,6 +219,8 @@ function toEntity(raw: RawEntity): QlooEntity {
     location: raw.location ? { lat: raw.location.lat, lon: raw.location.lon } : undefined,
     imageUrl: props.image?.url,
     description: props.short_description,
+    category: props.primary_genre?.name,
+    neighborhood: typeof props.neighborhood === "string" ? props.neighborhood : undefined,
     tagIds: (raw.tags ?? []).map((t) => t.id ?? t.tag_id).filter((id): id is string => Boolean(id)),
   };
 }

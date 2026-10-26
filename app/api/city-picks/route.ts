@@ -25,7 +25,17 @@ export async function POST(request: Request) {
 
   try {
     const places = await placesNear(signals, city.coordinates);
-    return Response.json({ places: places.map((p) => ({ id: p.id, name: p.name, imageUrl: p.imageUrl })) });
+    // Many places only have a local-script name, so Qloo's English category, area and description go along.
+    return Response.json({
+      places: places.map((p) => ({
+        id: p.id,
+        name: p.name,
+        category: p.category,
+        neighborhood: p.neighborhood,
+        description: p.description,
+        city: city.name,
+      })),
+    });
   } catch (err) {
     const code = err instanceof QlooError && err.code === "rate_limited" ? "rateLimited" : "qloo";
     return Response.json({ code }, { status: 502 });

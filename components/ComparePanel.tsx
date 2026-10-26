@@ -4,7 +4,26 @@ import { useEffect, useRef, useState } from "react";
 import type { CityMatch, ResolvedSignal } from "@/lib/agent/types";
 import { cityGradient, flag, money } from "@/lib/format";
 
-type Picks = { status: "loading" } | { status: "done"; places: { id: string; name: string }[] } | { status: "error" };
+interface Place {
+  id: string;
+  name: string;
+  category?: string;
+  neighborhood?: string;
+  description?: string;
+  city: string;
+}
+
+type Picks = { status: "loading" } | { status: "done"; places: Place[] } | { status: "error" };
+
+/** "Coffee shop in Downtown Seoul": Qloo's English details, useful when the name is in another script. */
+function placeDetails(place: Place): string {
+  if (place.category && place.neighborhood) return `${place.category} in ${place.neighborhood}`;
+  return place.category ?? place.neighborhood ?? "";
+}
+
+function mapsLink(place: Place): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${place.name}, ${place.city}`)}`;
+}
 
 interface Props {
   cities: readonly [CityMatch, CityMatch];
@@ -25,7 +44,7 @@ async function loadPicks(cityId: string, signals: ResolvedSignal[]): Promise<Pic
       }),
     });
     if (!res.ok) return { status: "error" };
-    const body = (await res.json()) as { places?: { id: string; name: string }[] };
+    const body = (await res.json()) as { places?: Place[] };
     return { status: "done", places: body.places ?? [] };
   } catch {
     return { status: "error" };
@@ -79,9 +98,20 @@ export function ComparePanel({ cities, signals, t, onClose }: Props) {
         if (p.status === "loading") return <span className="text-muted">{t("compare.picksLoading")}</span>;
         if (p.status === "error" || !p.places.length) return <span className="text-muted">{t("compare.picksEmpty")}</span>;
         return (
-          <ul className="list-disc space-y-0.5 pl-4">
+          <ul className="space-y-2">
             {p.places.map((place) => (
-              <li key={place.id}>{place.name}</li>
+              <li key={place.id}>
+                <a
+                  href={mapsLink(place)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={place.description}
+                  className="font-medium text-accent underline-offset-2 hover:underline"
+                >
+                  {place.name}
+                </a>
+                {placeDetails(place) && <span className="block text-xs text-muted">{placeDetails(place)}</span>}
+              </li>
             ))}
           </ul>
         );

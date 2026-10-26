@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Region } from "@/lib/cities";
 import type { AgentEvent, ErrorCode, MatchFilters, MatchResult, StepKey } from "@/lib/agent/types";
 import { t } from "@/lib/i18n";
+import type { LikeStatus } from "@/lib/agent/check";
 import { MAX_LIKES } from "@/lib/agent/request";
 import { fromSearchParams, toSearchParams, type SearchState } from "@/lib/share";
 import { AgentLog } from "./AgentLog";
@@ -53,13 +54,28 @@ export function TasteApp() {
     () => initial.filters.languages?.some((l) => l !== ENGLISH) ?? false,
   );
 
+  // What Qloo can do with each like, checked as soon as it is added (keyed by lowercase like).
+  const [likeStatus, setLikeStatus] = useState<Record<string, LikeStatus>>({});
+
+  const checkLike = async (like: string) => {
+    try {
+      const res = await fetch(`/api/check-like?q=${encodeURIComponent(like)}`);
+      const { status } = (await res.json()) as { status: LikeStatus | "unknown" };
+      if (status !== "unknown") setLikeStatus((s) => ({ ...s, [like.toLowerCase()]: status }));
+    } catch {
+      // Only a hint: the search still reports likes without city data.
+    }
+  };
+
   const addLike = (value: string) => {
     const like = value.trim();
     if (!like || likes.length >= MAX_LIKES || likes.some((l) => l.toLowerCase() === like.toLowerCase())) return;
     setLikes([...likes, like]);
     setDraft("");
     setError(null);
+    void checkLike(like);
   };
+  const flagged = (status: LikeStatus) => likes.filter((l) => likeStatus[l.toLowerCase()] === status);
 
   const onEvent = (event: AgentEvent) => {
     if (event.type === "step") {
@@ -204,20 +220,37 @@ export function TasteApp() {
 
         {likes.length > 0 && (
           <ul className="flex flex-wrap gap-2">
-            {likes.map((like) => (
-              <li key={like} className="flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-sm text-white">
-                {like}
-                <button
-                  type="button"
-                  aria-label={t("form.remove", { item: like })}
-                  onClick={() => setLikes(likes.filter((l) => l !== like))}
-                  className="ml-1 opacity-80 hover:opacity-100"
+            {likes.map((like) => {
+              const status = likeStatus[like.toLowerCase()];
+              const warn = status === "noCityData" || status === "notFound";
+              return (
+                <li
+                  key={like}
+                  className={`flex items-center gap-1 rounded-full px-3 py-1 text-sm ${
+                    warn ? "border border-dashed border-muted bg-warn-soft text-foreground" : "bg-accent text-white"
+                  }`}
                 >
-                  ×
-                </button>
-              </li>
-            ))}
+                  {warn && <span aria-hidden>⚠️</span>}
+                  {like}
+                  <button
+                    type="button"
+                    aria-label={t("form.remove", { item: like })}
+                    onClick={() => setLikes(likes.filter((l) => l !== like))}
+                    className="ml-1 opacity-80 hover:opacity-100"
+                  >
+                    ×
+                  </button>
+                </li>
+              );
+            })}
           </ul>
+        )}
+
+        {flagged("noCityData").length > 0 && (
+          <p className="rounded-xl bg-warn-soft p-2.5 text-sm">{t("form.noCityData", { items: flagged("noCityData").join(", ") })}</p>
+        )}
+        {flagged("notFound").length > 0 && (
+          <p className="rounded-xl bg-warn-soft p-2.5 text-sm">{t("form.notFound", { items: flagged("notFound").join(", ") })}</p>
         )}
 
         <LikeInput value={draft} onChange={setDraft} onAdd={addLike} t={t} />

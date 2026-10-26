@@ -12,6 +12,8 @@
     "remove": "Remove {item}",
     "count": "{count} / {max}",
     "full": "That is the maximum. Remove one to add another.",
+    "noCityData": "No city data in Qloo yet for: {items}. These won't change your ranking. Artists, music genres and foods work best.",
+    "notFound": "Qloo doesn't recognise: {items}. Check the spelling or pick a suggestion while typing.",
     "suggestions": "Need ideas?",
     "filters": "Optional filters",
     "maxTuition": "Max tuition per year (USD)",

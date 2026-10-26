@@ -17,6 +17,8 @@
     "suggestions": "Need ideas?",
     "filters": "Optional filters",
     "maxTuition": "Max tuition per year (USD)",
+    "euCitizen": "I have an EU/EEA passport",
+    "euCitizenHint": "Much of Europe charges EU/EEA students far less (Stockholm: free instead of $9k+). Without it, budgets use the non-EU fee.",
     "maxMonthly": "Max monthly budget (USD)",
     "language": "Language of study",
     "regions": "Regions",

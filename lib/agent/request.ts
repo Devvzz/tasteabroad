@@ -55,6 +55,7 @@ export function parseMatchRequest(input: unknown): MatchRequest | null {
   const raw = (body.filters && typeof body.filters === "object" ? body.filters : {}) as Record<string, unknown>;
   const filters: MatchFilters = {
     maxTuitionUsd: positiveNumber(raw.maxTuitionUsd),
+    euCitizen: raw.euCitizen === true || undefined,
     maxMonthlyUsd: positiveNumber(raw.maxMonthlyUsd),
     languages: parseLanguages(raw.languages ?? raw.language),
     regions: Array.isArray(raw.regions) ? raw.regions.filter((r): r is Region => REGIONS.includes(r as Region)) : undefined,
@@ -69,6 +70,7 @@ export function requestKey(req: MatchRequest): string {
   return JSON.stringify([
     req.likes.map((l) => l.toLowerCase()).sort(),
     f.maxTuitionUsd ?? null,
+    f.euCitizen ?? false,
     f.maxMonthlyUsd ?? null,
     (f.languages ?? []).map((l) => l.toLowerCase()).sort(),
     [...(f.regions ?? [])].sort(),

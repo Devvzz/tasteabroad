@@ -179,7 +179,9 @@ area (Suwon, Miraflores), which the card says openly.
 Each city has country, region, coordinates, 1 to 3 universities with official links, typical
 international tuition, a monthly student budget in EUR and USD, teaching languages and
 student-life tags, plus a `source`, a `checked` date and the mark `estimate, check official site`.
-Values are rough ranges, never quotes.
+Values are rough ranges, never quotes. Where Europe charges students without an EU/EEA passport
+more (15 cities, such as Stockholm and Amsterdam), the city also has a separate non-EU range. Budget
+filters and the best value pick use that higher fee unless the student ticks "I have an EU/EEA passport".
 
 `lib/funding.ts` holds exchange and scholarship facts per country: Erasmus+ programme countries
 (from the official Erasmus+ programme guide) and one or two government scholarship schemes with

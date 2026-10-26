@@ -353,6 +353,18 @@ export function TasteApp() {
               />
             </label>
           </div>
+          <label className="mt-3 flex cursor-pointer items-start gap-2">
+            <input
+              type="checkbox"
+              checked={filters.euCitizen ?? false}
+              onChange={(e) => setFilters({ ...filters, euCitizen: e.target.checked || undefined })}
+              className="mt-0.5 size-4 accent-[var(--accent)]"
+            />
+            <span>
+              {t("form.euCitizen")}
+              <span className="block text-xs text-muted">{t("form.euCitizenHint")}</span>
+            </span>
+          </label>
           <fieldset className="mt-3">
             <legend className="mb-1 text-muted">{t("form.regions")}</legend>
             <div className="flex flex-wrap gap-2">

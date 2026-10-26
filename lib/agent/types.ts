@@ -2,6 +2,8 @@ import type { City, Range, Region } from "@/lib/cities";
 
 export interface MatchFilters {
   maxTuitionUsd?: number;
+  /** EU/EEA passport holders pay the lower fee in much of Europe; everyone else pays the non-EU fee. */
+  euCitizen?: boolean;
   maxMonthlyUsd?: number;
   /** Languages the student could take classes in; a city matches if it teaches in any of them. */
   languages?: string[];

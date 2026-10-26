@@ -94,8 +94,8 @@ function assemble(ctx: AgentContext, cities: CityMatch[], mode: MatchResult["mod
     unresolved,
     unscored: ctx.unscored,
     cities,
-    ranking: buildRanking(ctx.allRanked.length ? ctx.allRanked : ranked, ranked),
-    bestValueId: bestValue(ranked),
+    ranking: buildRanking(ctx.allRanked.length ? ctx.allRanked : ranked, ranked, request.filters.euCitizen),
+    bestValueId: bestValue(ranked, request.filters.euCitizen),
     alsoLiked: (ctx.alsoLiked ?? []).map((e) => ({ id: e.id, name: e.name, type: e.type, imageUrl: e.imageUrl })),
     tasteSignals: ctx.tasteSignals,
     worldwide: worldwideExtras(ctx),
@@ -112,6 +112,7 @@ function systemPrompt(req: MatchRequest): string {
   const f = req.filters;
   const filters = [
     f.maxTuitionUsd !== undefined && `max tuition ${f.maxTuitionUsd} USD/year`,
+    f.euCitizen && "has an EU/EEA passport (lower fees in much of Europe)",
     f.maxMonthlyUsd !== undefined && `max living costs ${f.maxMonthlyUsd} USD/month`,
     f.languages?.length && `can study in ${f.languages.join(" or ")}`,
     f.regions?.length && `regions ${f.regions.join(", ")}`,

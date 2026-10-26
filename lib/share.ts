@@ -12,6 +12,7 @@ export function toSearchParams(state: SearchState): URLSearchParams {
   const params = new URLSearchParams();
   state.likes.forEach((l) => params.append("l", l));
   if (state.filters.maxTuitionUsd) params.set("tuition", String(state.filters.maxTuitionUsd));
+  if (state.filters.euCitizen) params.set("eu", "1");
   if (state.filters.maxMonthlyUsd) params.set("budget", String(state.filters.maxMonthlyUsd));
   state.filters.languages?.forEach((l) => params.append("study", l));
   state.filters.regions?.forEach((r) => params.append("region", r));
@@ -27,6 +28,7 @@ export function fromSearchParams(params: URLSearchParams): SearchState {
     likes: params.getAll("l").map((l) => l.trim()).filter(Boolean).slice(0, MAX_LIKES),
     filters: {
       maxTuitionUsd: num("tuition"),
+      euCitizen: params.get("eu") === "1" || undefined,
       maxMonthlyUsd: num("budget"),
       languages: params.getAll("study").filter(Boolean),
       regions: params.getAll("region") as Region[],

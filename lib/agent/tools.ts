@@ -1,6 +1,6 @@
 // The tools the LLM agent can call. Each tool records what it found in AgentContext, so the final
 // result is always assembled from real Qloo data, never from text the model made up.
-import { cities, getCity, type City } from "@/lib/cities";
+import { cities, getCity, tuitionFor, type City } from "@/lib/cities";
 import type { ToolDefinition } from "@/lib/llm";
 import {
   searchEntities,
@@ -168,7 +168,7 @@ function selectSignals(ctx: AgentContext, entityIds: string[] = [], tagIds: stri
 }
 
 function passesFilters(city: City, filters: MatchRequest["filters"]): boolean {
-  if (filters.maxTuitionUsd !== undefined && city.tuition.usdPerYear.min > filters.maxTuitionUsd) return false;
+  if (filters.maxTuitionUsd !== undefined && tuitionFor(city, filters.euCitizen).min > filters.maxTuitionUsd) return false;
   if (filters.maxMonthlyUsd !== undefined && city.costOfLiving && city.costOfLiving.usdPerMonth.min > filters.maxMonthlyUsd) {
     return false;
   }

@@ -4,7 +4,7 @@ Find the university city abroad where you'd actually feel at home.
 
 **Live demo: [tasteabroad.vercel.app](https://tasteabroad.vercel.app)** (no login needed)
 
-![TasteAbroad results for Studio Ghibli, street food and cycling](docs/screenshot.jpg)
+![TasteAbroad results for Studio Ghibli, ramen and jazz: Kyoto first, with its rank for each taste](docs/screenshot.jpg)
 
 Millions of students choose where to study abroad by rankings and price, then feel lost because
 the city doesn't fit them. TasteAbroad answers three questions together:

@@ -5,7 +5,17 @@ const REGIONS: Region[] = ["Europe", "North America", "Asia", "Oceania", "Latin 
 const MAX_LIKES = 8;
 const MAX_LIKE_LENGTH = 60;
 
+const MIN_LIKE_LENGTH = 2;
 const MAX_LANGUAGES = 6;
+
+/** Drops HTML tags and extra spaces so "<b>Beyoncé</b>" becomes "Beyoncé" before it reaches Qloo or the model. */
+function cleanLike(like: string): string {
+  return like
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, MAX_LIKE_LENGTH);
+}
 
 /** Accepts a list of languages (or a single one, as older share links send it). */
 function parseLanguages(value: unknown): string[] | undefined {
@@ -27,10 +37,15 @@ export function parseMatchRequest(input: unknown): MatchRequest | null {
 
   const likes = (Array.isArray(body.likes) ? body.likes : [])
     .filter((l): l is string => typeof l === "string")
-    .map((l) => l.trim().slice(0, MAX_LIKE_LENGTH))
-    .filter(Boolean);
-  const uniqueLikes = [...new Map(likes.map((l) => [l.toLowerCase(), l])).values()].slice(0, MAX_LIKES);
+    .map(cleanLike)
+    .filter((l) => l.length >= MIN_LIKE_LENGTH);
+  // Keep the first spelling of each like ("Jazz", not a later "JAZZ").
+  const uniqueLikes: string[] = [];
+  for (const like of likes) {
+    if (!uniqueLikes.some((u) => u.toLowerCase() === like.toLowerCase())) uniqueLikes.push(like);
+  }
   if (!uniqueLikes.length) return null;
+  uniqueLikes.splice(MAX_LIKES);
 
   const raw = (body.filters && typeof body.filters === "object" ? body.filters : {}) as Record<string, unknown>;
   const filters: MatchFilters = {

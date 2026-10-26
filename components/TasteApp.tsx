@@ -390,7 +390,6 @@ function Results({ result, t, onCopy, copied, compareIds, onCompareToggle }: Res
         </div>
 
         <p className="rounded-xl border border-accent/40 bg-accent-soft p-3 text-sm">
-          <span aria-hidden>★ </span>
           {t("results.scoreNote")}
         </p>
 

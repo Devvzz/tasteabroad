@@ -46,7 +46,7 @@ export function AboutContent({ cityCount }: { cityCount: number }) {
       </section>
 
       <section aria-label="Agent tools" className="rounded-2xl border border-line bg-card p-4">
-        <p className="mb-3 font-mono text-xs text-muted">Gemini agent → tool calls → Qloo</p>
+        <p className="mb-3 font-mono text-xs text-muted">TasteAbroad agent → tool calls → Qloo</p>
         <ol className="grid gap-2 sm:grid-cols-2">
           {FLOW.map((step, i) => (
             <li key={step.tool} className="rounded-xl bg-accent-soft p-3">
@@ -64,7 +64,7 @@ export function AboutContent({ cityCount }: { cityCount: number }) {
         <dl className="grid gap-3 sm:grid-cols-3">
           {[
             ["Qloo", "about.roleQloo"],
-            ["AI", "about.roleAi"],
+            ["Agent", "about.roleAi"],
             ["Data", "about.roleData"],
           ].map(([label, key]) => (
             <div key={key} className="rounded-2xl border border-line bg-card p-4">

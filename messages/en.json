@@ -42,7 +42,7 @@
     "similar": "Finding what people like you also like...",
     "cities": "Finding universities and costs...",
     "explain": "Writing why each city fits you...",
-    "fallback": "The AI is busy, switching to the backup pipeline..."
+    "fallback": "Busy right now, switching to the quick route..."
   },
   "results": {
     "title": "Your best-fit cities",
@@ -64,7 +64,7 @@
     "trace": "Agent trace ({count} tool calls)",
     "studyHere": "You can study here in {langs}",
     "scoreBy": "Score from Qloo",
-    "scoreNote": "Every match score comes straight from Qloo's taste data, not from the AI. The AI only chooses what to look up and writes the explanations."
+    "scoreNote": "Every match score comes straight from Qloo's taste data, unchanged. Our agent only decides what to look up and writes the notes."
   },
   "compare": {
     "select": "Compare",
@@ -91,7 +91,7 @@
   "notes": {
     "filtersRelaxed": "No city matched all your filters, so we relaxed the strictest ones (budget first, region last).",
     "nearestFallback": "Qloo had no direct score for our city list, so these are our cities closest to Qloo's top destinations for you.",
-    "llmFallback": "The AI writer was unavailable, so the explanations come straight from Qloo data.",
+    "llmFallback": "Quick mode: the notes below come straight from Qloo's data.",
     "unresolved": "Qloo didn't recognise: {items}."
   },
   "errors": {
@@ -113,17 +113,17 @@
     "intro": "Rankings and price tell you where you could study. TasteAbroad answers the three questions that decide whether you will be happy there: will the culture of the city feel like home, can you study in a language you speak, and can you afford it?",
     "stepsTitle": "What happens when you press the button",
     "step1": "You type what you love: artists, films, shows, food, hobbies, brands or places.",
-    "step2": "An AI agent (Google Gemini) reads your list and calls tools. First it looks up every like on Qloo: a specific name becomes a Qloo entity (Dua Lipa, Studio Ghibli), a genre or hobby becomes a Qloo tag (techno, street food, hiking).",
+    "step2": "The TasteAbroad agent (built on Google Gemini) reads your list and calls tools. First it looks up every like on Qloo: a specific name becomes a Qloo entity (Dua Lipa, Studio Ghibli), a genre or hobby becomes a Qloo tag (techno, street food, hiking).",
     "step3": "With those signals the agent asks Qloo's taste graph to score {count} university cities worldwide by taste affinity, and also fetches Qloo's top destinations around the world.",
     "step4": "It asks Qloo what else people with the same taste like (music, films, TV, places).",
     "step5": "It reads our curated data for the best cities: well-known universities, typical international tuition, a monthly student budget and the languages you can study in.",
-    "step6": "Finally the AI writes a short explanation for each city that refers to what you typed. In the compare view, Qloo also suggests places inside each city that people like you love.",
+    "step6": "Finally the agent writes a short note for each city that refers to what you typed. In the compare view, Qloo also suggests places inside each city that people like you love.",
     "roleTitle": "Who decides what",
-    "roleQloo": "Qloo decides which cities fit, how strongly and in what order. Every match score is Qloo's own affinity value, shown unchanged as a percentage. The AI never sets or changes a score.",
-    "roleAi": "The AI decides which Qloo lookups to make and puts the results into words. It can only use cities and IDs that Qloo actually returned.",
+    "roleQloo": "Qloo decides which cities fit, how strongly and in what order. Every match score is Qloo's own affinity value, shown unchanged as a percentage. The agent never sets or changes a score.",
+    "roleAi": "The agent decides which Qloo lookups to make and puts the results into words. It can only use cities and IDs that Qloo actually returned.",
     "roleData": "Universities, tuition and living costs come from our own dataset. They are rough ranges, so always check the official university site.",
     "reliabilityTitle": "Built to keep working",
-    "reliability": "If the AI is busy or rate-limited, a backup pipeline calls the same Qloo tools in a fixed order, so you still get results. Identical searches are cached for 30 minutes and every visitor has a fair-use limit to protect the free API quotas.",
+    "reliability": "If the language model is busy or rate-limited, a backup pipeline calls the same Qloo tools in a fixed order, so you still get results. Identical searches are cached for 30 minutes and every visitor has a fair-use limit to protect the free API quotas.",
     "limitsTitle": "What the results do not mean",
     "limits": "Qloo describes what groups of people with similar tastes enjoy. A high score is not a prediction about you, and it says nothing about admission chances, visas or safety.",
     "privacyTitle": "Privacy",

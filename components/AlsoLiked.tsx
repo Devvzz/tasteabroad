@@ -20,7 +20,9 @@ export function AlsoLiked({ items, t }: Props) {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={item.imageUrl} alt="" className="size-10 shrink-0 rounded-lg object-cover" loading="lazy" />
             ) : (
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent">★</span>
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent-soft font-semibold text-accent" aria-hidden>
+                {item.name.charAt(0)}
+              </span>
             )}
             <span className="min-w-0">
               <span className="block truncate font-medium">{item.name}</span>

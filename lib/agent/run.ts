@@ -31,6 +31,12 @@ export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) 
   const ctx = new AgentContext(request, emit);
   const startedAt = Date.now();
   let mode: MatchResult["mode"] = "agent";
+  // Show the ranked cities right away; writing the notes can take the language model a while.
+  ctx.onRanked = () => {
+    ctx.onRanked = undefined;
+    const placeholders = ctx.ranked!.slice(0, TOP_N).map((r) => ({ ...r, why: "", studentLife: "", pending: true }));
+    emit({ type: "partial", result: assemble(ctx, placeholders, mode) });
+  };
 
   try {
     ctx.step("plan", "running");
@@ -60,6 +66,13 @@ export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) 
   const cities = await explain(ctx, top, startedAt + WRITER_BUDGET_MS);
   ctx.step("explain", "done");
 
+  return assemble(ctx, cities, mode);
+}
+
+/** The result as the page sees it, built from what the run has found so far. */
+function assemble(ctx: AgentContext, cities: CityMatch[], mode: MatchResult["mode"]): MatchResult {
+  const { request } = ctx;
+  const ranked = ctx.ranked ?? [];
   const resolvedInputs = new Set(ctx.selected.map((s) => s.input.toLowerCase()));
   const unresolved = request.likes.filter((l) => !resolvedInputs.has(l.toLowerCase()));
   if (unresolved.length) ctx.notes.add("unresolved");
@@ -71,12 +84,13 @@ export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) 
     unresolved,
     unscored: ctx.unscored,
     cities,
-    ranking: buildRanking(ctx.allRanked.length ? ctx.allRanked : ctx.ranked, ctx.ranked),
-    bestValueId: bestValue(ctx.ranked),
+    ranking: buildRanking(ctx.allRanked.length ? ctx.allRanked : ranked, ranked),
+    bestValueId: bestValue(ranked),
     alsoLiked: (ctx.alsoLiked ?? []).map((e) => ({ id: e.id, name: e.name, type: e.type, imageUrl: e.imageUrl })),
     worldwide: worldwideExtras(ctx),
     notes: [...ctx.notes],
-    trace: ctx.trace,
+    // A copy, so the partial result does not keep growing as later tools are logged.
+    trace: [...ctx.trace],
     mode,
   };
 }

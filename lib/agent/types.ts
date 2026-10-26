@@ -29,6 +29,8 @@ export interface TraceEntry {
 export type AgentEvent =
   | { type: "step"; step: StepKey; status: "running" | "done" | "error"; detail?: string }
   | { type: "tool"; entry: TraceEntry }
+  /** Sent as soon as Qloo has ranked the cities, before the notes are written. Cards then show placeholders. */
+  | { type: "partial"; result: MatchResult }
   | { type: "result"; result: MatchResult }
   | { type: "error"; code: ErrorCode };
 
@@ -59,6 +61,8 @@ export interface CityMatch {
   breakdown: TasteRank[];
   why: string;
   studentLife: string;
+  /** True while the notes are still being written (the "why" and student life texts are empty). */
+  pending?: boolean;
 }
 
 /** A light summary of one city's place in the full ranking, for the map and the city checker. */

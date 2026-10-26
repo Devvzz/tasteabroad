@@ -47,6 +47,8 @@ export class AgentContext {
   alsoLiked: QlooEntity[] | null = null;
   /** Inputs Qloo recognised but has no city data for. */
   unscored: string[] = [];
+  /** Called once the cities are ranked, so the page can show them before the notes are written. */
+  onRanked?: () => void;
   /** Per-taste scoring, started by whichever tool needs it first. */
   tastes?: Promise<TasteScore[]>;
   readonly notes = new Set<NoteKey>();
@@ -235,6 +237,7 @@ export async function qlooDestinationAffinity(ctx: AgentContext, entityIds?: str
     if (i > 0) ctx.notes.add("filtersRelaxed");
     break;
   }
+  ctx.onRanked?.();
 
   const datasetIds = new Set(cities.map((c) => c.qlooId));
   return {

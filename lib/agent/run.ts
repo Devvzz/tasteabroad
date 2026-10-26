@@ -12,6 +12,7 @@ import {
   TOOL_DEFINITIONS,
   type RankedCity,
 } from "./tools";
+import { bestValue, buildRanking } from "./ranking";
 import type { AgentEvent, CityMatch, MatchRequest, MatchResult, ResolvedSignal } from "./types";
 
 const MAX_TURNS = 6;
@@ -72,6 +73,8 @@ export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) 
     unresolved,
     unscored: ctx.unscored,
     cities,
+    ranking: buildRanking(ctx.allRanked.length ? ctx.allRanked : ctx.ranked, ctx.ranked),
+    bestValueId: bestValue(ctx.ranked),
     alsoLiked: (ctx.alsoLiked ?? []).map((e) => ({ id: e.id, name: e.name, type: e.type, imageUrl: e.imageUrl })),
     worldwide: worldwideExtras(ctx),
     notes: [...ctx.notes],

@@ -1,4 +1,4 @@
-import type { City, Region } from "@/lib/cities";
+import type { City, Range, Region } from "@/lib/cities";
 
 export interface MatchFilters {
   maxTuitionUsd?: number;
@@ -61,6 +61,29 @@ export interface CityMatch {
   studentLife: string;
 }
 
+/** A light summary of one city's place in the full ranking, for the map and the city checker. */
+export interface RankingEntry {
+  id: string;
+  name: string;
+  country: string;
+  countryCode: string;
+  region: Region;
+  lat: number;
+  lon: number;
+  /** 1 is the best match among all cities. */
+  rank: number;
+  score: number;
+  breakdown: TasteRank[];
+  /** False when the city is outside the user's filters (budget, language, region). */
+  fits: boolean;
+  tuitionLabel: string;
+  tuitionUsd: Range;
+  monthlyUsd?: Range;
+  /** Lowest tuition plus twelve months of the lowest living costs, when both are known. */
+  yearlyUsd?: number;
+  universities: { name: string; url: string }[];
+}
+
 export interface AlsoLikedItem {
   id: string;
   name: string;
@@ -76,6 +99,10 @@ export interface MatchResult {
   /** Tastes Qloo recognised but has no city data for. */
   unscored: string[];
   cities: CityMatch[];
+  /** Every scored city in match order, including the ones outside the filters. */
+  ranking: RankingEntry[];
+  /** The cheapest city to live and study in among the strong matches. */
+  bestValueId?: string;
   alsoLiked: AlsoLikedItem[];
   worldwide: { name: string; countryCode?: string }[];
   notes: NoteKey[];

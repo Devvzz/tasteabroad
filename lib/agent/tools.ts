@@ -42,6 +42,8 @@ export class AgentContext {
   readonly candidates = new Map<string, ResolvedSignal>();
   selected: ResolvedSignal[] = [];
   ranked: RankedCity[] | null = null;
+  /** The ranking before filters, so the map and city checker can show every city. */
+  allRanked: RankedCity[] = [];
   worldwide: QlooEntity[] = [];
   alsoLiked: QlooEntity[] | null = null;
   /** Inputs Qloo recognised but has no city data for. */
@@ -252,6 +254,7 @@ export async function qlooDestinationAffinity(ctx: AgentContext, entityIds?: str
   // If nothing passes every filter, relax the strictest ones first and keep the region as long as possible.
   const f = ctx.request.filters;
   const attempts: MatchRequest["filters"][] = [f, { regions: f.regions, languages: f.languages }, { regions: f.regions }, {}];
+  ctx.allRanked = ranked;
   ctx.ranked = ranked;
   for (const [i, attempt] of attempts.entries()) {
     const passing = ranked.filter((r) => passesFilters(r.city, attempt));

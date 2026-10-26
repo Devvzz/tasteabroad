@@ -12,6 +12,7 @@ import {
   TOOL_DEFINITIONS,
   type RankedCity,
 } from "./tools";
+import { AgentError } from "./errors";
 import { bestValue, buildRanking } from "./ranking";
 import type { AgentEvent, CityMatch, MatchRequest, MatchResult, ResolvedSignal } from "./types";
 
@@ -24,11 +25,7 @@ const WRITER_MODEL = "gemini-3.1-flash-lite";
 const AGENT_BUDGET_MS = 30_000;
 const WRITER_BUDGET_MS = 48_000;
 
-export class AgentError extends Error {
-  constructor(readonly code: "noTaste" | "qloo" | "rateLimited") {
-    super(code);
-  }
-}
+export { AgentError };
 
 export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) => void): Promise<MatchResult> {
   const ctx = new AgentContext(request, emit);
@@ -40,6 +37,7 @@ export async function runAgent(request: MatchRequest, emit: (event: AgentEvent) 
     await agentLoop(ctx, startedAt + AGENT_BUDGET_MS);
   } catch (err) {
     if (err instanceof QlooError) throw toAgentError(err);
+    if (err instanceof AgentError) throw err;
     console.warn("agent loop stopped, using fixed pipeline:", err instanceof Error ? err.message : err);
     // Only report a fallback when the pipeline actually has to take over work.
     if (!ctx.ranked || !ctx.alsoLiked) {

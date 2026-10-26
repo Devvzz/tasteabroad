@@ -1,10 +1,8 @@
 // The tools the LLM agent can call. Each tool records what it found in AgentContext, so the final
 // result is always assembled from real Qloo data, never from text the model made up.
-import { cities, getCity, scoringId, type City } from "@/lib/cities";
-import { distanceKm } from "@/lib/geo";
+import { cities, getCity, type City } from "@/lib/cities";
 import type { ToolDefinition } from "@/lib/llm";
 import {
-  scoreDestinations,
   searchEntities,
   searchTags,
   similarEntities,
@@ -13,6 +11,7 @@ import {
   type QlooEntity,
   type TasteSignals,
 } from "@/lib/qloo";
+import { AgentError } from "./errors";
 import { MAX_LIKES } from "./request";
 import { rankCities, scoreTaste, type TasteScore } from "./scoring";
 import type { AgentEvent, MatchRequest, NoteKey, ResolvedSignal, StepKey, TasteRank, TraceEntry } from "./types";
@@ -177,20 +176,6 @@ function passesFilters(city: City, filters: MatchRequest["filters"]): boolean {
   return true;
 }
 
-/** When Qloo has no score for our list, map its worldwide picks to the nearest dataset cities. */
-function nearestToWorldwide(worldwide: QlooEntity[]): RankedCity[] {
-  const ranked = new Map<string, RankedCity>();
-  for (const dest of worldwide) {
-    if (!dest.location) continue;
-    const sameCountry = cities.filter((c) => c.countryCode === dest.countryCode);
-    const pool = sameCountry.length ? sameCountry : cities;
-    const nearest = pool.reduce((best, c) =>
-      distanceKm(c.coordinates, dest.location!) < distanceKm(best.coordinates, dest.location!) ? c : best,
-    );
-    if (!ranked.has(nearest.id)) ranked.set(nearest.id, { city: nearest, score: toScore(dest.affinity), breakdown: [] });
-  }
-  return [...ranked.values()];
-}
 
 /**
  * The per-taste scoring, done once per run: the agent usually calls the city and "also liked" tools
@@ -226,30 +211,17 @@ async function scoreEachTaste(ctx: AgentContext): Promise<TasteScore[]> {
   return results.filter((r): r is TasteScore => r !== null);
 }
 
-/** Old single-call scoring, kept for searches where no taste has per-city data of its own. */
-async function combinedRanking(ctx: AgentContext): Promise<RankedCity[]> {
-  const byScoringId = new Map(cities.map((c) => [scoringId(c), c]));
-  const scored = await scoreDestinations(ctx.signals(), [...byScoringId.keys()].filter((id): id is string => Boolean(id)));
-  return scored
-    .map((d) => ({ city: byScoringId.get(d.id), score: toScore(d.affinity), breakdown: [] as TasteRank[] }))
-    .filter((r): r is RankedCity => Boolean(r.city));
-}
 
 export async function qlooDestinationAffinity(ctx: AgentContext, entityIds?: string[], tagIds?: string[]) {
   selectSignals(ctx, entityIds, tagIds);
   const tastes = await tastesFor(ctx);
 
-  const [ranked0, worldwide] = await Promise.all([
-    tastes.length ? Promise.resolve(rankCities(tastes)) : combinedRanking(ctx),
-    topDestinations(tasteSignals(tastes, ctx.signals()), 30),
-  ]);
-  ctx.worldwide = worldwide;
+  // Without a single taste that has city data, every city gets the same score; say so instead of guessing.
+  if (!tastes.length) throw new AgentError("noCityData");
 
-  let ranked: RankedCity[] = ranked0;
-  if (!ranked.length) {
-    ranked = nearestToWorldwide(worldwide);
-    if (ranked.length) ctx.notes.add("nearestFallback");
-  }
+  const ranked = rankCities(tastes);
+  const worldwide = await topDestinations(tasteSignals(tastes, ctx.signals()), 30);
+  ctx.worldwide = worldwide;
 
   // If nothing passes every filter, relax the strictest ones first and keep the region as long as possible.
   const f = ctx.request.filters;
@@ -340,7 +312,7 @@ export async function executeTool(ctx: AgentContext, name: string, rawArgs: stri
     ok = false;
     if (step) ctx.step(step, "error");
     // Qloo outages are not something the model can fix; let the runner handle them.
-    if (err instanceof Error && err.name === "QlooError") throw err;
+    if (err instanceof Error && (err.name === "QlooError" || err.name === "AgentError")) throw err;
     return JSON.stringify({ error: err instanceof Error ? err.message : String(err) });
   } finally {
     const entry = { tool: name, args: rawArgs.slice(0, 300), ms: Date.now() - started, ok, info: traceInfo(name, args) };

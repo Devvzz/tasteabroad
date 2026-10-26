@@ -14,8 +14,8 @@ export interface MatchRequest {
 }
 
 export type StepKey = "plan" | "search" | "match" | "similar" | "cities" | "explain" | "fallback";
-export type ErrorCode = "generic" | "rateLimited" | "noTaste" | "qloo" | "badRequest";
-export type NoteKey = "filtersRelaxed" | "nearestFallback" | "llmFallback" | "unresolved" | "unscored";
+export type ErrorCode = "generic" | "rateLimited" | "noTaste" | "noCityData" | "qloo" | "badRequest";
+export type NoteKey = "filtersRelaxed" | "llmFallback" | "unresolved" | "unscored";
 
 export interface TraceEntry {
   tool: string;

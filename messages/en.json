@@ -130,7 +130,6 @@
   },
   "notes": {
     "filtersRelaxed": "No city matched all your filters, so we relaxed the strictest ones (budget first, region last).",
-    "nearestFallback": "Qloo had no direct score for our city list, so these are our cities closest to Qloo's top destinations for you.",
     "llmFallback": "Quick mode: the notes below come straight from Qloo's data.",
     "unresolved": "Qloo didn't recognise: {items}.",
     "unscored": "Left out of the ranking because Qloo has no city-level data for: {items}."
@@ -139,6 +138,7 @@
     "generic": "Something went wrong. Please try again.",
     "rateLimited": "Too many requests right now. Please wait a minute and try again.",
     "noTaste": "Qloo couldn't recognise any of your inputs. Try well-known artists, films or hobbies.",
+    "noCityData": "Qloo recognised your likes but has no city data for them yet. Add an artist, a music genre or a food. All the idea chips work.",
     "qloo": "Qloo is not reachable right now. Please try again shortly.",
     "badRequest": "Please check your inputs and try again."
   },

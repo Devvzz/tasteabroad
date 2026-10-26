@@ -13,6 +13,7 @@ import { CityCard } from "./CityCard";
 import { ComparePanel } from "./ComparePanel";
 import { IdeaChips } from "./IdeaChips";
 import { LikeInput } from "./LikeInput";
+import { ThemeToggle } from "./ThemeToggle";
 
 const REGIONS: Region[] = ["Europe", "North America", "Asia", "Oceania", "Latin America", "Middle East", "Africa"];
 // Names match the `languages` values in data/cities.json. English gets its own switch;
@@ -166,9 +167,12 @@ export function TasteApp() {
         <Link href="/" className="text-lg font-bold tracking-tight">
           Taste<span className="text-accent">Abroad</span>
         </Link>
-        <Link href="/about" className="text-sm text-muted underline-offset-2 hover:underline">
-          {t("app.about")}
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/about" className="text-sm text-muted underline-offset-2 hover:underline">
+            {t("app.about")}
+          </Link>
+          <ThemeToggle />
+        </div>
       </nav>
 
       <header className="mb-6">

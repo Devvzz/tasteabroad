@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { t } from "@/lib/i18n";
+import { ThemeToggle } from "./ThemeToggle";
 
 const REPO_URL = "https://github.com/Devvzz/tasteabroad";
 
@@ -21,9 +22,12 @@ export function AboutContent({ cityCount }: { cityCount: number }) {
         <Link href={home} className="text-lg font-bold tracking-tight">
           Taste<span className="text-accent">Abroad</span>
         </Link>
-        <Link href={home} className="rounded-lg bg-accent px-3 py-1.5 text-sm font-semibold text-white">
-          {t("about.back")}
-        </Link>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Link href={home} className="rounded-lg bg-accent px-3 py-1.5 text-sm font-semibold text-white">
+            {t("about.back")}
+          </Link>
+        </div>
       </nav>
 
       <header className="space-y-3">

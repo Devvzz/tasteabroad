@@ -12,7 +12,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const description = "Find the university city abroad that fits your taste in music, film, food and hobbies.";
+const THEME_SCRIPT = `try{if(localStorage.getItem("theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}`;
+
+const description ="Find the university city abroad that fits your taste in music, film, food and hobbies.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://tasteabroad.vercel.app"),
@@ -27,7 +29,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      // The theme script below may set data-theme before React loads.
+      suppressHydrationWarning
     >
+      <head>
+        {/* Apply a saved dark-mode choice before the first paint, so the page never flashes white. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Always the light theme, also on devices set to dark mode. */
+/* Light by default, whatever the device prefers; the switch in the header sets data-theme="dark". */
 :root {
   color-scheme: light;
   --background: #f7f6f2;
@@ -11,6 +11,24 @@
   --accent: #0f7a6c;
   --accent-soft: #dff2ee;
   --warn-soft: #fff4dc;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #121311;
+  --foreground: #ecebe6;
+  --card: #1c1d1a;
+  --muted: #a3a097;
+  --line: #2f302b;
+  --accent: #4fc7b4;
+  --accent-soft: #173a35;
+  --warn-soft: #3a3020;
+}
+
+/* The switch shows the option you can change to, without needing JavaScript state. */
+:root[data-theme="dark"] .show-in-light,
+:root:not([data-theme="dark"]) .show-in-dark {
+  display: none;
 }
 
 @theme inline {

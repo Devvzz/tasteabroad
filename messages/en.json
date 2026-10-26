@@ -130,5 +130,9 @@
     "privacy": "No account, no tracking. Only the things you type are sent to Qloo and Gemini to compute the result. Your search lives in the page link so you can share it.",
     "back": "Try it",
     "source": "Source code on GitHub"
+  },
+  "theme": {
+    "dark": "Dark",
+    "light": "Light"
   }
 }

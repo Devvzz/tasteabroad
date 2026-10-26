@@ -4,6 +4,8 @@
 const DEFAULT_BASE_URL = "https://hackathon.api.qloo.com";
 const TIMEOUT_MS = 8_000;
 const MAX_RETRIES = 3;
+// A request that timed out once usually times out again; waiting through more tries only stalls the search.
+const MAX_TIMEOUT_RETRIES = 1;
 // A search with 12 likes fans out into dozens of lookups; more than a few at once trips Qloo's rate limit.
 const MAX_IN_FLIGHT = 6;
 const CACHE_TTL_MS = 60 * 60 * 1000;
@@ -192,7 +194,7 @@ async function qlooGet<T>(path: string, params: Params): Promise<T | null> {
       lastError = isTimeout
         ? new QlooError("timeout", `Qloo did not answer within ${TIMEOUT_MS / 1000}s.`)
         : new QlooError("network", "Could not reach Qloo.");
-      if (attempt === MAX_RETRIES) throw lastError;
+      if (attempt === MAX_RETRIES || (isTimeout && attempt >= MAX_TIMEOUT_RETRIES)) throw lastError;
       await sleep(retryDelay(attempt, null));
     }
   }

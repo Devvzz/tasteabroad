@@ -68,7 +68,18 @@
     "scoreNote": "Scores come from Qloo's taste data: Qloo ranks all 105 cities for each of your tastes, and the match score is the city's average position. Our agent only decides what to look up and writes the notes.",
     "breakdown": "How it ranks for each of your tastes",
     "rankOf": "#{rank} of {of}",
-    "via": "via {names}"
+    "via": "via {names}",
+    "rankOverall": "#{rank} of {of} overall",
+    "yearly": "One year, roughly",
+    "from": "from {cost}",
+    "bestValue": "Best value",
+    "bestValueTitle": "Best value pick",
+    "bestValueHint": "The cheapest year of study among your 15 best matches: lowest tuition plus 12 months of living costs."
+  },
+  "checker": {
+    "title": "Check any city",
+    "hint": "See where any of our {count} cities lands for your tastes.",
+    "outside": "Outside your filters (budget, language or region), so it is not in your top list."
   },
   "compare": {
     "select": "Compare",

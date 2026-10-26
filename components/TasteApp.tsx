@@ -11,7 +11,9 @@ import { fromSearchParams, toSearchParams, type SearchState } from "@/lib/share"
 import { AgentLog } from "./AgentLog";
 import { AgentSteps, type StepStatus } from "./AgentSteps";
 import { AlsoLiked } from "./AlsoLiked";
+import { CityBrief } from "./CityBrief";
 import { CityCard } from "./CityCard";
+import { CityChecker } from "./CityChecker";
 import { ComparePanel } from "./ComparePanel";
 import { IdeaChips } from "./IdeaChips";
 import { LikeInput } from "./LikeInput";
@@ -332,6 +334,7 @@ export function TasteApp() {
 
         {result && (
           <Results
+            key={result.likes.join("|")}
             result={result}
             t={t}
             onCopy={copyLink}
@@ -392,6 +395,13 @@ interface ResultsProps {
 }
 
 function Results({ result, t, onCopy, copied, compareIds, onCompareToggle }: ResultsProps) {
+  const [checkId, setCheckId] = useState<string>();
+  // Older cached results have no full ranking; those simply skip the extras.
+  const ranking = result.ranking ?? [];
+  const shownIds = result.cities.map((c) => c.city.id);
+  const bestValue = ranking.find((r) => r.id === result.bestValueId);
+  const bestValueShown = bestValue && shownIds.includes(bestValue.id);
+
   return (
     <>
       <section className="space-y-3">
@@ -436,9 +446,30 @@ function Results({ result, t, onCopy, copied, compareIds, onCompareToggle }: Res
             comparing={compareIds.includes(match.city.id)}
             compareDisabled={compareIds.length >= 2 && !compareIds.includes(match.city.id)}
             onCompareToggle={() => onCompareToggle(match.city.id)}
+            bestValue={match.city.id === result.bestValueId}
           />
         ))}
       </div>
+
+      {bestValue && !bestValueShown && (
+        <section className="space-y-3 rounded-2xl border-2 border-accent bg-card p-4 shadow-sm">
+          <div>
+            <h2 className="font-semibold">💸 {t("results.bestValueTitle")}</h2>
+            <p className="text-sm text-muted">{t("results.bestValueHint")}</p>
+          </div>
+          <CityBrief entry={bestValue} of={ranking.length} t={t} />
+        </section>
+      )}
+
+      {ranking.length > 0 && (
+        <CityChecker
+          ranking={ranking}
+          shownIds={shownIds}
+          selectedId={checkId}
+          onSelect={setCheckId}
+          t={t}
+        />
+      )}
 
       {result.worldwide.length > 0 && (
         <p className="text-sm text-muted">

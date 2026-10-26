@@ -1,6 +1,7 @@
 "use client";
 
 import type { CityMatch } from "@/lib/agent/types";
+import { TasteBars } from "./TasteBars";
 import { cityGradient, flag, money } from "@/lib/format";
 
 interface Props {
@@ -12,9 +13,11 @@ interface Props {
   comparing: boolean;
   compareDisabled: boolean;
   onCompareToggle: () => void;
+  /** The cheapest year of study among the strong matches. */
+  bestValue?: boolean;
 }
 
-export function CityCard({ match, rank, t, studyLanguages, comparing, compareDisabled, onCompareToggle }: Props) {
+export function CityCard({ match, rank, t, studyLanguages, comparing, compareDisabled, onCompareToggle, bestValue }: Props) {
   const { city, score } = match;
   const cost = city.costOfLiving;
   const wanted = new Set(studyLanguages.map((l) => l.toLowerCase()));
@@ -29,7 +32,12 @@ export function CityCard({ match, rank, t, studyLanguages, comparing, compareDis
         style={{ background: cityGradient(city.id) }}
       >
         <div>
-          <p className="text-xs font-medium opacity-80">#{rank}</p>
+          <p className="text-xs font-medium opacity-80">
+            #{rank}
+            {bestValue && (
+              <span className="ml-2 rounded-full bg-white/90 px-2 py-0.5 font-semibold text-neutral-900">💸 {t("results.bestValue")}</span>
+            )}
+          </p>
           <h3 className="text-2xl font-semibold leading-tight">
             {city.name} <span aria-hidden>{flag(city.countryCode)}</span>
           </h3>
@@ -53,23 +61,7 @@ export function CityCard({ match, rank, t, studyLanguages, comparing, compareDis
         {match.breakdown.length > 0 && (
           <section>
             <h4 className="mb-2 font-semibold">{t("results.breakdown")}</h4>
-            <ul className="space-y-1.5">
-              {match.breakdown.map((b) => {
-                // Bar length: 100% for rank 1, close to 0 for the last city.
-                const strength = b.of > 1 ? 1 - (b.rank - 1) / (b.of - 1) : 1;
-                return (
-                  <li key={b.taste} className="grid grid-cols-[minmax(0,7rem)_1fr_auto] items-center gap-2 text-xs">
-                    <span className="truncate font-medium" title={b.taste}>
-                      {b.taste}
-                    </span>
-                    <span className="h-1.5 overflow-hidden rounded-full bg-accent-soft" aria-hidden>
-                      <span className="block h-full rounded-full bg-accent" style={{ width: `${Math.max(4, strength * 100)}%` }} />
-                    </span>
-                    <span className="tabular-nums text-muted">{t("results.rankOf", { rank: b.rank, of: b.of })}</span>
-                  </li>
-                );
-              })}
-            </ul>
+            <TasteBars breakdown={match.breakdown} t={t} />
           </section>
         )}
 

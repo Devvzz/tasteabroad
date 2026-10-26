@@ -346,6 +346,8 @@ export async function placesNear(
 }
 
 /** "People like you also liked…": other entities of a given type with high affinity. */
-export function similarEntities(signals: TasteSignals, type: EntityType, take = 5): Promise<QlooEntity[]> {
-  return getInsights({ filterType: type, ...signals, take });
+export async function similarEntities(signals: TasteSignals, type: EntityType, take = 5): Promise<QlooEntity[]> {
+  const found = await getInsights({ filterType: type, ...signals, take });
+  // Insights replies with the bare "urn:entity" type, so keep the one that was asked for (for the "Music"/"Film" label).
+  return found.map((e) => ({ ...e, type }));
 }

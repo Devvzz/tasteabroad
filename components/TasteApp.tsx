@@ -7,6 +7,7 @@ import type { Region } from "@/lib/cities";
 import type { AgentEvent, ErrorCode, MatchFilters, MatchResult, StepKey } from "@/lib/agent/types";
 import { t } from "@/lib/i18n";
 import { fromSearchParams, toSearchParams, type SearchState } from "@/lib/share";
+import { AgentLog } from "./AgentLog";
 import { AgentSteps, type StepStatus } from "./AgentSteps";
 import { AlsoLiked } from "./AlsoLiked";
 import { CityCard } from "./CityCard";
@@ -432,17 +433,7 @@ function Results({ result, t, onCopy, copied, compareIds, onCompareToggle }: Res
 
       <AlsoLiked items={result.alsoLiked} t={t} />
 
-      <details className="rounded-2xl border border-line bg-card p-4 text-sm">
-        <summary className="cursor-pointer font-medium">{t("results.trace", { count: result.trace.length })}</summary>
-        <ol className="mt-3 space-y-1 font-mono text-xs">
-          {result.trace.map((entry, i) => (
-            <li key={i} className="break-all">
-              <span className={entry.ok ? "text-accent" : "text-amber-600"}>{entry.tool}</span>{" "}
-              <span className="text-muted">{entry.ms}ms</span> {entry.args}
-            </li>
-          ))}
-        </ol>
-      </details>
+      <AgentLog trace={result.trace} t={t} />
     </>
   );
 }

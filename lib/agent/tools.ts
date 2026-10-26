@@ -270,8 +270,9 @@ export async function executeTool(ctx: AgentContext, name: string, rawArgs: stri
   const step = TOOL_STEPS[name];
   if (step) ctx.step(step, "running");
   let ok = true;
+  let args: ToolArgs = {};
   try {
-    const args = (rawArgs ? JSON.parse(rawArgs) : {}) as ToolArgs;
+    args = (rawArgs ? JSON.parse(rawArgs) : {}) as ToolArgs;
     const output = await runTool(ctx, name, args);
     if (step) ctx.step(step, "done", detailFor(ctx, name));
     return JSON.stringify(output);
@@ -282,9 +283,25 @@ export async function executeTool(ctx: AgentContext, name: string, rawArgs: stri
     if (err instanceof Error && err.name === "QlooError") throw err;
     return JSON.stringify({ error: err instanceof Error ? err.message : String(err) });
   } finally {
-    const entry = { tool: name, args: rawArgs.slice(0, 300), ms: Date.now() - started, ok };
+    const entry = { tool: name, args: rawArgs.slice(0, 300), ms: Date.now() - started, ok, info: traceInfo(name, args) };
     ctx.trace.push(entry);
     ctx.emit({ type: "tool", entry });
+  }
+}
+
+/** What the readable log needs to describe a call, without the raw IDs. */
+function traceInfo(name: string, args: ToolArgs): TraceEntry["info"] {
+  switch (name) {
+    case "qloo_search":
+      return { items: args.queries ?? [], count: args.queries?.length ?? 0 };
+    case "qloo_destination_affinity":
+      return { count: cities.length };
+    case "get_city_info": {
+      const city = args.city ? getCity(args.city) : undefined;
+      return { items: [city?.name ?? args.city ?? "?"] };
+    }
+    default:
+      return undefined;
   }
 }
 

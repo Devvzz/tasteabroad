@@ -22,6 +22,8 @@ export interface TraceEntry {
   args: string;
   ms: number;
   ok: boolean;
+  /** Plain facts about the call for the readable log: the tastes looked up, the city read, how many cities scored. */
+  info?: { items?: string[]; count?: number };
 }
 
 export type AgentEvent =

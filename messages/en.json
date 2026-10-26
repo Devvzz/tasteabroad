@@ -61,7 +61,6 @@
     "worldwide": "Qloo also sees strong taste fits in",
     "share": "Copy share link",
     "copied": "Link copied!",
-    "trace": "Agent trace ({count} tool calls)",
     "studyHere": "You can study here in {langs}",
     "scoreBy": "Score from Qloo",
     "scoreNote": "Every match score comes straight from Qloo's taste data, unchanged. Our agent only decides what to look up and writes the notes."
@@ -134,5 +133,16 @@
   "theme": {
     "dark": "Dark",
     "light": "Light"
+  },
+  "log": {
+    "title": "How the agent found these cities ({count} steps)",
+    "intro": "Every step below is a real call the TasteAbroad agent made to Qloo or to our city data for your search.",
+    "search": "Looked up your {count} tastes on Qloo: {items}",
+    "match": "Asked Qloo to score all {count} cities for your taste",
+    "similar": "Asked Qloo what people with your taste also like",
+    "cities": "Read universities and costs for {items}",
+    "failed": "(this one did not work, so the agent carried on another way)",
+    "instant": "instant",
+    "seconds": "{seconds} s"
   }
 }

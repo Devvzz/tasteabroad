@@ -2,7 +2,8 @@ import type { Region } from "@/lib/cities";
 import type { MatchFilters, MatchRequest } from "./types";
 
 const REGIONS: Region[] = ["Europe", "North America", "Asia", "Oceania", "Latin America", "Middle East", "Africa"];
-const MAX_LIKES = 8;
+// Each taste costs a few Qloo calls, so this keeps searches quick and the shared quota safe.
+export const MAX_LIKES = 12;
 const MAX_LIKE_LENGTH = 60;
 
 const MIN_LIKE_LENGTH = 2;

@@ -10,6 +10,8 @@
     "placeholder": "e.g. Dua Lipa",
     "add": "Add",
     "remove": "Remove {item}",
+    "count": "{count} / {max}",
+    "full": "That is the maximum. Remove one to add another.",
     "suggestions": "Need ideas?",
     "filters": "Optional filters",
     "maxTuition": "Max tuition per year (USD)",

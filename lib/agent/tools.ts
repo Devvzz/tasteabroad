@@ -13,6 +13,7 @@ import {
   type QlooEntity,
   type TasteSignals,
 } from "@/lib/qloo";
+import { MAX_LIKES } from "./request";
 import { rankCities, scoreTaste, type TasteScore } from "./scoring";
 import type { AgentEvent, MatchRequest, NoteKey, ResolvedSignal, StepKey, TasteRank, TraceEntry } from "./types";
 
@@ -133,7 +134,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
 // ---------- tool implementations ----------
 
 export async function qlooSearch(ctx: AgentContext, queries: string[]) {
-  const unique = [...new Set(queries.map((q) => q.trim()).filter(Boolean))].slice(0, 10);
+  const unique = [...new Set(queries.map((q) => q.trim()).filter(Boolean))].slice(0, MAX_LIKES);
   return Promise.all(
     unique.map(async (query) => {
       const [entities, tags] = await Promise.all([searchEntities(query, SEARCH_TYPES, 3), searchTags(query, 3)]);

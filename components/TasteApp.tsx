@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Region } from "@/lib/cities";
 import type { AgentEvent, ErrorCode, MatchFilters, MatchResult, StepKey } from "@/lib/agent/types";
 import { t } from "@/lib/i18n";
+import { MAX_LIKES } from "@/lib/agent/request";
 import { fromSearchParams, toSearchParams, type SearchState } from "@/lib/share";
 import { AgentLog } from "./AgentLog";
 import { AgentSteps, type StepStatus } from "./AgentSteps";
@@ -21,7 +22,6 @@ const REGIONS: Region[] = ["Europe", "North America", "Asia", "Oceania", "Latin 
 // the others sit behind "I also speak..." because most students only need English.
 const ENGLISH = "English";
 const OTHER_STUDY_LANGUAGES = ["Spanish", "German", "French", "Italian", "Portuguese", "Dutch", "Japanese", "Korean", "Mandarin", "Arabic", "Albanian"];
-const MAX_LIKES = 8;
 
 export function TasteApp() {
   const router = useRouter();
@@ -182,10 +182,18 @@ export function TasteApp() {
 
       <form onSubmit={submit} className="space-y-4 rounded-2xl border border-line bg-card p-4 shadow-sm">
         <div>
-          <label htmlFor="like-input" className="font-semibold">
-            {t("form.label")}
-          </label>
-          <p className="text-sm text-muted">{t("form.hint")}</p>
+          <div className="flex items-baseline justify-between gap-2">
+            <label htmlFor="like-input" className="font-semibold">
+              {t("form.label")}
+            </label>
+            <span
+              aria-live="polite"
+              className={`text-xs tabular-nums ${likes.length >= MAX_LIKES ? "font-semibold text-accent" : "text-muted"}`}
+            >
+              {t("form.count", { count: likes.length, max: MAX_LIKES })}
+            </span>
+          </div>
+          <p className="text-sm text-muted">{likes.length >= MAX_LIKES ? t("form.full") : t("form.hint")}</p>
         </div>
 
         {likes.length > 0 && (

@@ -1,5 +1,6 @@
 // Encodes a search (likes and filters) in URL params so results can be shared.
 import type { Region } from "@/lib/cities";
+import { MAX_LIKES } from "@/lib/agent/request";
 import type { MatchFilters } from "@/lib/agent/types";
 
 export interface SearchState {
@@ -23,7 +24,7 @@ export function fromSearchParams(params: URLSearchParams): SearchState {
     return Number.isFinite(n) && n > 0 ? n : undefined;
   };
   return {
-    likes: params.getAll("l").map((l) => l.trim()).filter(Boolean).slice(0, 8),
+    likes: params.getAll("l").map((l) => l.trim()).filter(Boolean).slice(0, MAX_LIKES),
     filters: {
       maxTuitionUsd: num("tuition"),
       maxMonthlyUsd: num("budget"),

@@ -166,7 +166,7 @@ Never commit `.env.local`; `.gitignore` already excludes it.
 
 1. Push the repo to GitHub.
 2. On [vercel.com/new](https://vercel.com/new), import the repo. The Next.js preset needs no changes.
-3. Under **Environment Variables**, add `QLOO_API_KEY` and `GEMINI_API_KEY`.
+3. Under **Environment Variables**, add `QLOO_API_KEY` and `GEMINI_API_KEY` (and optionally `DEMO_ONLY=true` to serve only the saved examples).
 4. Deploy. Every later push to `main` redeploys automatically.
 
 ## Data
@@ -189,6 +189,14 @@ filters and the best value pick use that higher fee unless the student ticks "I 
 (from the official Erasmus+ programme guide) and one or two government scholarship schemes with
 links to their official pages. These are national schemes; eligibility depends on nationality and
 study level, which the page says. The map outline comes from Natural Earth (via world-atlas).
+
+## Demo mode
+
+The five "Try an example" searches on the start page (also `?demo=1`) load saved results from
+`data/demo/examples.json`, recorded from real searches on the live app. They need no Qloo or Gemini
+call, so the app can always be tried. If a live search fails because Qloo or the model is down, the
+key has expired or the rate limit is hit, the app shows the closest saved example with a clear note
+instead of an error. Set `DEMO_ONLY=true` to serve only the saved examples.
 
 ## Limitations
 

@@ -170,6 +170,8 @@ collected: only the likes you type are sent to Qloo and Gemini.
 
 ## Try it yourself
 
+On the live app, the "Try an example" buttons (or `?demo=1`) load saved results instantly, so the app works even if the Qloo key or the free Gemini quota runs out during judging. Live searches still use Qloo, and if they fail, the page shows a saved example with a clear note instead of an error.
+
 ```bash
 git clone https://github.com/Devvzz/tasteabroad.git
 cd tasteabroad

@@ -9,6 +9,7 @@ import type { AgentEvent, ErrorCode, MatchFilters, MatchResult, StepKey } from "
 import { t } from "@/lib/i18n";
 import type { LikeStatus } from "@/lib/agent/check";
 import { MAX_LIKES } from "@/lib/agent/request";
+import { DEMO_EXAMPLES } from "@/lib/demo-examples";
 import { fromSearchParams, toSearchParams, type SearchState } from "@/lib/share";
 import { AgentLog } from "./AgentLog";
 import { AgentSteps, type StepStatus } from "./AgentSteps";
@@ -35,8 +36,14 @@ export function TasteApp() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const initial = useMemo(() => fromSearchParams(new URLSearchParams(searchParams.toString())), [searchParams]);
+  // ?demo=1 loads saved example results without calling Qloo or the model.
+  const demoParam = searchParams.get("demo") === "1";
+  const startLikes = useMemo(
+    () => (initial.likes.length ? initial.likes : demoParam ? DEMO_EXAMPLES[0] : []),
+    [initial, demoParam],
+  );
 
-  const [likes, setLikes] = useState<string[]>(initial.likes);
+  const [likes, setLikes] = useState<string[]>(startLikes);
   const [draft, setDraft] = useState("");
   const [filters, setFilters] = useState<MatchFilters>(initial.filters);
   const [running, setRunning] = useState(false);
@@ -89,7 +96,7 @@ export function TasteApp() {
   };
 
   const run = useCallback(
-    async (state: SearchState) => {
+    async (state: SearchState, demo = false) => {
       if (!state.likes.length) {
         setError("needLikes");
         return;
@@ -101,7 +108,9 @@ export function TasteApp() {
       setError(null);
       setCompareIds([]);
       setShowCompare(false);
-      router.replace(`${pathname}?${toSearchParams(state).toString()}`, { scroll: false });
+      const params = toSearchParams(state);
+      if (demo) params.set("demo", "1");
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
       // On phones the progress appears below the form, so bring it into view.
       requestAnimationFrame(() => outputRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
 
@@ -117,7 +126,7 @@ export function TasteApp() {
         const res = await fetch("/api/match", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(state),
+          body: JSON.stringify({ ...state, demo }),
         });
         if (!res.ok || !res.body) {
           finished = true;
@@ -153,10 +162,17 @@ export function TasteApp() {
 
   // A shared link with likes in it runs the search straight away.
   useEffect(() => {
-    if (autoRan.current || !initial.likes.length) return;
+    if (autoRan.current || !startLikes.length) return;
     autoRan.current = true;
-    void run(initial);
-  }, [initial, run]);
+    void run({ likes: startLikes, filters: initial.filters }, demoParam);
+  }, [initial, startLikes, run, demoParam]);
+
+  const tryExample = (example: string[]) => {
+    setLikes(example);
+    setDraft("");
+    setFilters({});
+    void run({ likes: example, filters: {} }, true);
+  };
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -279,6 +295,23 @@ export function TasteApp() {
         <LikeInput value={draft} onChange={setDraft} onAdd={addLike} t={t} />
 
         <IdeaChips likes={likes} onAdd={addLike} t={t} />
+
+        <div className="text-sm">
+          <p className="mb-2 text-muted">{t("demo.tryLabel")}</p>
+          <div className="flex flex-wrap gap-2">
+            {DEMO_EXAMPLES.map((example) => (
+              <button
+                key={example.join("|")}
+                type="button"
+                disabled={running}
+                onClick={() => tryExample(example)}
+                className="rounded-full border border-line px-3 py-1 hover:border-accent disabled:opacity-60"
+              >
+                {example.join(" · ")}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <fieldset className="space-y-2 text-sm">
           <legend className="sr-only">{t("form.language")}</legend>
@@ -442,6 +475,7 @@ export function TasteApp() {
         <ComparePanel
           cities={comparePair}
           signals={placeSignals}
+          demo={Boolean(result.demo)}
           t={t}
           onClose={() => setShowCompare(false)}
         />
@@ -483,6 +517,12 @@ function Results({ result, t, onCopy, copied, compareIds, onCompareToggle }: Res
             {copied ? t("results.copied") : t("results.share")}
           </button>
         </div>
+
+        {result.demo && (
+          <p role="status" className="rounded-xl border border-dashed border-muted bg-warn-soft p-3 text-sm">
+            {t(result.demo === "example" ? "demo.example" : "demo.fallback", { likes: result.likes.join(", ") })}
+          </p>
+        )}
 
         <p className="rounded-xl border border-accent/40 bg-accent-soft p-3 text-sm">
           {t("results.scoreNote")}

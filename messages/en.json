@@ -198,5 +198,10 @@
     "failed": "(this one did not work, so the agent carried on another way)",
     "instant": "instant",
     "seconds": "{seconds} s"
+  },
+  "demo": {
+    "tryLabel": "Or try an example (saved results, loads instantly):",
+    "example": "This is a saved example result for: {likes}. It loads without calling Qloo, so it always works. Type your own likes for a live search.",
+    "fallback": "Live data is unavailable right now, so you're seeing a saved example result (for: {likes}) instead of an error. Please try your own search again in a few minutes."
   }
 }

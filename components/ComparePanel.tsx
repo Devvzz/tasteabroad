@@ -29,16 +29,18 @@ interface Props {
   cities: readonly [CityMatch, CityMatch];
   /** The Qloo IDs the ranking used, so the places fit the same taste. */
   signals: NonNullable<MatchResult["tasteSignals"]>;
+  /** Saved example results use saved places too, so no Qloo call is needed. */
+  demo?: boolean;
   t: (key: string, vars?: Record<string, string | number>) => string;
   onClose: () => void;
 }
 
-async function loadPicks(cityId: string, signals: Props["signals"]): Promise<Picks> {
+async function loadPicks(cityId: string, signals: Props["signals"], demo: boolean): Promise<Picks> {
   try {
     const res = await fetch("/api/city-picks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cityId, ...signals }),
+      body: JSON.stringify({ cityId, ...signals, demo }),
     });
     if (!res.ok) return { status: "error" };
     const body = (await res.json()) as { places?: Place[] };
@@ -48,7 +50,7 @@ async function loadPicks(cityId: string, signals: Props["signals"]): Promise<Pic
   }
 }
 
-export function ComparePanel({ cities, signals, t, onClose }: Props) {
+export function ComparePanel({ cities, signals, demo = false, t, onClose }: Props) {
   const [picks, setPicks] = useState<Record<string, Picks>>({});
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -66,16 +68,16 @@ export function ComparePanel({ cities, signals, t, onClose }: Props) {
   useEffect(() => {
     let cancelled = false;
     for (const { city } of cities) {
-      void loadPicks(city.id, signals).then((p) => !cancelled && setPicks((prev) => ({ ...prev, [city.id]: p })));
+      void loadPicks(city.id, signals, demo).then((p) => !cancelled && setPicks((prev) => ({ ...prev, [city.id]: p })));
     }
     return () => {
       cancelled = true;
     };
-  }, [cities, signals]);
+  }, [cities, signals, demo]);
 
   const retry = (cityId: string) => {
     setPicks((prev) => ({ ...prev, [cityId]: { status: "loading" } }));
-    void loadPicks(cityId, signals).then((p) => setPicks((prev) => ({ ...prev, [cityId]: p })));
+    void loadPicks(cityId, signals, demo).then((p) => setPicks((prev) => ({ ...prev, [cityId]: p })));
   };
 
   const rows: { label: string; render: (m: CityMatch) => React.ReactNode }[] = [

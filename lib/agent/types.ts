@@ -116,4 +116,6 @@ export interface MatchResult {
   notes: NoteKey[];
   trace: TraceEntry[];
   mode: "agent" | "fallback";
+  /** Set when this is a saved example result rather than a live search. */
+  demo?: "example" | "fallback";
 }

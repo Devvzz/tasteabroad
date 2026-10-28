@@ -1,6 +1,7 @@
 // POST /api/city-picks: places in one city that people with the user's taste love (used by the compare view).
 import { getCity } from "@/lib/cities";
 import { placesNear, QlooError } from "@/lib/qloo";
+import { demoOnly, demoPlaces } from "@/lib/demo";
 import { clientIp, isRateLimited } from "@/lib/rate-limit";
 
 const RATE_LIMIT = 20;
@@ -16,6 +17,7 @@ export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
   const city = typeof body?.cityId === "string" ? getCity(body.cityId) : undefined;
   const signals = { entityIds: ids(body?.entityIds, ENTITY_ID), tagIds: ids(body?.tagIds, TAG_ID) };
+  if (city && (demoOnly() || body?.demo === true)) return Response.json({ places: demoPlaces(city.id), demo: true });
   if (!city || (!signals.entityIds.length && !signals.tagIds.length)) {
     return Response.json({ code: "badRequest" }, { status: 400 });
   }
@@ -37,6 +39,9 @@ export async function POST(request: Request) {
       })),
     });
   } catch (err) {
+    // Saved places from the examples are better than an empty panel when Qloo is unavailable.
+    const saved = demoPlaces(city.id);
+    if (saved.length) return Response.json({ places: saved, demo: true });
     const code = err instanceof QlooError && err.code === "rate_limited" ? "rateLimited" : "qloo";
     return Response.json({ code }, { status: 502 });
   }
